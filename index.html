@@ -362,14 +362,6 @@
         /* RESPONSIVE */
         @media (max-width:1200px) { .events-grid { grid-template-columns: repeat(2,1fr); } .filters-grid { grid-template-columns: repeat(3,1fr); } .landing-features { grid-template-columns: repeat(2,1fr); } }
         @media (max-width:768px) { .events-grid { grid-template-columns: 1fr; } .filters-grid { grid-template-columns: 1fr 1fr; } .form-row, .form-row-3 { grid-template-columns: 1fr; } .sidebar { display: none; } .landing-hero h1 { font-size: 32px; } .landing-features { padding: 30px 20px; } .landing-stats { grid-template-columns: repeat(2,1fr); padding: 30px 20px; } .profile-stats { grid-template-columns: repeat(2,1fr); } .verification-steps { grid-template-columns: 1fr; } .chat-layout { grid-template-columns: 1fr; } .landing-navbar { padding: 0 20px; } }
-    </style>
-</head>
-<body>
-<div class="toast-container" id="toastContainer"></div>
-<div class="loading-overlay hidden" id="loadingOverlay">
-    <div class="spinner"></div>
-    <p style="color:var(--primary);font-weight:600;">Caricamento...</p>
-</div>
 /* =========================
    DROPDOWN USER MENU
 ========================= */
@@ -380,13 +372,18 @@
 
 .dropdown-menu {
     position: absolute;
-    top: 50px;
-    right: 0;
+
+    top: calc(100% + 6px);  /* sotto il nome */
+    left: 50%;               /* centrato rispetto al nome */
+    transform: translateX(-50%);
+
     background: white;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
     min-width: 180px;
     padding: 8px 0;
+
     display: none;
     z-index: 2000;
 }
@@ -418,6 +415,15 @@
 .dropdown-item.logout {
     color: #dc3545;
 }
+    </style>
+</head>
+<body>
+<div class="toast-container" id="toastContainer"></div>
+<div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p style="color:var(--primary);font-weight:600;">Caricamento...</p>
+</div>
+
 
 <!-- ============ LANDING ============ -->
 <div id="landingPage">
