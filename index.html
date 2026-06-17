@@ -634,7 +634,7 @@
                 <div class="page-header"><h1 id="homeGreeting">👋 Ciao!</h1><p>Scopri gli eventi perfetti per te oggi</p></div>
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
                     <div class="card" style="cursor:pointer;" onclick="switchPage('myevents')"><div class="card-body" style="padding:20px;display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;background:rgba(0,53,128,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--primary);"><i class="fas fa-calendar-check"></i></div><div><div style="font-size:24px;font-weight:800;color:var(--primary);">4</div><div style="font-size:12px;color:var(--gray);">Eventi Attivi</div></div></div></div>
-                    <div class="card" style="cursor:pointer;" onclick="switchPage('requests')"><div class="card-body" style="padding:20px;display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;background:rgba(254,187,2,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--accent-dark);"><i class="fas fa-user-clock"></i></div><div><div style="font-size:24px;font-weight:800;color:var(--accent-dark);">2</div><div style="font-size:12px;color:var(--gray);">Richieste Pending</div></div></div></div>
+                    <div class="card" style="cursor:pointer;" onclick="switchPage('requests')"><div class="card-body" style="padding:20px;display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;background:rgba(254,187,2,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--accent-dark);"><i class="fas fa-user-clock"></i></div><div><div id="requestsCount" style="font-size:24px;font-weight:800;color:var(--accent-dark);"></div><div style="font-size:12px;color:var(--gray);">Richieste Pending</div></div></div></div>
                     <div class="card" style="cursor:pointer;" onclick="switchPage('chat')"><div class="card-body" style="padding:20px;display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;background:rgba(0,159,227,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--secondary);"><i class="fas fa-comments"></i></div><div><div style="font-size:24px;font-weight:800;color:var(--secondary);">3</div><div style="font-size:12px;color:var(--gray);">Nuovi Messaggi</div></div></div></div>
                     <div class="card" style="cursor:pointer;" onclick="switchPage('favorites')"><div class="card-body" style="padding:20px;display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;background:rgba(220,53,69,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--danger);"><i class="fas fa-heart"></i></div><div><div style="font-size:24px;font-weight:800;color:var(--danger);">7</div><div style="font-size:12px;color:var(--gray);">Preferiti</div></div></div></div>
                 </div>
@@ -1271,6 +1271,7 @@ const EVENTS = [
 const NOTIFICATIONS = [
     { id:1, icon:"fas fa-user-plus", iconBg:"rgba(0,53,128,0.1)", iconColor:"var(--primary)", text:"<strong>Giulia R.</strong> ha inviato una richiesta per <strong>\"Concerto Ultimo\"</strong>", time:"5 min fa", unread:true, actions:true, reqId:1 },
 ];
+
 const CHATS = [];
 
 // ============================================================
@@ -1281,7 +1282,7 @@ document.addEventListener('DOMContentLoaded', () => {
     App.favorites = EVENTS.filter(e => e.favorited);
     renderHomeEvents(); renderExploreEvents(); renderMyEvents();
     renderFavorites(); renderNotifications(); renderRequests();
-    renderChats(); renderProfileEvents();
+    renderChats(); renderProfileEvents(); updateDashboardCounts();
     const nav = document.getElementById('landingNavbar');
     if (nav) window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 10));
     document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => {
@@ -1461,6 +1462,16 @@ function finishReg() {
 }
 function toggleInterest(el) { el.classList.toggle('selected'); }
 function selectReq(el) { el.closest('.requirements-grid').querySelectorAll('.requirement-card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); }
+
+function updateDashboardCounts() {
+    // conteggio richieste
+    const reqCount = REQUESTS.length;
+
+    const el = document.getElementById("requestsCount");
+    if (el) {
+        el.textContent = reqCount;
+    }
+}
 
 // ============================================================
 // ADMIN PANEL
