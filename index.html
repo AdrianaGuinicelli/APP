@@ -370,6 +370,54 @@
     <div class="spinner"></div>
     <p style="color:var(--primary);font-weight:600;">Caricamento...</p>
 </div>
+/* =========================
+   DROPDOWN USER MENU
+========================= */
+
+.dropdown-user {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    min-width: 180px;
+    padding: 8px 0;
+    display: none;
+    z-index: 2000;
+}
+
+.dropdown-menu.open {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #f4f6f9;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #eee;
+    margin: 6px 0;
+}
+
+.dropdown-item.logout {
+    color: #dc3545;
+}
 
 <!-- ============ LANDING ============ -->
 <div id="landingPage">
@@ -513,11 +561,25 @@
         </div>
         <div class="navbar-right">
             <button class="btn btn-accent btn-sm btn-round" onclick="showModal('createEventModal')"><i class="fas fa-plus"></i> Crea Evento</button>
-            <div class="navbar-avatar" onclick="switchPage('profile')">
-                <div class="avatar avatar-sm" id="navAvatar" style="background:linear-gradient(135deg,var(--primary),var(--secondary));"></div>
-                <span id="navName">Utente</span>
-                <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.7;"></i>
-            </div>
+          <div class="navbar-avatar dropdown-user" onclick="toggleUserDropdown(event)">
+    <div class="avatar avatar-sm" id="navAvatar"></div>
+    <span id="navName">Utente</span>
+    <i class="fas fa-chevron-down" style="font-size:10px;opacity:0.7;"></i>
+
+    <!-- DROPDOWN -->
+    <div class="dropdown-menu" id="userDropdown">
+        <div class="dropdown-item" onclick="switchPage('profile')">
+            <i class="fas fa-user"></i> Profilo
+        </div>
+        <div class="dropdown-item" onclick="switchPage('settings')">
+            <i class="fas fa-cog"></i> Impostazioni
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Esci
+        </div>
+    </div>
+</div>
         </div>
     </nav>
     <div class="app-layout">
@@ -1924,6 +1986,21 @@ function showToast(msg, type='success') {
     document.getElementById('toastContainer').appendChild(t);
     setTimeout(()=>{ if(t.parentElement) t.remove(); },4000);
 }
+// ============================
+// DROPDOWN USER MENU
+// ============================
+
+function toggleUserDropdown(e) {
+    e.stopPropagation();
+
+    const menu = document.getElementById("userDropdown");
+    menu.classList.toggle("open");
+}
+
+// chiusura click fuori
+document.addEventListener("click", () => {
+    document.getElementById("userDropdown")?.classList.remove("open");
+});
 </script>
 </body>
 </html>
