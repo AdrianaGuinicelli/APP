@@ -377,12 +377,12 @@
     left: 50%;               /* centrato rispetto al nome */
     transform: translateX(-50%);
 
-    background: white;
+    background: var(--primary); /* ✅ BLU */
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 
     min-width: 180px;
-    padding: 8px 0;
+    padding: 6px 0;
 
     display: none;
     z-index: 2000;
@@ -399,16 +399,16 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    transition: 0.2s;
+     color: white; /* ✅ testo bianco */
 }
 
 .dropdown-item:hover {
-    background: #f4f6f9;
+    background: rgba(255,255,255,0.15);
 }
 
 .dropdown-divider {
-    height: 1px;
-    background: #eee;
+   height: 1px;
+    background: rgba(255,255,255,0.2);
     margin: 6px 0;
 }
 
