@@ -678,10 +678,7 @@
                         </div>
                         <div class="form-group" style="margin:0;"><label style="font-size:12px;margin-bottom:4px;">Prezzo Max: <span id="priceLabel">€100</span></label><input type="range" min="0" max="500" value="100" id="filterPrice" oninput="document.getElementById('priceLabel').textContent='€'+this.value"></div>
                         <div class="form-group" style="margin:0;"><label style="font-size:12px;margin-bottom:4px;">Raggio: <span id="radiusLabel">50km</span></label><input type="range" min="5" max="300" value="50" id="filterRadius" oninput="document.getElementById('radiusLabel').textContent=this.value+'km'"></div>
-//<!-- FILTER TIPO EVENTO -->//
-.filters-bar .filter-chips {
-    margin-bottom: 16px;
-}
+
 <div class="filter-chips" style="margin-top:10px;"> 
     <div class="chip active" onclick="filterByCategory('all',this)">
         <i class="fas fa-th"></i> Tutti
@@ -698,6 +695,10 @@
 </div>
                         <div class="form-group" style="margin:0;display:flex;align-items:flex-end;"><button class="btn btn-primary w-full" onclick="applyFilters()"><i class="fas fa-filter"></i> Applica</button></div>
                     </div>
+.filters-bar .filter-chips {
+    margin-top: 12px;
+    margin-bottom: 16px;
+}
                 </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
                     <div style="font-size:14px;color:var(--gray);" id="resultsCount">Mostrando 6 eventi</div>
