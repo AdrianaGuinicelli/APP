@@ -675,79 +675,51 @@
                     </div>
                 </div>
  
-<div class="filters-bar">
-
+<div class="filters-bar"> 
     <div class="filters-title">
         <i class="fas fa-sliders-h"></i> Filtri
     </div>
 
-
-    <!-- GRID FILTRI -->
     <div class="filters-grid">
-
-        <div class="form-group" style="margin:0;">
-            <label style="font-size:12px;margin-bottom:4px;">Data Da</label>
+        <!-- DATA / LOCATION -->
+        <div class="form-group">
+            <label>Data Da</label>
             <input type="date" class="input-field" id="filterDateFrom">
         </div>
 
-        <div class="form-group" style="margin:0;">
-            <label style="font-size:12px;margin-bottom:4px;">Data A</label>
+        <div class="form-group">
+            <label>Data A</label>
             <input type="date" class="input-field" id="filterDateTo">
         </div>
 
-        <div class="form-group" style="margin:0;">
-            <label style="font-size:12px;margin-bottom:4px;">Città / Zona</label>
-            <div class="city-input-wrap">
-                <input type="text" class="input-field"
-                    placeholder="Es. Milano, Parigi..."
-                    id="filterCity"
-                    oninput="cityAutocomplete(this,'filterCitySugg')"
-                    autocomplete="off">
-                <div class="city-suggestions" id="filterCitySugg"></div>
-            </div>
+        <div class="form-group">
+            <label>Città / Zona</label>
+            <input type="text" class="input-field" id="filterCity">
         </div>
 
-        <div class="form-group" style="margin:0;">
-            <label style="font-size:12px;margin-bottom:4px;">
-                Prezzo Max: <span id="priceLabel">€100</span>
-            </label>
-            <input type="range" min="0" max="500" value="100"
-                id="filterPrice"
-                oninput="document.getElementById('priceLabel').textContent='€'+this.value">
+        <div class="form-group">
+            <label>Prezzo Max</label>
+            <input type="range" id="filterPrice">
         </div>
 
-        <div class="form-group" style="margin:0;">
-            <label style="font-size:12px;margin-bottom:4px;">
-                Raggio: <span id="radiusLabel">50km</span>
-            </label>
-            <input type="range" min="5" max="300" value="50"
-                id="filterRadius"
-                oninput="document.getElementById('radiusLabel').textContent=this.value+'km'">
+        <div class="form-group">
+            <label>Raggio</label>
+            <input type="range" id="filterRadius">
         </div>
-    <!-- CHIPS (FUORI dalla GRID) -->
-    <div class="filter-chips">
-        <div class="chip active" onclick="filterByCategory('all',this)">
-            <i class="fas fa-th"></i> Tutti
-        </div>
-        <div class="chip" onclick="filterByCategory('musica',this)">🎵 Musica</div>
-        <div class="chip" onclick="filterByCategory('sport',this)">⚽ Sport</div>
-        <div class="chip" onclick="filterByCategory('food',this)">🍽️ Food & Drink</div>
-        <div class="chip" onclick="filterByCategory('arte',this)">🎨 Arte & Cultura</div>
-        <div class="chip" onclick="filterByCategory('tech',this)">💻 Tech</div>
-        <div class="chip" onclick="filterByCategory('natura',this)">🏔️ Natura</div>
-        <div class="chip" onclick="filterByCategory('cinema',this)">🎬 Cinema</div>
-        <div class="chip" onclick="filterByCategory('viaggi',this)">✈️ Viaggi</div>
-        <div class="chip" onclick="filterByCategory('wellness',this)">🧘 Wellness</div>
-    </div>
-        <div class="form-group" style="margin:0;display:flex;align-items:flex-end;">
-            <button class="btn btn-primary w-full" onclick="applyFilters()">
-                <i class="fas fa-filter"></i> Applica
-            </button>
-        </div>
-
     </div>
 
+    <!-- ✅ CATEGORIE SOTTO -->
+    <div style="margin-top:20px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">
+            Categorie
+        </div>
+
+        <div id="categoryContainer" class="filter-chips"></div>
+    </div>
 </div>
+
+
+    </div>
                 </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
                     <div style="font-size:14px;color:var(--gray);" id="resultsCount">Mostrando 6 eventi</div>
@@ -2025,6 +1997,40 @@ function sendMessage() {
 // ============================================================
 // FILTERS
 // ============================================================
+
+const ALL_CATEGORIES = [
+ 'musica','sport','food','arte','tech','natura','cinema','viaggi','wellness'
+];
+
+let selectedCategories = [];
+
+function renderCategories(){
+    const c = document.getElementById('categoryContainer');
+    c.innerHTML = ALL_CATEGORIES.map(cat => `
+        <div class="chip" onclick="toggleCategory('${cat}', this)">
+            ${cat}
+        </div>
+    `).join('');
+}
+
+function toggleCategory(cat, el){
+    if(selectedCategories.includes(cat)){
+        selectedCategories = selectedCategories.filter(c => c !== cat);
+        el.classList.remove('active');
+    }else{
+        selectedCategories.push(cat);
+        el.classList.add('active');
+    }
+}
+
+function applyFilters(){
+    const filtered = EVENTS.filter(e => {
+        if(selectedCategories.length && !selectedCategories.includes(e.category)) return false;
+        return true;
+    });
+
+
+
 function filterEvents() { const s=document.getElementById('searchInput').value.toLowerCase(); renderExploreEvents(EVENTS.filter(e=>e.title.toLowerCase().includes(s)||e.city.toLowerCase().includes(s)||e.category.toLowerCase().includes(s)||e.tags.some(t=>t.includes(s)))); }
 function filterByCategory(cat,el) { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); renderExploreEvents(cat==='all'?EVENTS:EVENTS.filter(e=>e.tags.includes(cat))); }
 function applyFilters() {
