@@ -678,24 +678,9 @@
 <div class="filters-bar">
 
     <div class="filters-title">
-        <i class="fas fa-sliders-h"></i> Filtri Avanzati
+        <i class="fas fa-sliders-h"></i> Filtri
     </div>
 
-    <!-- CHIPS (FUORI dalla GRID) -->
-    <div class="filter-chips">
-        <div class="chip active" onclick="filterByCategory('all',this)">
-            <i class="fas fa-th"></i> Tutti
-        </div>
-        <div class="chip" onclick="filterByCategory('musica',this)">🎵 Musica</div>
-        <div class="chip" onclick="filterByCategory('sport',this)">⚽ Sport</div>
-        <div class="chip" onclick="filterByCategory('food',this)">🍽️ Food & Drink</div>
-        <div class="chip" onclick="filterByCategory('arte',this)">🎨 Arte & Cultura</div>
-        <div class="chip" onclick="filterByCategory('tech',this)">💻 Tech</div>
-        <div class="chip" onclick="filterByCategory('natura',this)">🏔️ Natura</div>
-        <div class="chip" onclick="filterByCategory('cinema',this)">🎬 Cinema</div>
-        <div class="chip" onclick="filterByCategory('viaggi',this)">✈️ Viaggi</div>
-        <div class="chip" onclick="filterByCategory('wellness',this)">🧘 Wellness</div>
-    </div>
 
     <!-- GRID FILTRI -->
     <div class="filters-grid">
@@ -739,7 +724,21 @@
                 id="filterRadius"
                 oninput="document.getElementById('radiusLabel').textContent=this.value+'km'">
         </div>
-
+    <!-- CHIPS (FUORI dalla GRID) -->
+    <div class="filter-chips">
+        <div class="chip active" onclick="filterByCategory('all',this)">
+            <i class="fas fa-th"></i> Tutti
+        </div>
+        <div class="chip" onclick="filterByCategory('musica',this)">🎵 Musica</div>
+        <div class="chip" onclick="filterByCategory('sport',this)">⚽ Sport</div>
+        <div class="chip" onclick="filterByCategory('food',this)">🍽️ Food & Drink</div>
+        <div class="chip" onclick="filterByCategory('arte',this)">🎨 Arte & Cultura</div>
+        <div class="chip" onclick="filterByCategory('tech',this)">💻 Tech</div>
+        <div class="chip" onclick="filterByCategory('natura',this)">🏔️ Natura</div>
+        <div class="chip" onclick="filterByCategory('cinema',this)">🎬 Cinema</div>
+        <div class="chip" onclick="filterByCategory('viaggi',this)">✈️ Viaggi</div>
+        <div class="chip" onclick="filterByCategory('wellness',this)">🧘 Wellness</div>
+    </div>
         <div class="form-group" style="margin:0;display:flex;align-items:flex-end;">
             <button class="btn btn-primary w-full" onclick="applyFilters()">
                 <i class="fas fa-filter"></i> Applica
