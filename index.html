@@ -2028,7 +2028,7 @@ function applyFilters(){
         if(selectedCategories.length && !selectedCategories.includes(e.category)) return false;
         return true;
     });
-
+}
 
 
 function filterEvents() { const s=document.getElementById('searchInput').value.toLowerCase(); renderExploreEvents(EVENTS.filter(e=>e.title.toLowerCase().includes(s)||e.city.toLowerCase().includes(s)||e.category.toLowerCase().includes(s)||e.tags.some(t=>t.includes(s)))); }
