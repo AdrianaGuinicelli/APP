@@ -174,15 +174,6 @@
     margin-bottom: 16px;
 }
 
-        .category-filter-area { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray-light); }
-        .category-filter-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-        .category-search-row { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
-        .selected-category-bubbles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 0; }
-        .selected-category-bubble { background: var(--primary); color: white; border-radius: 50px; padding: 6px 10px 6px 14px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; }
-        .selected-category-bubble button { border: none; background: rgba(255,255,255,0.18); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-        .selected-category-bubble button:hover { background: rgba(255,255,255,0.32); }
-        .chip.add-category-chip { border-style: dashed; color: var(--primary); }
-
         .chip { padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); border: 2px solid var(--gray-light); background: white; color: var(--gray); display: flex; align-items: center; gap: 6px; }
         .chip:hover, .chip.active { border-color: var(--primary); background: rgba(0,53,128,0.08); color: var(--primary); }
         /* EVENTS */
@@ -374,6 +365,32 @@
         .user-table td { padding: 14px 16px; border-bottom: 1px solid var(--gray-light); font-size: 13px; vertical-align: middle; }
         .user-table tr:hover td { background: rgba(0,53,128,0.02); }
         .user-table tr:last-child td { border-bottom: none; }
+
+        /* ADVANCED FILTERS */
+        .filters-grid { grid-template-columns: repeat(5, minmax(170px, 1fr)) auto; align-items: end; }
+        .filter-range-wrap { display:flex; flex-direction:column; gap:9px; }
+        .filter-range-wrap label { font-weight:700; font-size:13px; }
+        .category-filter-panel { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--gray-light); }
+        .category-search-wrap { position: relative; margin-top: 12px; }
+        .category-search-wrap .input-field { padding-left: 44px; }
+        .category-search-wrap i { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--gray); }
+        .selected-category-bubbles { display:flex; flex-wrap:wrap; gap:8px; margin: 12px 0 0; }
+        .selected-category-bubble { background: var(--primary); color:white; border-radius:50px; padding:7px 12px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:8px; }
+        .selected-category-bubble button { border:none; background:rgba(255,255,255,0.18); color:white; width:18px; height:18px; border-radius:50%; cursor:pointer; line-height:18px; display:flex; align-items:center; justify-content:center; font-weight:800; }
+        .category-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px; }
+        .category-chip-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; max-height:150px; overflow-y:auto; padding:2px 2px 6px; }
+        .category-empty { color:var(--gray); font-size:13px; padding:8px 0; }
+        .chip.category-chip.active { border-color: var(--primary); background: rgba(0,53,128,0.08); color: var(--primary); }
+        .geo-suggestions { position:absolute; top:calc(100% + 4px); left:0; right:0; background:white; border:2px solid var(--secondary); border-radius:var(--radius-sm); box-shadow:var(--shadow-hover); z-index:3000; max-height:240px; overflow-y:auto; display:none; }
+        .geo-suggestions.open { display:block; }
+        .geo-suggestion-item { padding:10px 14px; cursor:pointer; font-size:13px; display:flex; align-items:flex-start; gap:8px; border-bottom:1px solid var(--gray-light); }
+        .geo-suggestion-item:last-child { border-bottom:none; }
+        .geo-suggestion-item:hover { background: rgba(0,159,227,0.07); color:var(--primary); }
+        .geo-suggestion-main { font-weight:700; }
+        .geo-suggestion-sub { color:var(--gray); font-size:11px; margin-top:2px; }
+        @media (max-width:1200px) { .filters-grid { grid-template-columns: repeat(3,1fr); } }
+        @media (max-width:768px) { .filters-grid { grid-template-columns: 1fr; } }
+
         /* RESPONSIVE */
         @media (max-width:1200px) { .events-grid { grid-template-columns: repeat(2,1fr); } .filters-grid { grid-template-columns: repeat(3,1fr); } .landing-features { grid-template-columns: repeat(2,1fr); } }
         @media (max-width:768px) { .events-grid { grid-template-columns: 1fr; } .filters-grid { grid-template-columns: 1fr 1fr; } .form-row, .form-row-3 { grid-template-columns: 1fr; } .sidebar { display: none; } .landing-hero h1 { font-size: 32px; } .landing-features { padding: 30px 20px; } .landing-stats { grid-template-columns: repeat(2,1fr); padding: 30px 20px; } .profile-stats { grid-template-columns: repeat(2,1fr); } .verification-steps { grid-template-columns: 1fr; } .chat-layout { grid-template-columns: 1fr; } .landing-navbar { padding: 0 20px; } }
@@ -694,58 +711,44 @@
             <label>Data Da</label>
             <input type="date" class="input-field" id="filterDateFrom" onchange="applyFilters()">
         </div>
-
         <div class="form-group">
             <label>Data A</label>
             <input type="date" class="input-field" id="filterDateTo" onchange="applyFilters()">
         </div>
-
         <div class="form-group">
             <label>Città / Zona</label>
-            <input type="text" class="input-field" id="filterCity" placeholder="Es. Milano, Parigi..." oninput="applyFilters()">
+            <div class="city-input-wrap">
+                <input type="text" class="input-field" id="filterCity" placeholder="Es. Milano, Parigi..." oninput="cityAutocomplete(this,'filterCitySugg'); applyFilters();" autocomplete="off">
+                <div class="city-suggestions geo-suggestions" id="filterCitySugg"></div>
+            </div>
         </div>
-
-        <div class="form-group">
+        <div class="filter-range-wrap">
             <label>Prezzo Max: <span id="filterPriceLabel">€100</span></label>
-            <input type="range" id="filterPrice" min="0" max="300" value="100" oninput="updateRangeLabels();applyFilters()">
+            <input type="range" id="filterPrice" min="0" max="500" step="5" value="100" oninput="updateFilterLabels(); applyFilters();">
         </div>
-
-        <div class="form-group">
+        <div class="filter-range-wrap">
             <label>Raggio: <span id="filterRadiusLabel">50km</span></label>
-            <input type="range" id="filterRadius" min="5" max="300" value="50" oninput="updateRangeLabels();applyFilters()">
+            <input type="range" id="filterRadius" min="1" max="300" step="1" value="50" oninput="updateFilterLabels(); applyFilters();">
         </div>
-
-        <div class="form-group">
-            <label>&nbsp;</label>
-            <button class="btn btn-primary btn-full" onclick="applyFilters()"><i class="fas fa-filter"></i> Applica</button>
-        </div>
+        <button class="btn btn-primary btn-full" onclick="applyFilters()"><i class="fas fa-filter"></i> Applica</button>
     </div>
 
-    <div class="category-filter-area">
-        <div class="category-filter-header">
-            <div>
-                <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Categorie</div>
-                <div style="font-size:12px;color:var(--gray);">Cerca, seleziona o aggiungi più categorie</div>
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="clearCategories()"><i class="fas fa-times"></i> Pulisci</button>
+    <div class="category-filter-panel">
+        <div style="font-size:13px;font-weight:800;color:var(--dark);margin-bottom:4px;">Categorie</div>
+        <div style="font-size:13px;color:var(--gray);">Cerca, seleziona o aggiungi più categorie</div>
+        <div class="category-search-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" class="input-field" id="categorySearchInput" placeholder="Cerca o aggiungi categoria..." oninput="renderCategories()" onkeydown="handleCategorySearchKey(event)">
         </div>
-
-        <div class="category-search-row">
-            <div class="input-icon-wrap" style="flex:1;">
-                <i class="fas fa-search"></i>
-                <input type="text" class="input-field" id="categorySearch" placeholder="Cerca o aggiungi categoria..." oninput="renderCategories(this.value)" onkeydown="handleCategorySearchKey(event)">
-            </div>
-            <button class="btn btn-outline" onclick="addCategoryFromInput()"><i class="fas fa-plus"></i> Aggiungi</button>
+        <div class="category-actions">
+            <button class="btn btn-outline btn-sm" onclick="addCategoryFromSearch()"><i class="fas fa-plus"></i> Aggiungi categoria</button>
+            <button class="btn btn-ghost btn-sm" onclick="clearCategoryFilters()"><i class="fas fa-times"></i> Pulisci categorie</button>
         </div>
-
         <div id="selectedCategoryBubbles" class="selected-category-bubbles"></div>
-        <div id="categoryContainer" class="filter-chips"></div>
+        <div id="categoryContainer" class="category-chip-row"></div>
     </div>
 </div>
 
-
-    </div>
-                </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
                     <div style="font-size:14px;color:var(--gray);" id="resultsCount">Mostrando 6 eventi</div>
                     <select class="input-field" style="width:auto;padding:8px 12px;font-size:13px;" onchange="sortEvents(this.value)">
@@ -1022,7 +1025,7 @@
                 <div class="form-group"><label>Tipo Durata</label><select class="input-field"><option>Singola Data</option><option>Più Date</option><option>Periodo</option><option>Ricorrente</option></select></div>
             </div>
             <div class="form-group"><label>Città <span class="required">*</span></label><div class="city-input-wrap"><input type="text" class="input-field" placeholder="Es. Milano, Parigi..." id="evCity" oninput="cityAutocomplete(this,'evCitySugg')" autocomplete="off"><div class="city-suggestions" id="evCitySugg"></div></div></div>
-            <div class="form-group"><label>Indirizzo / Luogo <span class="required">*</span></label><div class="input-icon-wrap"><i class="fas fa-map-marker-alt"></i><input type="text" class="input-field" placeholder="Via Roma 1, Milano" id="evAddress"></div><div class="map-placeholder" style="height:120px;margin-top:8px;font-size:13px;" onclick="showToast('Apertura mappa...','info')"><i class="fas fa-map-marked-alt" style="font-size:24px;"></i> Clicca per aprire la mappa</div></div>
+            <div class="form-group"><label>Indirizzo / Luogo <span class="required">*</span></label><div class="city-input-wrap input-icon-wrap"><i class="fas fa-map-marker-alt"></i><input type="text" class="input-field" placeholder="Via Roma 1, Milano" id="evAddress" oninput="addressAutocomplete(this,'evAddressSugg')" autocomplete="off"><div class="city-suggestions geo-suggestions" id="evAddressSugg"></div></div><div class="map-placeholder" style="height:120px;margin-top:8px;font-size:13px;" onclick="openMapFromEventForm()"><i class="fas fa-map-marked-alt" style="font-size:24px;"></i> Clicca per aprire la mappa</div></div>
             <div class="form-row">
                 <div class="form-group"><label>Prezzo <span class="required">*</span></label><select class="input-field" id="evPriceType" onchange="togglePriceField(this)"><option value="free">Gratuito</option><option value="fixed">Prezzo Fisso</option><option value="range">Range</option><option value="unknown">Da Definire</option></select></div>
                 <div class="form-group" id="priceFieldWrap" style="display:none;"><label>Importo (€)</label><input type="number" class="input-field" placeholder="Es. 25.00" id="evPrice" min="0" step="0.01"></div>
@@ -1190,105 +1193,147 @@ function initDemoUsers() {
 }
 
 // ============================================================
-// CITY AUTOCOMPLETE — NOMINATIM (WORLDWIDE FIX)
+// CITY / ADDRESS AUTOCOMPLETE — Nominatim + fallback locale
 // ============================================================
 
 const cityCache = {};
+const addressCache = {};
 let cityDebounceTimer = null;
+let addressDebounceTimer = null;
+
+const FALLBACK_PLACES = [
+    { name:'Milano', state:'Lombardia', country:'Italia', lat:45.4642, lon:9.1900 },
+    { name:'Roma', state:'Lazio', country:'Italia', lat:41.9028, lon:12.4964 },
+    { name:'Torino', state:'Piemonte', country:'Italia', lat:45.0703, lon:7.6869 },
+    { name:'Firenze', state:'Toscana', country:'Italia', lat:43.7696, lon:11.2558 },
+    { name:'Napoli', state:'Campania', country:'Italia', lat:40.8518, lon:14.2681 },
+    { name:'Bologna', state:'Emilia-Romagna', country:'Italia', lat:44.4949, lon:11.3426 },
+    { name:'Venezia', state:'Veneto', country:'Italia', lat:45.4408, lon:12.3155 },
+    { name:'Verona', state:'Veneto', country:'Italia', lat:45.4384, lon:10.9916 },
+    { name:'Padova', state:'Veneto', country:'Italia', lat:45.4064, lon:11.8768 },
+    { name:'Parigi', state:'Île-de-France', country:'Francia', lat:48.8566, lon:2.3522 },
+    { name:'Londra', state:'Inghilterra', country:'Regno Unito', lat:51.5072, lon:-0.1276 },
+    { name:'Madrid', state:'Comunidad de Madrid', country:'Spagna', lat:40.4168, lon:-3.7038 },
+    { name:'Berlino', state:'Berlino', country:'Germania', lat:52.5200, lon:13.4050 },
+    { name:'New York', state:'New York', country:'Stati Uniti', lat:40.7128, lon:-74.0060 }
+];
+
+function normalizeText(value) {
+    return String(value || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+}
+
+function escapeJs(value) {
+    return String(value || '').split('\\').join('\\\\').split("'").join("\\'").split('\n').join(' ');
+}
+function getFallbackPlaces(query) {
+    const q = normalizeText(query);
+    if (!q) return [];
+    return FALLBACK_PLACES.filter(p => normalizeText(`${p.name} ${p.state} ${p.country}`).includes(q)).slice(0, 6);
+}
+
+function getPlaceCity(address, fallback) {
+    return address?.city || address?.town || address?.village || address?.municipality || address?.county || fallback || '';
+}
 
 function cityAutocomplete(inputEl, suggId) {
     const query = inputEl.value.trim();
     const container = document.getElementById(suggId);
-
     if (!container) return;
-
-    if (query.length < 2) {
-        closeSugg(container);
-        return;
-    }
-
-    container.innerHTML = `
-        <div class="city-suggestion-item" style="cursor:default;color:var(--gray);">
-            ⏳ Ricerca in corso...
-        </div>
-    `;
-    container.classList.add('open');
-
+    if (query.length < 2) { closeSugg(container); return; }
+    renderCities(getFallbackPlaces(query), container, inputEl.id, suggId, true);
     clearTimeout(cityDebounceTimer);
-
-    cityDebounceTimer = setTimeout(() => {
-        fetchCities(query, container, inputEl.id, suggId);
-    }, 350);
+    cityDebounceTimer = setTimeout(() => fetchCities(query, container, inputEl.id, suggId), 300);
 }
 
 function fetchCities(query, container, inputId, suggId) {
-    const key = query.toLowerCase();
-
-    if (cityCache[key]) {
+    const key = normalizeText(query);
+    if (cityCache[key]) { renderCities(cityCache[key], container, inputId, suggId); return; }
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=8&accept-language=it&featuretype=city`;
+    fetch(url).then(r => r.ok ? r.json() : Promise.reject()).then(data => {
+        const seen = new Set();
+        const results = data.map(c => {
+            const name = getPlaceCity(c.address, c.display_name.split(',')[0]);
+            return { name, country: c.address?.country || '', state: c.address?.state || c.address?.region || '', lat: c.lat, lon: c.lon };
+        }).filter(c => {
+            const id = normalizeText(`${c.name}-${c.state}-${c.country}`);
+            if (!c.name || seen.has(id)) return false;
+            seen.add(id); return true;
+        }).slice(0, 6);
+        cityCache[key] = results.length ? results : getFallbackPlaces(query);
         renderCities(cityCache[key], container, inputId, suggId);
-        return;
-    }
-
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=6`;
-
-    fetch(url)
-        .then(r => r.json())
-        .then(data => {
-            const results = data.map(c => ({
-                name: c.display_name.split(',')[0],
-                country: c.address?.country || '',
-                state: c.address?.state || ''
-            }));
-
-            cityCache[key] = results;
-            renderCities(results, container, inputId, suggId);
-        })
-        .catch(() => {
-            container.innerHTML = `
-                <div class="city-suggestion-item" style="cursor:default;color:var(--danger);">
-                    ⚠️ Errore di connessione
-                </div>
-            `;
-        });
+    }).catch(() => renderCities(getFallbackPlaces(query), container, inputId, suggId));
 }
 
-function renderCities(results, container, inputId, suggId) {
+function renderCities(results, container, inputId, suggId, loadingOnline = false) {
     if (!results.length) {
-        container.innerHTML = `
-            <div class="city-suggestion-item">Nessun risultato</div>
-        `;
-        return;
+        container.innerHTML = `<div class="city-suggestion-item" style="cursor:default;color:var(--gray);">${loadingOnline ? '⏳ Ricerca in corso...' : 'Nessun risultato'}</div>`;
+        container.classList.add('open'); return;
     }
-
+    const loadingRow = loadingOnline ? `<div class="city-suggestion-item" style="cursor:default;color:var(--gray);">⏳ Cerco altri risultati geografici...</div>` : '';
     container.innerHTML = results.map(c => {
         const sub = [c.state, c.country].filter(Boolean).join(', ');
-        return `
-            <div class="city-suggestion-item" 
-                 onclick="selectCity('${c.name.replace(/'/g,"\\'")}','${inputId}','${suggId}')">
-                📍 <span class="city-name">${c.name}</span>
-                <span class="city-region">${sub}</span>
-            </div>
-        `;
-    }).join('');
+        return `<div class="city-suggestion-item" onclick="selectCity('${escapeJs(c.name)}','${inputId}','${suggId}')">📍 <span class="city-name">${c.name}</span><span class="city-region">${sub}</span></div>`;
+    }).join('') + loadingRow;
+    container.classList.add('open');
 }
 
 function selectCity(name, inputId, suggId) {
     const el = document.getElementById(inputId);
-    if (el) el.value = name;
-
-    const c = document.getElementById(suggId);
-    if (c) closeSugg(c);
+    if (el) { el.value = name; el.dispatchEvent(new Event('change', { bubbles: true })); }
+    const c = document.getElementById(suggId); if (c) closeSugg(c);
+    if (inputId === 'filterCity') applyFilters();
 }
 
-function closeSugg(container) {
-    container.classList.remove('open');
-    container.innerHTML = '';
+function addressAutocomplete(inputEl, suggId) {
+    const query = inputEl.value.trim();
+    const container = document.getElementById(suggId);
+    if (!container) return;
+    if (query.length < 3) { closeSugg(container); return; }
+    container.innerHTML = `<div class="geo-suggestion-item" style="cursor:default;color:var(--gray);">⏳ Ricerca indirizzo...</div>`;
+    container.classList.add('open');
+    clearTimeout(addressDebounceTimer);
+    addressDebounceTimer = setTimeout(() => fetchAddresses(query, container, inputEl.id, suggId), 350);
 }
+
+function fetchAddresses(query, container, inputId, suggId) {
+    const key = normalizeText(query);
+    if (addressCache[key]) { renderAddresses(addressCache[key], container, inputId, suggId); return; }
+    const city = document.getElementById('evCity')?.value?.trim();
+    const fullQuery = city && !normalizeText(query).includes(normalizeText(city)) ? `${query}, ${city}` : query;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullQuery)}&addressdetails=1&limit=6&accept-language=it`;
+    fetch(url).then(r => r.ok ? r.json() : Promise.reject()).then(data => {
+        const results = data.map(item => ({ label: item.display_name, city: getPlaceCity(item.address, ''), lat: item.lat, lon: item.lon }));
+        addressCache[key] = results; renderAddresses(results, container, inputId, suggId);
+    }).catch(() => {
+        const fallback = getFallbackPlaces(query).map(p => ({ label: `${p.name}, ${p.state}, ${p.country}`, city: p.name, lat: p.lat, lon: p.lon }));
+        renderAddresses(fallback, container, inputId, suggId);
+    });
+}
+
+function renderAddresses(results, container, inputId, suggId) {
+    if (!results.length) { container.innerHTML = `<div class="geo-suggestion-item" style="cursor:default;color:var(--gray);">Nessun indirizzo trovato</div>`; container.classList.add('open'); return; }
+    container.innerHTML = results.map(a => `<div class="geo-suggestion-item" onclick="selectAddress('${escapeJs(a.label)}','${escapeJs(a.city)}','${inputId}','${suggId}')"><i class="fas fa-map-marker-alt" style="margin-top:2px;color:var(--secondary);"></i><div><div class="geo-suggestion-main">${a.label.split(',')[0]}</div><div class="geo-suggestion-sub">${a.label}</div></div></div>`).join('');
+    container.classList.add('open');
+}
+
+function selectAddress(label, city, inputId, suggId) {
+    const el = document.getElementById(inputId); if (el) el.value = label;
+    if (city) { const cityEl = document.getElementById('evCity'); if (cityEl && !cityEl.value.trim()) cityEl.value = city; }
+    const c = document.getElementById(suggId); if (c) closeSugg(c);
+}
+
+function openMapFromEventForm() {
+    const city = document.getElementById('evCity')?.value?.trim() || '';
+    const address = document.getElementById('evAddress')?.value?.trim() || '';
+    const query = [address, city].filter(Boolean).join(', ');
+    if (!query) { showToast('Inserisci prima città o indirizzo','warning'); return; }
+    window.open(`https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`, '_blank');
+}
+
+function closeSugg(container) { container.classList.remove('open'); container.innerHTML = ''; }
 
 document.addEventListener('click', e => {
-    if (!e.target.closest('.city-input-wrap')) {
-        document.querySelectorAll('.city-suggestions').forEach(closeSugg);
-    }
+    if (!e.target.closest('.city-input-wrap')) document.querySelectorAll('.city-suggestions, .geo-suggestions').forEach(closeSugg);
 });
 
 // ============================================================
@@ -1334,9 +1379,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initDemoUsers();
     App.favorites = EVENTS.filter(e => e.favorited);
     renderHomeEvents(); renderExploreEvents(); renderMyEvents();
-    renderCategories(); updateRangeLabels();
     renderFavorites(); renderNotifications(); renderRequests();
     renderChats(); renderProfileEvents(); updateDashboardCounts();
+    updateFilterLabels(); renderCategories();
     const nav = document.getElementById('landingNavbar');
     if (nav) window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 10));
     document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => {
@@ -2025,238 +2070,132 @@ function sendMessage() {
 // ============================================================
 
 const DEFAULT_CATEGORIES = [
-    { key: 'musica', label: '🎵 Musica' },
-    { key: 'sport', label: '⚽ Sport' },
-    { key: 'food', label: '🍽️ Food & Drink' },
-    { key: 'arte', label: '🎨 Arte & Cultura' },
-    { key: 'tech', label: '💻 Tech' },
-    { key: 'natura', label: '⛰️ Natura' },
-    { key: 'cinema', label: '🎬 Cinema' },
-    { key: 'viaggi', label: '✈️ Viaggi' },
-    { key: 'wellness', label: '🧘 Wellness' }
+    { name:'Musica', emoji:'🎵', keywords:['musica','concerto','concerti','festival','club','live'] },
+    { name:'Sport', emoji:'⚽', keywords:['sport','sportivo','calcio','evento sportivo','running'] },
+    { name:'Food & Drink', emoji:'🍽️', keywords:['food','drink','cena','aperitivo','ristorazione','degustazione','wine','vino'] },
+    { name:'Arte & Cultura', emoji:'🎨', keywords:['arte','cultura','mostra','museo','teatro','spettacolo','workshop','conferenza'] },
+    { name:'Tech', emoji:'💻', keywords:['tech','tecnologia','meetup','innovation','innovazione'] },
+    { name:'Natura', emoji:'🏔️', keywords:['natura','trekking','outdoor','escursioni','escursione'] },
+    { name:'Cinema', emoji:'🎬', keywords:['cinema','film'] },
+    { name:'Viaggi', emoji:'✈️', keywords:['viaggi','viaggio','gita','avventure','travel'] },
+    { name:'Wellness', emoji:'🧘', keywords:['wellness','yoga','benessere'] }
 ];
 
-let allCategories = [...DEFAULT_CATEGORIES];
+let customCategories = [];
 let selectedCategories = [];
 
-function normalizeCategory(value) {
-    return String(value || '')
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, ' ')
-        .trim();
+function getStoredCategories() { try { return JSON.parse(localStorage.getItem('ec_categories') || '[]'); } catch(e) { return []; } }
+function saveStoredCategories() { localStorage.setItem('ec_categories', JSON.stringify(customCategories)); }
+
+function getAllCategories() {
+    const byName = new Map();
+    DEFAULT_CATEGORIES.forEach(c => byName.set(normalizeText(c.name), { ...c, custom:false }));
+    getStoredCategories().forEach(name => { if (name && !byName.has(normalizeText(name))) byName.set(normalizeText(name), { name, emoji:'🏷️', keywords:[name], custom:true }); });
+    EVENTS.forEach(ev => { const cat = inferEventCategory(ev); if (cat && !byName.has(normalizeText(cat))) byName.set(normalizeText(cat), { name:cat, emoji:'🏷️', keywords:[cat], custom:true }); });
+    return Array.from(byName.values()).sort((a,b) => a.name.localeCompare(b.name, 'it'));
 }
 
-function categoryKey(value) {
-    const normalized = normalizeCategory(value);
-    if (!normalized) return '';
-    if (normalized.includes('music') || normalized.includes('concerto')) return 'musica';
-    if (normalized.includes('food') || normalized.includes('drink') || normalized.includes('ristor') || normalized.includes('cena') || normalized.includes('aperitivo')) return 'food';
-    if (normalized.includes('arte') || normalized.includes('cultura') || normalized.includes('mostra')) return 'arte';
-    if (normalized.includes('travel') || normalized.includes('viaggi') || normalized.includes('gita')) return 'viaggi';
-    return normalized.split(' ')[0];
-}
-
-function labelFromCategory(value) {
-    const text = String(value || '').trim();
-    if (!text) return '';
-    return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-function escapeHtml(value) {
-    return String(value || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-function ensureEventCategories() {
-    EVENTS.forEach(ev => {
-        [ev.category, ...(ev.tags || [])].forEach(raw => {
-            const key = categoryKey(raw);
-            if (key && !allCategories.some(c => c.key === key)) {
-                allCategories.push({ key, label: labelFromCategory(raw) });
-            }
-        });
+function syncEventCategorySelect() {
+    const select = document.getElementById('evCategory');
+    if (!select) return;
+    const existing = Array.from(select.options).map(o => normalizeText(o.textContent || o.value));
+    getAllCategories().forEach(c => {
+        if (!existing.some(v => v.includes(normalizeText(c.name)))) {
+            const opt = document.createElement('option');
+            opt.value = `${c.emoji || '🏷️'} ${c.name}`;
+            opt.textContent = `${c.emoji || '🏷️'} ${c.name}`;
+            select.appendChild(opt);
+        }
     });
 }
 
-function getCategoryLabel(key) {
-    const found = allCategories.find(c => c.key === key);
-    return found ? found.label : labelFromCategory(key);
+function inferEventCategory(ev) {
+    const raw = `${ev?.category || ''} ${(ev?.tags || []).join(' ')}`;
+    const norm = normalizeText(raw);
+    const match = DEFAULT_CATEGORIES.find(c => c.keywords.some(k => norm.includes(normalizeText(k))) || norm.includes(normalizeText(c.name)));
+    return match ? match.name : String(ev?.category || '').replace(/^\W+\s*/, '').trim();
 }
 
-function renderCategories(searchValue = '') {
-    ensureEventCategories();
-
+function renderCategories() {
     const container = document.getElementById('categoryContainer');
     if (!container) return;
-
-    const search = normalizeCategory(searchValue);
-    const categories = allCategories.filter(cat =>
-        !search || normalizeCategory(cat.label).includes(search) || cat.key.includes(search)
-    );
-
-    const chips = [
-        `<div class="chip ${selectedCategories.length === 0 ? 'active' : ''}" onclick="clearCategories()"><i class="fas fa-th"></i> Tutti</div>`,
-        ...categories.map(cat => `
-            <div class="chip ${selectedCategories.includes(cat.key) ? 'active' : ''}" onclick="toggleCategory('${cat.key}')">
-                ${cat.label}
-            </div>
-        `)
-    ];
-
-    const pendingKey = categoryKey(searchValue);
-    if (search && pendingKey && !allCategories.some(c => c.key === pendingKey)) {
-        chips.push(`<div class="chip add-category-chip" onclick="addCategoryFromInput()"><i class="fas fa-plus"></i> Aggiungi "${escapeHtml(searchValue.trim())}"</div>`);
-    }
-
-    container.innerHTML = chips.join('');
+    customCategories = getStoredCategories();
+    const query = normalizeText(document.getElementById('categorySearchInput')?.value || '');
+    let categories = getAllCategories();
+    if (query) categories = categories.filter(c => normalizeText(`${c.name} ${c.keywords.join(' ')}`).includes(query));
+    if (!categories.length) container.innerHTML = '<div class="category-empty">Nessuna categoria trovata. Puoi aggiungerla con il pulsante sopra.</div>';
+    else container.innerHTML = categories.map(c => {
+        const active = selectedCategories.some(s => normalizeText(s) === normalizeText(c.name));
+        return `<button type="button" class="chip category-chip ${active ? 'active' : ''}" onclick="toggleCategory('${escapeJs(c.name)}')">${c.emoji || '🏷️'} ${c.name}</button>`;
+    }).join('');
     renderSelectedCategoryBubbles();
+    syncEventCategorySelect();
 }
 
 function renderSelectedCategoryBubbles() {
-    const wrap = document.getElementById('selectedCategoryBubbles');
-    if (!wrap) return;
-
-    if (!selectedCategories.length) {
-        wrap.innerHTML = '';
-        return;
-    }
-
-    wrap.innerHTML = selectedCategories.map(key => `
-        <span class="selected-category-bubble">
-            ${getCategoryLabel(key)}
-            <button type="button" onclick="removeCategory('${key}')" title="Rimuovi categoria">×</button>
-        </span>
-    `).join('');
+    const box = document.getElementById('selectedCategoryBubbles');
+    if (!box) return;
+    if (!selectedCategories.length) { box.innerHTML = '<span class="chip active"><i class="fas fa-th"></i> Tutti</span>'; return; }
+    box.innerHTML = selectedCategories.map(cat => `<span class="selected-category-bubble">${cat}<button type="button" onclick="toggleCategory('${escapeJs(cat)}')">×</button></span>`).join('');
 }
 
-function toggleCategory(key) {
-    if (selectedCategories.includes(key)) {
-        selectedCategories = selectedCategories.filter(c => c !== key);
-    } else {
-        selectedCategories.push(key);
-    }
-    renderCategories(document.getElementById('categorySearch')?.value || '');
-    applyFilters();
+function toggleCategory(cat) {
+    const key = normalizeText(cat);
+    if (selectedCategories.some(c => normalizeText(c) === key)) selectedCategories = selectedCategories.filter(c => normalizeText(c) !== key);
+    else selectedCategories.push(cat);
+    renderCategories(); applyFilters();
 }
 
-function removeCategory(key) {
-    selectedCategories = selectedCategories.filter(c => c !== key);
-    renderCategories(document.getElementById('categorySearch')?.value || '');
-    applyFilters();
-}
-
-function clearCategories() {
-    selectedCategories = [];
-    const input = document.getElementById('categorySearch');
+function addCategoryFromSearch() {
+    const input = document.getElementById('categorySearchInput');
+    const value = input ? input.value.trim() : '';
+    if (!value) { showToast('Scrivi una categoria da aggiungere','warning'); return; }
+    const exists = getAllCategories().some(c => normalizeText(c.name) === normalizeText(value));
+    if (!exists) { customCategories = getStoredCategories(); customCategories.push(value); saveStoredCategories(); }
+    if (!selectedCategories.some(c => normalizeText(c) === normalizeText(value))) selectedCategories.push(value);
     if (input) input.value = '';
-    renderCategories();
-    applyFilters();
+    renderCategories(); syncEventCategorySelect(); applyFilters(); showToast(`Categoria "${value}" aggiunta`,'success');
 }
 
-function addCategoryFromInput() {
-    const input = document.getElementById('categorySearch');
-    const label = input?.value.trim();
-    if (!label) return;
+function handleCategorySearchKey(event) { if (event.key === 'Enter') { event.preventDefault(); addCategoryFromSearch(); } }
+function clearCategoryFilters() { selectedCategories = []; const input = document.getElementById('categorySearchInput'); if (input) input.value = ''; renderCategories(); applyFilters(); }
+function updateFilterLabels() { const price=document.getElementById('filterPrice'); const radius=document.getElementById('filterRadius'); const priceLabel=document.getElementById('filterPriceLabel'); const radiusLabel=document.getElementById('filterRadiusLabel'); if(price&&priceLabel)priceLabel.textContent=`€${price.value}`; if(radius&&radiusLabel)radiusLabel.textContent=`${radius.value}km`; }
 
-    const key = categoryKey(label);
-    if (!allCategories.some(c => c.key === key)) {
-        allCategories.push({ key, label: labelFromCategory(label) });
-    }
-    if (!selectedCategories.includes(key)) selectedCategories.push(key);
-
-    input.value = '';
-    renderCategories();
-    applyFilters();
-}
-
-function handleCategorySearchKey(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        addCategoryFromInput();
-    }
-}
-
-function eventMatchesSelectedCategories(event) {
+function eventMatchesSelectedCategories(ev) {
     if (!selectedCategories.length) return true;
-
-    const eventKeys = [event.category, ...(event.tags || [])]
-        .map(categoryKey)
-        .filter(Boolean);
-
-    return selectedCategories.some(key => eventKeys.includes(key));
+    const eventCategory = normalizeText(inferEventCategory(ev));
+    const raw = normalizeText(`${ev.category || ''} ${(ev.tags || []).join(' ')}`);
+    return selectedCategories.some(cat => { const key = normalizeText(cat); return eventCategory === key || raw.includes(key); });
 }
 
-function updateRangeLabels() {
-    const price = document.getElementById('filterPrice');
-    const radius = document.getElementById('filterRadius');
-    const priceLabel = document.getElementById('filterPriceLabel');
-    const radiusLabel = document.getElementById('filterRadiusLabel');
-
-    if (price && priceLabel) priceLabel.textContent = `€${price.value}`;
-    if (radius && radiusLabel) radiusLabel.textContent = `${radius.value}km`;
-}
-
-function applyFilters() {
-    const search = document.getElementById('searchInput')?.value.toLowerCase().trim() || '';
-    const city = document.getElementById('filterCity')?.value.toLowerCase().trim() || '';
-    const maxPrice = parseInt(document.getElementById('filterPrice')?.value || '9999', 10);
+function getFilteredEvents() {
+    const search = normalizeText(document.getElementById('searchInput')?.value || '');
+    const city = normalizeText(document.getElementById('filterCity')?.value || '');
+    const priceEl = document.getElementById('filterPrice');
+    const maxPrice = priceEl ? parseInt(priceEl.value, 10) : Number.POSITIVE_INFINITY;
     const from = document.getElementById('filterDateFrom')?.value || '';
     const to = document.getElementById('filterDateTo')?.value || '';
-
-    const filtered = EVENTS.filter(e => {
-        if (search) {
-            const haystack = [e.title, e.city, e.category, e.description, ...(e.tags || [])].join(' ').toLowerCase();
-            if (!haystack.includes(search)) return false;
-        }
-        if (city && !e.city.toLowerCase().includes(city)) return false;
-        if (Number(e.price || 0) > maxPrice) return false;
+    return EVENTS.filter(e => {
+        const haystack = normalizeText(`${e.title} ${e.city} ${e.address || ''} ${e.category} ${(e.tags || []).join(' ')} ${e.description || ''}`);
+        if (search && !haystack.includes(search)) return false;
+        if (city && !normalizeText(`${e.city} ${e.address || ''}`).includes(city)) return false;
+        if (Number.isFinite(maxPrice) && Number(e.price || 0) > maxPrice) return false;
         if (from && e.date < from) return false;
         if (to && e.date > to) return false;
         if (!eventMatchesSelectedCategories(e)) return false;
         return true;
     });
-
-    renderExploreEvents(filtered);
-    const count = document.getElementById('resultsCount');
-    if (count) count.textContent = `Mostrando ${filtered.length} eventi`;
 }
 
-function filterEvents() { applyFilters(); }
-function filterByCategory(cat, el) {
-    if (cat === 'all') clearCategories();
-    else toggleCategory(categoryKey(cat));
-}
-function sortEvents(by) {
-    let filtered = Array.from(document.querySelectorAll('#exploreEventsGrid .event-card'));
-    const sorted = [...EVENTS];
-    if(by==='price_asc') sorted.sort((a,b)=>a.price-b.price);
-    else if(by==='price_desc') sorted.sort((a,b)=>b.price-a.price);
-    else if(by==='date') sorted.sort((a,b)=>new Date(a.date)-new Date(b.date));
-    else if(by==='popular') sorted.sort((a,b)=>b.participants.length-a.participants.length);
-    renderExploreEvents(sorted);
-    applyFilters();
-}
-function toggleFav(id, btn) {
-    const ev=EVENTS.find(e=>e.id===id); if(!ev) return;
-    ev.favorited=!ev.favorited; const i=btn.querySelector('i');
-    if(ev.favorited){i.className='fas fa-heart';i.style.color='var(--danger)';App.favorites.push(ev);showToast('Aggiunto ai preferiti ❤️','success');}
-    else{i.className='far fa-heart';i.style.color='var(--gray)';App.favorites=App.favorites.filter(f=>f.id!==id);showToast('Rimosso dai preferiti','info');}
-    renderFavorites();
-}
+function filterEvents() { applyFilters(false); }
+function filterByCategory(cat, el) { if (cat === 'all') { clearCategoryFilters(); return; } toggleCategory(cat); }
+function applyFilters(showMessage = true) { updateFilterLabels(); const filtered = getFilteredEvents(); renderExploreEvents(filtered); if (showMessage) showToast(`${filtered.length} eventi trovati`,'success'); }
+function sortEvents(by) { const s=getFilteredEvents(); if(by==='price_asc')s.sort((a,b)=>a.price-b.price); else if(by==='price_desc')s.sort((a,b)=>b.price-a.price); else if(by==='date')s.sort((a,b)=>new Date(a.date)-new Date(b.date)); else if(by==='popular')s.sort((a,b)=>b.participants.length-a.participants.length); renderExploreEvents(s); }
+function toggleFav(id, btn) { const ev=EVENTS.find(e=>e.id===id); if(!ev) return; ev.favorited=!ev.favorited; const i=btn.querySelector('i'); if(ev.favorited){i.className='fas fa-heart';i.style.color='var(--danger)';App.favorites.push(ev);showToast('Aggiunto ai preferiti ❤️','success');} else{i.className='far fa-heart';i.style.color='var(--gray)';App.favorites=App.favorites.filter(f=>f.id!==id);showToast('Rimosso dai preferiti','info');} renderFavorites(); }
 function togglePriceField(sel) { document.getElementById('priceFieldWrap').style.display=sel.value!=='free'?'block':'none'; }
 function importFromUrl() { const url=document.getElementById('importUrl').value; if(!url){showToast('Inserisci un URL valido','error');return;} showLoading(); setTimeout(()=>{ hideLoading(); try{document.getElementById('evTitle').value="Evento da "+new URL(url).hostname;}catch(e){} showToast('Dati importati ✅','success'); },1500); }
 function saveDraftEvent() { showToast('Bozza salvata 📝','info'); closeModal('createEventModal'); }
-function publishEvent() {
-    const t=document.getElementById('evTitle').value.trim(); const ca=document.getElementById('evCategory').value; const d=document.getElementById('evDescription').value.trim(); const ds=document.getElementById('evDateStart').value; const a=document.getElementById('evAddress').value.trim();
-    if(!t){showToast("Inserisci il nome dell'evento",'error');return;} if(!ca){showToast('Seleziona una categoria','error');return;} if(!d){showToast('Aggiungi una descrizione','error');return;} if(!ds){showToast("Seleziona la data",'error');return;} if(!a){showToast("Inserisci l'indirizzo",'error');return;}
-    showLoading(); setTimeout(()=>{ hideLoading(); closeModal('createEventModal'); showToast('Evento pubblicato! 🎉','success'); },1500);
-}
+function publishEvent() { const t=document.getElementById('evTitle').value.trim(); const ca=document.getElementById('evCategory').value; const d=document.getElementById('evDescription').value.trim(); const ds=document.getElementById('evDateStart').value; const city=document.getElementById('evCity').value.trim(); const a=document.getElementById('evAddress').value.trim(); if(!t){showToast("Inserisci il nome dell'evento",'error');return;} if(!ca){showToast('Seleziona una categoria','error');return;} if(!d){showToast('Aggiungi una descrizione','error');return;} if(!ds){showToast("Seleziona la data",'error');return;} if(!city){showToast('Inserisci la città','error');return;} if(!a){showToast("Inserisci l'indirizzo",'error');return;} showLoading(); setTimeout(()=>{ hideLoading(); closeModal('createEventModal'); showToast('Evento pubblicato! 🎉','success'); },1500); }
 function saveProfile() { showLoading(); setTimeout(()=>{ hideLoading(); closeModal('editProfileModal'); showToast('Profilo aggiornato ✅','success'); },1000); }
 function triggerPhotoUpload() { showToast('Scegli una foto dal tuo dispositivo 📷','info'); }
 
