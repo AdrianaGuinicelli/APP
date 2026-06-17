@@ -174,6 +174,15 @@
     margin-bottom: 16px;
 }
 
+        .category-filter-area { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray-light); }
+        .category-filter-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+        .category-search-row { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+        .selected-category-bubbles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 0; }
+        .selected-category-bubble { background: var(--primary); color: white; border-radius: 50px; padding: 6px 10px 6px 14px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; }
+        .selected-category-bubble button { border: none; background: rgba(255,255,255,0.18); color: white; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .selected-category-bubble button:hover { background: rgba(255,255,255,0.32); }
+        .chip.add-category-chip { border-style: dashed; color: var(--primary); }
+
         .chip { padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); border: 2px solid var(--gray-light); background: white; color: var(--gray); display: flex; align-items: center; gap: 6px; }
         .chip:hover, .chip.active { border-color: var(--primary); background: rgba(0,53,128,0.08); color: var(--primary); }
         /* EVENTS */
@@ -681,39 +690,55 @@
     </div>
 
     <div class="filters-grid">
-        <!-- DATA / LOCATION -->
         <div class="form-group">
             <label>Data Da</label>
-            <input type="date" class="input-field" id="filterDateFrom">
+            <input type="date" class="input-field" id="filterDateFrom" onchange="applyFilters()">
         </div>
 
         <div class="form-group">
             <label>Data A</label>
-            <input type="date" class="input-field" id="filterDateTo">
+            <input type="date" class="input-field" id="filterDateTo" onchange="applyFilters()">
         </div>
 
         <div class="form-group">
             <label>Città / Zona</label>
-            <input type="text" class="input-field" id="filterCity">
+            <input type="text" class="input-field" id="filterCity" placeholder="Es. Milano, Parigi..." oninput="applyFilters()">
         </div>
 
         <div class="form-group">
-            <label>Prezzo Max</label>
-            <input type="range" id="filterPrice">
+            <label>Prezzo Max: <span id="filterPriceLabel">€100</span></label>
+            <input type="range" id="filterPrice" min="0" max="300" value="100" oninput="updateRangeLabels();applyFilters()">
         </div>
 
         <div class="form-group">
-            <label>Raggio</label>
-            <input type="range" id="filterRadius">
+            <label>Raggio: <span id="filterRadiusLabel">50km</span></label>
+            <input type="range" id="filterRadius" min="5" max="300" value="50" oninput="updateRangeLabels();applyFilters()">
+        </div>
+
+        <div class="form-group">
+            <label>&nbsp;</label>
+            <button class="btn btn-primary btn-full" onclick="applyFilters()"><i class="fas fa-filter"></i> Applica</button>
         </div>
     </div>
 
-    <!-- ✅ CATEGORIE SOTTO -->
-    <div style="margin-top:20px;">
-        <div style="font-size:12px;font-weight:700;margin-bottom:8px;">
-            Categorie
+    <div class="category-filter-area">
+        <div class="category-filter-header">
+            <div>
+                <div style="font-size:12px;font-weight:700;margin-bottom:4px;">Categorie</div>
+                <div style="font-size:12px;color:var(--gray);">Cerca, seleziona o aggiungi più categorie</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="clearCategories()"><i class="fas fa-times"></i> Pulisci</button>
         </div>
 
+        <div class="category-search-row">
+            <div class="input-icon-wrap" style="flex:1;">
+                <i class="fas fa-search"></i>
+                <input type="text" class="input-field" id="categorySearch" placeholder="Cerca o aggiungi categoria..." oninput="renderCategories(this.value)" onkeydown="handleCategorySearchKey(event)">
+            </div>
+            <button class="btn btn-outline" onclick="addCategoryFromInput()"><i class="fas fa-plus"></i> Aggiungi</button>
+        </div>
+
+        <div id="selectedCategoryBubbles" class="selected-category-bubbles"></div>
         <div id="categoryContainer" class="filter-chips"></div>
     </div>
 </div>
@@ -1309,6 +1334,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDemoUsers();
     App.favorites = EVENTS.filter(e => e.favorited);
     renderHomeEvents(); renderExploreEvents(); renderMyEvents();
+    renderCategories(); updateRangeLabels();
     renderFavorites(); renderNotifications(); renderRequests();
     renderChats(); renderProfileEvents(); updateDashboardCounts();
     const nav = document.getElementById('landingNavbar');
@@ -1998,49 +2024,224 @@ function sendMessage() {
 // FILTERS
 // ============================================================
 
-const ALL_CATEGORIES = [
- 'musica','sport','food','arte','tech','natura','cinema','viaggi','wellness'
+const DEFAULT_CATEGORIES = [
+    { key: 'musica', label: '🎵 Musica' },
+    { key: 'sport', label: '⚽ Sport' },
+    { key: 'food', label: '🍽️ Food & Drink' },
+    { key: 'arte', label: '🎨 Arte & Cultura' },
+    { key: 'tech', label: '💻 Tech' },
+    { key: 'natura', label: '⛰️ Natura' },
+    { key: 'cinema', label: '🎬 Cinema' },
+    { key: 'viaggi', label: '✈️ Viaggi' },
+    { key: 'wellness', label: '🧘 Wellness' }
 ];
 
+let allCategories = [...DEFAULT_CATEGORIES];
 let selectedCategories = [];
 
-function renderCategories(){
-    const c = document.getElementById('categoryContainer');
-    c.innerHTML = ALL_CATEGORIES.map(cat => `
-        <div class="chip" onclick="toggleCategory('${cat}', this)">
-            ${cat}
-        </div>
-    `).join('');
+function normalizeCategory(value) {
+    return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
 }
 
-function toggleCategory(cat, el){
-    if(selectedCategories.includes(cat)){
-        selectedCategories = selectedCategories.filter(c => c !== cat);
-        el.classList.remove('active');
-    }else{
-        selectedCategories.push(cat);
-        el.classList.add('active');
-    }
+function categoryKey(value) {
+    const normalized = normalizeCategory(value);
+    if (!normalized) return '';
+    if (normalized.includes('music') || normalized.includes('concerto')) return 'musica';
+    if (normalized.includes('food') || normalized.includes('drink') || normalized.includes('ristor') || normalized.includes('cena') || normalized.includes('aperitivo')) return 'food';
+    if (normalized.includes('arte') || normalized.includes('cultura') || normalized.includes('mostra')) return 'arte';
+    if (normalized.includes('travel') || normalized.includes('viaggi') || normalized.includes('gita')) return 'viaggi';
+    return normalized.split(' ')[0];
 }
 
-function applyFilters(){
-    const filtered = EVENTS.filter(e => {
-        if(selectedCategories.length && !selectedCategories.includes(e.category)) return false;
-        return true;
+function labelFromCategory(value) {
+    const text = String(value || '').trim();
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function ensureEventCategories() {
+    EVENTS.forEach(ev => {
+        [ev.category, ...(ev.tags || [])].forEach(raw => {
+            const key = categoryKey(raw);
+            if (key && !allCategories.some(c => c.key === key)) {
+                allCategories.push({ key, label: labelFromCategory(raw) });
+            }
+        });
     });
 }
 
-
-function filterEvents() { const s=document.getElementById('searchInput').value.toLowerCase(); renderExploreEvents(EVENTS.filter(e=>e.title.toLowerCase().includes(s)||e.city.toLowerCase().includes(s)||e.category.toLowerCase().includes(s)||e.tags.some(t=>t.includes(s)))); }
-function filterByCategory(cat,el) { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); renderExploreEvents(cat==='all'?EVENTS:EVENTS.filter(e=>e.tags.includes(cat))); }
-function applyFilters() {
-    const city=document.getElementById('filterCity').value.toLowerCase();
-    const maxP=parseInt(document.getElementById('filterPrice').value);
-    const from=document.getElementById('filterDateFrom').value;
-    const filtered=EVENTS.filter(e=>{ if(city&&!e.city.toLowerCase().includes(city))return false; if(e.price>maxP)return false; if(from&&e.date<from)return false; return true; });
-    renderExploreEvents(filtered); showToast(`${filtered.length} eventi trovati`,'success');
+function getCategoryLabel(key) {
+    const found = allCategories.find(c => c.key === key);
+    return found ? found.label : labelFromCategory(key);
 }
-function sortEvents(by) { const s=[...EVENTS]; if(by==='price_asc')s.sort((a,b)=>a.price-b.price); else if(by==='price_desc')s.sort((a,b)=>b.price-a.price); else if(by==='date')s.sort((a,b)=>new Date(a.date)-new Date(b.date)); else if(by==='popular')s.sort((a,b)=>b.participants.length-a.participants.length); renderExploreEvents(s); }
+
+function renderCategories(searchValue = '') {
+    ensureEventCategories();
+
+    const container = document.getElementById('categoryContainer');
+    if (!container) return;
+
+    const search = normalizeCategory(searchValue);
+    const categories = allCategories.filter(cat =>
+        !search || normalizeCategory(cat.label).includes(search) || cat.key.includes(search)
+    );
+
+    const chips = [
+        `<div class="chip ${selectedCategories.length === 0 ? 'active' : ''}" onclick="clearCategories()"><i class="fas fa-th"></i> Tutti</div>`,
+        ...categories.map(cat => `
+            <div class="chip ${selectedCategories.includes(cat.key) ? 'active' : ''}" onclick="toggleCategory('${cat.key}')">
+                ${cat.label}
+            </div>
+        `)
+    ];
+
+    const pendingKey = categoryKey(searchValue);
+    if (search && pendingKey && !allCategories.some(c => c.key === pendingKey)) {
+        chips.push(`<div class="chip add-category-chip" onclick="addCategoryFromInput()"><i class="fas fa-plus"></i> Aggiungi "${escapeHtml(searchValue.trim())}"</div>`);
+    }
+
+    container.innerHTML = chips.join('');
+    renderSelectedCategoryBubbles();
+}
+
+function renderSelectedCategoryBubbles() {
+    const wrap = document.getElementById('selectedCategoryBubbles');
+    if (!wrap) return;
+
+    if (!selectedCategories.length) {
+        wrap.innerHTML = '';
+        return;
+    }
+
+    wrap.innerHTML = selectedCategories.map(key => `
+        <span class="selected-category-bubble">
+            ${getCategoryLabel(key)}
+            <button type="button" onclick="removeCategory('${key}')" title="Rimuovi categoria">×</button>
+        </span>
+    `).join('');
+}
+
+function toggleCategory(key) {
+    if (selectedCategories.includes(key)) {
+        selectedCategories = selectedCategories.filter(c => c !== key);
+    } else {
+        selectedCategories.push(key);
+    }
+    renderCategories(document.getElementById('categorySearch')?.value || '');
+    applyFilters();
+}
+
+function removeCategory(key) {
+    selectedCategories = selectedCategories.filter(c => c !== key);
+    renderCategories(document.getElementById('categorySearch')?.value || '');
+    applyFilters();
+}
+
+function clearCategories() {
+    selectedCategories = [];
+    const input = document.getElementById('categorySearch');
+    if (input) input.value = '';
+    renderCategories();
+    applyFilters();
+}
+
+function addCategoryFromInput() {
+    const input = document.getElementById('categorySearch');
+    const label = input?.value.trim();
+    if (!label) return;
+
+    const key = categoryKey(label);
+    if (!allCategories.some(c => c.key === key)) {
+        allCategories.push({ key, label: labelFromCategory(label) });
+    }
+    if (!selectedCategories.includes(key)) selectedCategories.push(key);
+
+    input.value = '';
+    renderCategories();
+    applyFilters();
+}
+
+function handleCategorySearchKey(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        addCategoryFromInput();
+    }
+}
+
+function eventMatchesSelectedCategories(event) {
+    if (!selectedCategories.length) return true;
+
+    const eventKeys = [event.category, ...(event.tags || [])]
+        .map(categoryKey)
+        .filter(Boolean);
+
+    return selectedCategories.some(key => eventKeys.includes(key));
+}
+
+function updateRangeLabels() {
+    const price = document.getElementById('filterPrice');
+    const radius = document.getElementById('filterRadius');
+    const priceLabel = document.getElementById('filterPriceLabel');
+    const radiusLabel = document.getElementById('filterRadiusLabel');
+
+    if (price && priceLabel) priceLabel.textContent = `€${price.value}`;
+    if (radius && radiusLabel) radiusLabel.textContent = `${radius.value}km`;
+}
+
+function applyFilters() {
+    const search = document.getElementById('searchInput')?.value.toLowerCase().trim() || '';
+    const city = document.getElementById('filterCity')?.value.toLowerCase().trim() || '';
+    const maxPrice = parseInt(document.getElementById('filterPrice')?.value || '9999', 10);
+    const from = document.getElementById('filterDateFrom')?.value || '';
+    const to = document.getElementById('filterDateTo')?.value || '';
+
+    const filtered = EVENTS.filter(e => {
+        if (search) {
+            const haystack = [e.title, e.city, e.category, e.description, ...(e.tags || [])].join(' ').toLowerCase();
+            if (!haystack.includes(search)) return false;
+        }
+        if (city && !e.city.toLowerCase().includes(city)) return false;
+        if (Number(e.price || 0) > maxPrice) return false;
+        if (from && e.date < from) return false;
+        if (to && e.date > to) return false;
+        if (!eventMatchesSelectedCategories(e)) return false;
+        return true;
+    });
+
+    renderExploreEvents(filtered);
+    const count = document.getElementById('resultsCount');
+    if (count) count.textContent = `Mostrando ${filtered.length} eventi`;
+}
+
+function filterEvents() { applyFilters(); }
+function filterByCategory(cat, el) {
+    if (cat === 'all') clearCategories();
+    else toggleCategory(categoryKey(cat));
+}
+function sortEvents(by) {
+    let filtered = Array.from(document.querySelectorAll('#exploreEventsGrid .event-card'));
+    const sorted = [...EVENTS];
+    if(by==='price_asc') sorted.sort((a,b)=>a.price-b.price);
+    else if(by==='price_desc') sorted.sort((a,b)=>b.price-a.price);
+    else if(by==='date') sorted.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    else if(by==='popular') sorted.sort((a,b)=>b.participants.length-a.participants.length);
+    renderExploreEvents(sorted);
+    applyFilters();
+}
 function toggleFav(id, btn) {
     const ev=EVENTS.find(e=>e.id===id); if(!ev) return;
     ev.favorited=!ev.favorited; const i=btn.querySelector('i');
