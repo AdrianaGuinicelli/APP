@@ -574,6 +574,14 @@
 
     <!-- DROPDOWN -->
     <div class="dropdown-menu" id="userDropdown">
+
+    <div class="dropdown-item" onclick="switchPage('myevents')">
+        <i class="fas fa-calendar-alt"></i> I miei eventi
+<span style="margin-left:auto;background:var(--accent);padding:2px 8px;border-radius:50px;font-size:11px;color:var(--dark);font-weight:700;">
+    4
+</span>
+
+    </div>
         <div class="dropdown-item" onclick="switchPage('profile')">
             <i class="fas fa-user"></i> Profilo
         </div>
@@ -594,8 +602,7 @@
                 <div class="sidebar-section-title">Menù Principale</div>
                 <div class="sidebar-item active" onclick="switchPage('home');setSidebarActive(this)"><i class="fas fa-home"></i> Dashboard</div>
                 <div class="sidebar-item" onclick="switchPage('explore');setSidebarActive(this)"><i class="fas fa-search"></i> Cerca Eventi</div>
-                <div class="sidebar-item" onclick="switchPage('myevents');setSidebarActive(this)"><i class="fas fa-calendar-alt"></i> I Miei Eventi<span class="sidebar-badge">4</span></div>
-                <div class="sidebar-item" onclick="switchPage('favorites');setSidebarActive(this)"><i class="fas fa-heart"></i> Preferiti</div>
+                               <div class="sidebar-item" onclick="switchPage('favorites');setSidebarActive(this)"><i class="fas fa-heart"></i> Preferiti</div>
             </div>
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Comunicazione</div>
