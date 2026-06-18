@@ -4,108 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>EventConnect – Condividi Esperienze</title>
-
-<!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-/* ============================================================
-   RESET & BASE
-============================================================ */
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;overflow:hidden;}
-
-.app{
-  max-width:430px;margin:0 auto;
-  background:#f5f5f7;
-  height:100vh;display:flex;flex-direction:column;
-  position:relative;overflow:hidden;
-  box-shadow:0 0 40px rgba(0,0,0,.15);
-}
-
-/* HEADER */
-.header{
-  padding:14px 16px;
-  background:#fff;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid #eee;
-  position:relative;z-index:50;
-  min-height:54px;
-}
+.app{max-width:430px;margin:0 auto;background:#f5f5f7;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(0,0,0,.15);}
+.header{padding:14px 16px;background:#fff;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;position:relative;z-index:50;min-height:54px;}
 .header-left{display:flex;align-items:center;gap:10px;}
 .back-btn{font-size:26px;cursor:pointer;color:#6c5ce7;display:none;line-height:1;}
 .header-title{font-weight:700;font-size:17px;}
-.header-logo{
-  font-size:17px;font-weight:800;
-  background:linear-gradient(90deg,#6c5ce7,#a29bfe);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
+.header-logo{font-size:17px;font-weight:800;background:linear-gradient(90deg,#6c5ce7,#a29bfe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .header-right{display:flex;align-items:center;gap:12px;}
 .header-icon{font-size:22px;cursor:pointer;position:relative;}
-.badge-dot{
-  position:absolute;top:-2px;right:-2px;
-  width:9px;height:9px;border-radius:50%;
-  background:#ff4757;border:2px solid #fff;
-}
-
-/* CONTENT */
-.content{
-  flex:1;overflow-y:auto;padding:16px;
-  padding-bottom:85px;
-  -webkit-overflow-scrolling:touch;
-}
+.badge-dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#ff4757;border:2px solid #fff;}
+.content{flex:1;overflow-y:auto;padding:16px;padding-bottom:85px;-webkit-overflow-scrolling:touch;}
 .content::-webkit-scrollbar{display:none;}
-
-/* NAVBAR */
-.navbar{
-  display:flex;justify-content:space-around;align-items:center;
-  padding:8px 0 14px;
-  border-top:1px solid #eee;background:#fff;
-  position:absolute;bottom:0;left:0;right:0;z-index:50;
-}
-.nav-item{
-  display:flex;flex-direction:column;align-items:center;
-  cursor:pointer;font-size:10px;color:#aaa;gap:2px;
-  transition:color .2s;min-width:52px;
-}
+.navbar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;border-top:1px solid #eee;background:#fff;position:absolute;bottom:0;left:0;right:0;z-index:50;}
+.nav-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;font-size:10px;color:#aaa;gap:2px;transition:color .2s;min-width:52px;}
 .nav-item.active{color:#6c5ce7;}
 .nav-icon{font-size:22px;line-height:1;}
-.nav-plus{
-  background:linear-gradient(135deg,#6c5ce7,#8e7dff);
-  color:#fff;border-radius:50%;
-  width:46px;height:46px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;margin-top:-14px;
-  box-shadow:0 4px 14px rgba(108,92,231,.5);
-}
-
-/* BUTTONS */
-.btn{
-  background:linear-gradient(90deg,#6c5ce7,#8e7dff);
-  color:#fff;padding:13px;text-align:center;
-  border-radius:14px;margin-top:10px;cursor:pointer;
-  font-weight:700;font-size:15px;border:none;width:100%;
-  display:block;transition:opacity .2s;
-}
+.nav-plus{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-top:-14px;box-shadow:0 4px 14px rgba(108,92,231,.5);}
+.btn{background:linear-gradient(90deg,#6c5ce7,#8e7dff);color:#fff;padding:13px;text-align:center;border-radius:14px;margin-top:10px;cursor:pointer;font-weight:700;font-size:15px;border:none;width:100%;display:block;transition:opacity .2s;}
 .btn:active{opacity:.8;}
 .btn.secondary{background:#f0f0f5;color:#6c5ce7;}
 .btn.outline{background:transparent;color:#6c5ce7;border:1.5px solid #6c5ce7;}
 .btn.danger{background:linear-gradient(90deg,#ff4757,#ff6b81);}
 .btn.green{background:linear-gradient(90deg,#00b894,#55efc4);}
 .btn.sm{padding:8px 14px;font-size:13px;border-radius:10px;width:auto;display:inline-block;margin-top:0;}
-
-/* CARDS */
-.card{
-  background:#fff;border-radius:18px;padding:14px;
-  margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.07);
-}
+.card{background:#fff;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
 .card-title{font-weight:700;font-size:16px;margin-bottom:4px;}
 .card-meta{font-size:13px;color:#666;display:flex;align-items:center;gap:6px;margin-bottom:3px;}
-.card-tag{
-  display:inline-block;border-radius:20px;
-  padding:3px 10px;font-size:12px;font-weight:700;
-  margin-bottom:6px;margin-right:4px;
-}
+.card-tag{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;margin-bottom:6px;margin-right:4px;}
 .tag-musica{background:#f0eeff;color:#6c5ce7;}
 .tag-arte{background:#fce4ec;color:#c2185b;}
 .tag-sport{background:#e8f8f5;color:#00897b;}
@@ -119,95 +48,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-libri{background:#fff8e1;color:#f57f17;}
 .tag-benessere{background:#f1f8e9;color:#558b2f;}
 .tag-cibo{background:#fff3e0;color:#e65100;}
-
-/* INPUTS */
-input,textarea,select{
-  width:100%;padding:12px 14px;margin-top:8px;
-  border-radius:12px;border:1.5px solid #e0e0e0;
-  font-size:14px;outline:none;transition:border-color .2s;
-  background:#fafafa;font-family:inherit;color:#222;
-}
+input,textarea,select{width:100%;padding:12px 14px;margin-top:8px;border-radius:12px;border:1.5px solid #e0e0e0;font-size:14px;outline:none;transition:border-color .2s;background:#fafafa;font-family:inherit;color:#222;}
 input:focus,textarea:focus,select:focus{border-color:#6c5ce7;background:#fff;}
 label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
-
-/* AUTOCOMPLETE */
 .autocomplete-wrap{position:relative;}
-.autocomplete-list{
-  position:absolute;top:100%;left:0;right:0;
-  background:#fff;border:1.5px solid #6c5ce7;border-radius:12px;
-  z-index:200;max-height:180px;overflow-y:auto;
-  box-shadow:0 8px 24px rgba(108,92,231,.15);
-}
-.autocomplete-item{
-  padding:10px 14px;cursor:pointer;font-size:14px;
-  border-bottom:1px solid #f0f0f0;
-}
+.autocomplete-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #6c5ce7;border-radius:12px;z-index:200;max-height:180px;overflow-y:auto;box-shadow:0 8px 24px rgba(108,92,231,.15);}
+.autocomplete-item{padding:10px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;}
 .autocomplete-item:last-child{border-bottom:none;}
 .autocomplete-item:hover{background:#f0eeff;color:#6c5ce7;}
-
-/* AVATAR */
-.avatar{
-  width:42px;height:42px;border-radius:50%;
-  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-weight:700;font-size:16px;flex-shrink:0;
-}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;}
 .avatar.lg{width:80px;height:80px;font-size:30px;}
 .avatar.sm{width:32px;height:32px;font-size:13px;}
 .avatar.xl{width:100px;height:100px;font-size:36px;}
-
-/* BADGE */
 .badge{background:#6c5ce7;color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;}
 .badge.green{background:#00b894;}
 .badge.red{background:#ff4757;}
 .badge.orange{background:#e67e22;}
-
-/* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
-.chip{
-  padding:9px 16px;border-radius:20px;
-  border:2px solid #e0e0e0;cursor:pointer;
-  font-size:14px;display:flex;align-items:center;gap:6px;
-  transition:all .2s;background:#fff;
-}
+.chip{padding:9px 16px;border-radius:20px;border:2px solid #e0e0e0;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:6px;transition:all .2s;background:#fff;}
 .chip.selected{border-color:#6c5ce7;background:#f0eeff;color:#6c5ce7;font-weight:700;}
-
-/* SECTION HEADERS */
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:8px;}
 .section-title{font-weight:700;font-size:17px;}
 .section-link{color:#6c5ce7;font-size:13px;cursor:pointer;}
-
-/* SEARCH BAR */
-.search-bar{
-  display:flex;align-items:center;gap:10px;
-  background:#f5f5f7;border-radius:14px;padding:10px 14px;
-  margin-bottom:12px;border:1.5px solid #e8e8e8;
-}
+.search-bar{display:flex;align-items:center;gap:10px;background:#f5f5f7;border-radius:14px;padding:10px 14px;margin-bottom:12px;border:1.5px solid #e8e8e8;}
 .search-bar input{border:none;background:transparent;padding:0;margin:0;font-size:14px;flex:1;}
 .search-bar input:focus{border:none;background:transparent;}
-
-/* FILTER CHIPS */
 .filters{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
 .filters::-webkit-scrollbar{display:none;}
-.filter-chip{
-  padding:7px 14px;border-radius:20px;
-  border:1.5px solid #e0e0e0;cursor:pointer;
-  font-size:13px;white-space:nowrap;background:#fff;
-  transition:all .2s;flex-shrink:0;
-}
+.filter-chip{padding:7px 14px;border-radius:20px;border:1.5px solid #e0e0e0;cursor:pointer;font-size:13px;white-space:nowrap;background:#fff;transition:all .2s;flex-shrink:0;}
 .filter-chip.active{background:#6c5ce7;color:#fff;border-color:#6c5ce7;}
-
-/* SCROLL ROW */
 .scroll-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;}
 .scroll-row::-webkit-scrollbar{display:none;}
-.scroll-card{
-  min-width:190px;background:#fff;border-radius:16px;
-  padding:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);
-  flex-shrink:0;cursor:pointer;transition:transform .15s;
-}
+.scroll-card{min-width:190px;background:#fff;border-radius:16px;padding:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);flex-shrink:0;cursor:pointer;transition:transform .15s;}
 .scroll-card:active{transform:scale(.97);}
-
-/* CHAT */
 .chat-messages{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:340px;overflow-y:auto;}
 .msg-wrap{display:flex;flex-direction:column;}
 .msg-wrap.me{align-items:flex-end;}
@@ -219,139 +92,122 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .msg-sender{font-size:11px;color:#6c5ce7;font-weight:700;margin-bottom:2px;}
 .chat-input-row{display:flex;gap:8px;align-items:center;margin-top:4px;}
 .chat-input-row input{margin:0;flex:1;}
-.send-btn{
-  background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;
-  border:none;border-radius:50%;width:44px;height:44px;
-  font-size:20px;cursor:pointer;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;
-}
-
-/* TABS */
+.send-btn{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .tabs{display:flex;border-bottom:2px solid #eee;margin-bottom:14px;}
 .tab{flex:1;text-align:center;padding:10px;cursor:pointer;font-size:14px;font-weight:700;color:#aaa;}
 .tab.active{color:#6c5ce7;border-bottom:2px solid #6c5ce7;margin-bottom:-2px;}
-
-/* PROFILE STATS */
 .profile-stats{display:flex;border-top:1px solid #eee;border-bottom:1px solid #eee;margin:14px 0;}
 .profile-stat{flex:1;text-align:center;padding:14px 0;}
 .profile-stat .num{font-size:20px;font-weight:800;color:#222;}
 .profile-stat .lbl{font-size:12px;color:#888;}
-
-/* MATCH ROW */
 .match-row{display:flex;align-items:center;gap:12px;padding:13px;background:#fafafa;border-radius:14px;margin-bottom:10px;}
 .compat-bar{height:6px;border-radius:3px;background:#eee;margin-top:4px;flex:1;}
 .compat-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#6c5ce7,#00b894);}
 .match-pct{font-weight:800;color:#6c5ce7;font-size:16px;margin-left:auto;}
-
-/* STARS */
 .stars{display:flex;gap:8px;font-size:36px;justify-content:center;margin:16px 0;}
 .star{cursor:pointer;color:#ddd;transition:color .2s;}
 .star.active{color:#f39c12;}
-
-/* NOTIFICATIONS */
-.notif-item{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:13px;background:#fff;border-radius:14px;
-  margin-bottom:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);
-}
+.notif-item{display:flex;gap:12px;align-items:flex-start;padding:13px;background:#fff;border-radius:14px;margin-bottom:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);}
 .notif-dot{width:10px;height:10px;border-radius:50%;background:#6c5ce7;margin-top:5px;flex-shrink:0;}
 .notif-dot.read{background:#ddd;}
-
-/* REPORT */
 .report-option{padding:13px;border-radius:12px;border:1.5px solid #eee;margin-bottom:8px;cursor:pointer;font-size:14px;transition:all .2s;}
 .report-option.selected{border-color:#ff4757;background:#fff5f5;color:#ff4757;}
-
-/* ADMIN */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
 .stat-card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,.07);}
 .stat-num{font-size:22px;font-weight:800;color:#6c5ce7;}
 .stat-label{font-size:11px;color:#888;margin-top:2px;}
-
-/* AI */
-.ai-bubble{
-  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
-  color:#fff;border-radius:20px 20px 20px 4px;
-  padding:14px 16px;font-size:14px;line-height:1.55;margin-bottom:12px;
-}
-.ai-suggestion{
-  background:#f8f7ff;border-radius:14px;padding:13px;
-  margin-bottom:10px;border:1.5px solid #e8e4ff;cursor:pointer;transition:background .2s;
-}
+.ai-bubble{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;border-radius:20px 20px 20px 4px;padding:14px 16px;font-size:14px;line-height:1.55;margin-bottom:12px;}
+.ai-suggestion{background:#f8f7ff;border-radius:14px;padding:13px;margin-bottom:10px;border:1.5px solid #e8e4ff;cursor:pointer;transition:background .2s;}
 .ai-suggestion:hover{background:#f0eeff;}
 .ai-dot{width:8px;height:8px;border-radius:50%;background:#6c5ce7;animation:bounce .9s infinite;display:inline-block;margin:0 2px;}
 .ai-dot:nth-child(2){animation-delay:.15s;}
 .ai-dot:nth-child(3){animation-delay:.3s;}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-
-/* DETAIL */
-.detail-hero{
-  width:100%;height:180px;border-radius:16px;
-  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:60px;margin-bottom:14px;
-}
+.detail-hero{width:100%;height:180px;border-radius:16px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:60px;margin-bottom:14px;}
 .detail-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;}
 .detail-row .icon{font-size:18px;width:24px;flex-shrink:0;margin-top:1px;}
 .participants-row{display:flex;margin:10px 0;}
-.participant-av{
-  width:32px;height:32px;border-radius:50%;border:2px solid #fff;
-  margin-left:-8px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:12px;font-weight:700;
-}
+.participant-av{width:32px;height:32px;border-radius:50%;border:2px solid #fff;margin-left:-8px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;}
 .participant-av:first-child{margin-left:0;}
-
-/* PROGRESS */
 .progress-bar{height:6px;background:#eee;border-radius:3px;margin-top:6px;}
 .progress-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#6c5ce7,#00b894);transition:width .4s;}
-
-/* VERIFIED */
 .verified-badge{display:inline-flex;align-items:center;gap:4px;background:#e8f8f5;color:#00897b;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;}
-
-/* TOAST */
-.toast{
-  position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
-  background:rgba(50,50,50,.92);color:#fff;
-  padding:10px 20px;border-radius:20px;font-size:14px;
-  z-index:999;white-space:nowrap;pointer-events:none;
-  animation:fadeInOut 2.8s forwards;
-}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(50,50,50,.92);color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;z-index:9999;white-space:nowrap;pointer-events:none;animation:fadeInOut 2.8s forwards;}
 @keyframes fadeInOut{0%{opacity:0;transform:translateX(-50%) translateY(10px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}80%{opacity:1;}100%{opacity:0;}}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
 .modal{background:#fff;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;}
 .modal-handle{width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 16px;}
-
-/* LOADING */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;gap:12px;color:#888;}
 .spinner{width:36px;height:36px;border:3px solid #f0eeff;border-top:3px solid #6c5ce7;border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-
 .hidden{display:none!important;}
 
 /* SPLASH */
 .splash{
   position:fixed;inset:0;
-  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:999;color:#fff;gap:16px;
+  background:linear-gradient(160deg,#6c5ce7 0%,#a29bfe 100%);
+  z-index:999;color:#fff;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;
+  padding:60px 24px 44px;
+  text-align:center;
 }
-.splash-logo{font-size:60px;}
-.splash-name{font-size:28px;font-weight:800;}
-.splash-sub{font-size:15px;opacity:.85;}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
+<!-- SPLASH – contenuto statico, sempre visibile, no JS needed -->
 <div class="splash" id="splash">
-  <div class="splash-logo">🎉</div>
-  <div class="splash-name">EventConnect</div>
-  <div class="splash-sub">Condividi Esperienze, Crea Connessioni</div>
+
+  <!-- TOP: logo + titolo + subtitle -->
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <div style="font-size:72px;line-height:1;">🎉</div>
+    <div style="font-size:36px;font-weight:800;letter-spacing:-.5px;">EventConnect</div>
+    <div style="font-size:16px;opacity:.88;line-height:1.5;">
+      Condividi Esperienze,<br>Crea Connessioni
+    </div>
+  </div>
+
+  <!-- CENTRO: feature pills -->
+  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">🛡️ Sicuro e verificato</div>
+    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">🤝 Matching intelligente</div>
+    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">📍 Vicino a te</div>
+    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">🤖 AI Assistant</div>
+  </div>
+
+  <!-- BASSO: 3 pulsanti -->
+  <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;">
+
+    <button onclick="splashGo('register')"
+      style="width:100%;padding:16px;border-radius:16px;border:none;
+             background:#fff;color:#6c5ce7;font-size:17px;font-weight:800;
+             cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,.18);">
+      🚀 Registrati – è gratis
+    </button>
+
+    <button onclick="splashGo('login')"
+      style="width:100%;padding:16px;border-radius:16px;
+             border:2px solid rgba(255,255,255,.75);
+             background:transparent;color:#fff;
+             font-size:17px;font-weight:700;cursor:pointer;">
+      Accedi
+    </button>
+
+    <button onclick="splashGo('admin')"
+      style="width:100%;padding:12px;border-radius:16px;border:none;
+             background:rgba(255,255,255,.18);color:#fff;
+             font-size:14px;cursor:pointer;">
+      🔐 Demo Admin
+    </button>
+
+    <div style="margin-top:8px;font-size:12px;opacity:.55;">
+      Vivi di più. Insieme. 🌟<br>Scopri. Condividi. Connettiti.
+    </div>
+  </div>
 </div>
 
-<!-- APP -->
+<!-- APP SHELL -->
 <div class="app" id="appShell" style="display:none;">
   <div class="header" id="appHeader">
     <div class="header-left">
@@ -362,7 +218,7 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
     <div class="header-right" id="headerRight"></div>
   </div>
   <div class="content" id="content"></div>
-  <div class="navbar" id="navbar">
+  <div class="navbar" id="navbar" style="display:none;">
     <div class="nav-item" onclick="navigate('home')" id="nav-home">
       <span class="nav-icon">🏠</span><span>Home</span>
     </div>
@@ -382,103 +238,83 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 </div>
 
 <script>
-/* ================================================================
-   SUPABASE CONFIG
-================================================================ */
+/* ── SUPABASE ── */
 const SUPABASE_URL = 'https://sqevigimxneucauwljov.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxZXZpZ2lteG5ldWNhdXdsam92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDAyNjQsImV4cCI6MjA5NzM3NjI2NH0.0Eo-hIYVFYQJjyGh3viUTeymInTyqw6Ef7BF54uJOXU';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* ================================================================
-   GLOBAL STATE
-================================================================ */
-let currentUser   = null;
-let isLoggedIn    = false;
-let isAdmin       = false;
-let navHistory    = [];
-let currentPage   = '';
-let currentEventId= null;
-let selectedStars = 0;
-let reportSelected= '';
-let userInterests = [];
-let userLocation  = null;
-let activeFilters = {category:'', maxDistance:200};
-let savedEvents   = [];
-let blockedUsers  = [];
-let activeTab     = 'chat';
-let events        = [];
-let selectedEmoji = '🎉';
-let thumbValue    = null;
-let repeatValue   = null;
+/* ── STATE ── */
+let currentUser=null,isLoggedIn=false,isAdmin=false;
+let navHistory=[],currentPage='',currentEventId=null;
+let selectedStars=0,reportSelected='',userInterests=[];
+let userLocation=null,activeFilters={category:'',maxDistance:200};
+let savedEvents=[],blockedUsers=[],activeTab='chat';
+let events=[],selectedEmoji='🎉',thumbValue=null,repeatValue=null;
+let notifications=[{id:1,text:'Benvenuto su EventConnect! 🎉',time:'ora',read:false,icon:'🎉'}];
 
-/* ================================================================
-   MOCK NOTIFICATIONS (locale)
-================================================================ */
-let notifications = [
-  {id:1,text:'Benvenuto su EventConnect! 🎉',time:'ora',read:false,icon:'🎉'},
-];
-
-/* ================================================================
-   INTERESSI
-================================================================ */
-const allInterests = [
+const allInterests=[
   {icon:'🎵',label:'Musica'},{icon:'🎨',label:'Arte'},{icon:'⚽',label:'Sport'},
   {icon:'🥾',label:'Trekking'},{icon:'🎬',label:'Cinema'},{icon:'🍕',label:'Cibo'},
   {icon:'✈️',label:'Viaggi'},{icon:'💻',label:'Tecnologia'},{icon:'🎭',label:'Teatro'},
   {icon:'📚',label:'Libri'},{icon:'🧘',label:'Benessere'},{icon:'🎉',label:'Altro'}
 ];
 
-/* ================================================================
-   GEOLOCATION + HAVERSINE
-================================================================ */
-function haversine(lat1,lng1,lat2,lng2){
-  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-  return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
-}
-function distLabel(ev){
-  if(!userLocation||!ev.latitude)return null;
-  const km=parseFloat(haversine(userLocation.lat,userLocation.lng,ev.latitude,ev.longitude));
-  return km<1?'< 1 km':km+' km';
-}
-async function requestGeo(){
-  return new Promise(res=>{
-    if(!navigator.geolocation)return res(null);
-    navigator.geolocation.getCurrentPosition(
-      p=>{userLocation={lat:p.coords.latitude,lng:p.coords.longitude};res(userLocation);},
-      ()=>res(null),{timeout:6000}
-    );
-  });
+/* ── SPLASH ENTRY POINT ── */
+function splashGo(dest){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('appShell').style.display='flex';
+  if(dest==='admin'){adminLogin();}
+  else{navigate(dest);}
 }
 
-/* ================================================================
-   NOMINATIM AUTOCOMPLETE
-================================================================ */
-let geoTimeout=null;
-function setupGeoAutocomplete(inputId,listId,onSelect){
-  const inp=document.getElementById(inputId);
-  const lst=document.getElementById(listId);
+/* ── INIT ── */
+window.onload=async function(){
+  requestGeo();
+  try{
+    const {data:{session}}=await supabase.auth.getSession();
+    if(session){
+      const {data:profile}=await supabase.from('profiles').select('*').eq('id',session.user.id).single();
+      if(profile){
+        currentUser={...profile,id:session.user.id};
+        isLoggedIn=true;
+        const {data:ui}=await supabase.from('user_interests').select('interests(name)').eq('user_id',session.user.id);
+        userInterests=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
+        currentUser.interests=userInterests;
+        await loadEvents();
+        // Già loggato: salta splash e vai a home
+        document.getElementById('splash').style.display='none';
+        document.getElementById('appShell').style.display='flex';
+        navigate('home');
+      }
+    }
+  }catch(e){console.log('No session',e);}
+};
+
+/* ── GEO ── */
+function haversine(a,b,c,d){const R=6371,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180,x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return(R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))).toFixed(1);}
+function distLabel(ev){if(!userLocation||!ev.latitude)return null;const k=parseFloat(haversine(userLocation.lat,userLocation.lng,ev.latitude,ev.longitude));return k<1?'< 1 km':k+' km';}
+async function requestGeo(){return new Promise(r=>{if(!navigator.geolocation)return r(null);navigator.geolocation.getCurrentPosition(p=>{userLocation={lat:p.coords.latitude,lng:p.coords.longitude};r(userLocation);},()=>r(null),{timeout:6000});});}
+
+/* ── NOMINATIM ── */
+let geoT=null;
+function setupGeoAutocomplete(iId,lId,cb){
+  const inp=document.getElementById(iId),lst=document.getElementById(lId);
   if(!inp||!lst)return;
   inp.addEventListener('input',()=>{
-    clearTimeout(geoTimeout);
+    clearTimeout(geoT);
     const q=inp.value.trim();
-    if(q.length<3){lst.innerHTML='';lst.style.display='none';return;}
-    geoTimeout=setTimeout(async()=>{
+    if(q.length<3){lst.style.display='none';return;}
+    geoT=setTimeout(async()=>{
       try{
-        const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5&accept-language=it`);
+        const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q)+'&limit=5&accept-language=it');
         const data=await r.json();
         if(!data.length){lst.style.display='none';return;}
         lst.innerHTML='';lst.style.display='block';
         data.forEach(item=>{
-          const div=document.createElement('div');
-          div.className='autocomplete-item';
-          div.textContent=item.display_name;
-          div.onclick=()=>{
-            inp.value=item.display_name;
-            lst.style.display='none';
-            if(onSelect)onSelect(item);
-          };
-          lst.appendChild(div);
+          const d=document.createElement('div');
+          d.className='autocomplete-item';d.textContent=item.display_name;
+          d.onclick=()=>{inp.value=item.display_name;lst.style.display='none';if(cb)cb(item);};
+          lst.appendChild(d);
         });
       }catch(e){lst.style.display='none';}
     },400);
@@ -486,187 +322,74 @@ function setupGeoAutocomplete(inputId,listId,onSelect){
   document.addEventListener('click',e=>{if(!inp.contains(e.target))lst.style.display='none';});
 }
 
-/* ================================================================
-   AI ASSISTANT
-================================================================ */
-const aiResponses=[
-  {kw:['jazz','musica','concerto'],reply:'🎷 Ho trovato eventi musicali vicino a te! Dai un\'occhiata ai concerti in programma questa settimana.',suggest:'Musica'},
-  {kw:['trekking','montagna','escursione','natura'],reply:'🥾 Perfetto! Ci sono uscite trekking questo weekend. Vuoi che filtri per difficoltà?',suggest:'Trekking'},
-  {kw:['arte','mostra','museo'],reply:'🖼️ Ho trovato mostre ed eventi artistici nella tua zona!',suggest:'Arte'},
-  {kw:['aperitivo','cibo','mangiare','bere'],reply:'🍹 Ottima idea! Ci sono aperitivi ed eventi food in programma.',suggest:'Food'},
-  {kw:['sport','calcio','palestra','kayak'],reply:'⚽ Ho trovato eventi sportivi adatti a te!',suggest:'Sport'},
-  {kw:['amici','persone','conoscere','match'],reply:'🤝 Ho analizzato il tuo profilo. Vuoi vedere le persone più compatibili con te?'},
-  {kw:['vicino','zona','distanza'],reply:'📍 Attiva la geolocalizzazione per vedere gli eventi più vicini a te!'},
+/* ── AI ── */
+const aiR=[
+  {kw:['jazz','musica','concerto'],reply:'🎷 Ho trovato eventi musicali! Dai un\'occhiata ai concerti.',suggest:'Musica'},
+  {kw:['trekking','montagna','escursione'],reply:'🥾 Ci sono uscite trekking questo weekend!',suggest:'Trekking'},
+  {kw:['arte','mostra','museo'],reply:'🖼️ Ho trovato mostre ed eventi artistici!',suggest:'Arte'},
+  {kw:['aperitivo','cibo','mangiare'],reply:'🍹 Ci sono aperitivi ed eventi food!',suggest:'Food'},
+  {kw:['sport','calcio','kayak'],reply:'⚽ Ho trovato eventi sportivi!',suggest:'Sport'},
+  {kw:['persone','conoscere','match'],reply:'🤝 Vuoi vedere le persone compatibili con te?'},
+  {kw:['vicino','zona','distanza'],reply:'📍 Attiva la posizione per eventi vicini a te!'},
 ];
+function getAIReply(t){const tx=t.toLowerCase();for(const r of aiR){if(r.kw.some(k=>tx.includes(k)))return r;}return{reply:'Ciao! Chiedimi eventi di musica, trekking, arte, sport o cibo 😊'};}
 
-function getAIReply(text){
-  const t=text.toLowerCase();
-  for(const r of aiResponses){
-    if(r.kw.some(k=>t.includes(k)))return r;
-  }
-  return {reply:'Ciao! Puoi chiedermi di trovare eventi per musica, trekking, arte, sport, cibo. Cosa ti piace? 😊'};
-}
+/* ── TOAST ── */
+function toast(m){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
 
-/* ================================================================
-   TOAST
-================================================================ */
-function toast(msg){
-  document.querySelectorAll('.toast').forEach(t=>t.remove());
-  const t=document.createElement('div');
-  t.className='toast';t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),3000);
-}
+/* ── LOADING ── */
+function showLoading(){document.getElementById('content').innerHTML='<div class="loading"><div class="spinner"></div><div>Caricamento...</div></div>';}
 
-/* ================================================================
-   LOADING
-================================================================ */
-function showLoading(){
-  document.getElementById('content').innerHTML=`
-    <div class="loading">
-      <div class="spinner"></div>
-      <div>Caricamento...</div>
-    </div>`;
-}
-
-/* ================================================================
-   MODAL
-================================================================ */
-function showModal(title,bodyHtml){
-  document.getElementById('globalModal')?.remove();
-  const overlay=document.createElement('div');
-  overlay.className='modal-overlay';overlay.id='globalModal';
-  overlay.innerHTML=`
-    <div class="modal">
-      <div class="modal-handle"></div>
-      <div style="font-weight:700;font-size:16px;margin-bottom:14px">${title}</div>
-      ${bodyHtml}
-      <div class="btn secondary" onclick="closeModal()" style="margin-top:12px">Chiudi</div>
-    </div>`;
-  overlay.onclick=e=>{if(e.target===overlay)closeModal();};
-  document.body.appendChild(overlay);
-}
+/* ── MODAL ── */
+function showModal(title,body){document.getElementById('globalModal')?.remove();const o=document.createElement('div');o.className='modal-overlay';o.id='globalModal';o.innerHTML='<div class="modal"><div class="modal-handle"></div><div style="font-weight:700;font-size:16px;margin-bottom:14px">'+title+'</div>'+body+'<div class="btn secondary" onclick="closeModal()" style="margin-top:12px">Chiudi</div></div>';o.onclick=e=>{if(e.target===o)closeModal();};document.body.appendChild(o);}
 function closeModal(){document.getElementById('globalModal')?.remove();}
 
-/* ================================================================
-   NAVIGATION
-================================================================ */
-const NAV_PAGES=['home','search','create','chatList','profile'];
-const PAGE_TITLES={
-  home:'',search:'Cerca Eventi',create:'Crea Attività',
-  chatList:'Chat',profile:'Profilo',onboarding:'I tuoi interessi',
-  login:'Accedi',register:'Registrati',eventDetail:'Dettaglio Evento',
-  eventGroup:'Gruppo Evento',aiAssistant:'AI Assistant',
-  matchPeople:'Match Persone',feedback:'Feedback Post-Evento',
-  notifications:'Notifiche',admin:'Admin Dashboard',
-  report:'Segnala',savedEvents:'Preferiti'
-};
+/* ── NAVIGATION ── */
+const PAGE_TITLES={home:'',search:'Cerca Eventi',create:'Crea Attività',chatList:'Chat',profile:'Profilo',onboarding:'I tuoi interessi',login:'Accedi',register:'Registrati',eventDetail:'Dettaglio Evento',eventGroup:'Gruppo Evento',aiAssistant:'AI Assistant',matchPeople:'Match Persone',feedback:'Feedback',notifications:'Notifiche',admin:'Admin Dashboard',report:'Segnala',savedEvents:'Preferiti'};
 
 function navigate(page,param){
   if(page!==currentPage)navHistory.push(currentPage);
   currentPage=page;
   if(param!==undefined)currentEventId=param;
   updateShell(page);
-  const map={
-    home:drawHome,search:drawSearch,create:drawCreate,
-    chatList:drawChatList,profile:drawProfile,
-    onboarding:drawOnboarding,login:drawLogin,register:drawRegister,
-    eventDetail:()=>drawEventDetail(currentEventId),
-    eventGroup:()=>drawEventGroup(currentEventId),
-    aiAssistant:drawAI,matchPeople:drawMatchPeople,
-    feedback:()=>drawFeedback(currentEventId),
-    notifications:drawNotifications,admin:drawAdmin,
-    report:()=>drawReport(currentEventId),
-    savedEvents:drawSavedEvents
-  };
+  const map={home:drawHome,search:drawSearch,create:drawCreate,chatList:drawChatList,profile:drawProfile,onboarding:drawOnboarding,login:drawLogin,register:drawRegister,eventDetail:()=>drawEventDetail(currentEventId),eventGroup:()=>drawEventGroup(currentEventId),aiAssistant:drawAI,matchPeople:drawMatchPeople,feedback:()=>drawFeedback(currentEventId),notifications:drawNotifications,admin:drawAdmin,report:()=>drawReport(),savedEvents:drawSavedEvents};
   if(map[page])map[page]();
   document.getElementById('content').scrollTop=0;
 }
-
-function goBack(){
-  if(navHistory.length)navigate(navHistory.pop());
-}
+function goBack(){if(navHistory.length)navigate(navHistory.pop());}
 
 function updateShell(page){
-  document.getElementById('navbar').style.display=
-    ['login','register','onboarding'].includes(page)?'none':'flex';
+  const noNavPages=['login','register','onboarding'];
+  document.getElementById('navbar').style.display=noNavPages.includes(page)?'none':'flex';
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const navMap={home:'nav-home',search:'nav-search',create:'nav-create',chatList:'nav-chatList',profile:'nav-profile'};
-  if(navMap[page])document.getElementById(navMap[page])?.classList.add('active');
-
+  const nm={home:'nav-home',search:'nav-search',create:'nav-create',chatList:'nav-chatList',profile:'nav-profile'};
+  if(nm[page])document.getElementById(nm[page])?.classList.add('active');
   const logo=document.getElementById('headerLogo');
   const title=document.getElementById('headerTitle');
-  const backBtn=document.getElementById('backBtn');
-  const headerRight=document.getElementById('headerRight');
+  const back=document.getElementById('backBtn');
+  const hr=document.getElementById('headerRight');
   const noBack=['home','search','create','chatList','profile','login','register','onboarding'];
-  backBtn.style.display=noBack.includes(page)?'none':'block';
-
+  back.style.display=noBack.includes(page)?'none':'block';
   if(page==='home'){
     logo.classList.remove('hidden');title.classList.add('hidden');
-    headerRight.innerHTML=`
-      <span class="header-icon" onclick="navigate('savedEvents')">🔖</span>
-      <span class="header-icon" onclick="navigate('notifications')" style="position:relative">
-        🔔<span class="badge-dot" style="${notifications.some(n=>!n.read)?'':'display:none'}"></span>
-      </span>`;
+    hr.innerHTML='<span class="header-icon" onclick="navigate(\'savedEvents\')">🔖</span><span class="header-icon" onclick="navigate(\'notifications\')" style="position:relative">🔔<span class="badge-dot" style="'+(notifications.some(n=>!n.read)?'':'display:none')+'"></span></span>';
   } else if(page==='admin'){
-    logo.classList.add('hidden');title.classList.remove('hidden');
-    title.textContent='⚙️ Admin Dashboard';
-    headerRight.innerHTML=`<span class="header-icon" onclick="doLogout()">🚪</span>`;
+    logo.classList.add('hidden');title.classList.remove('hidden');title.textContent='⚙️ Admin';
+    hr.innerHTML='<span class="header-icon" onclick="doLogout()">🚪</span>';
   } else {
     logo.classList.add('hidden');title.classList.remove('hidden');
     title.textContent=PAGE_TITLES[page]||page;
-    headerRight.innerHTML=page==='profile'?`<span class="header-icon" onclick="navigate('aiAssistant')">🤖</span>`:'';
+    hr.innerHTML=page==='profile'?'<span class="header-icon" onclick="navigate(\'aiAssistant\')">🤖</span>':'';
   }
 }
 
-/* ================================================================
-   INIT
-================================================================ */
-window.onload=async function(){
-  await requestGeo();
-
-  // Controlla sessione Supabase attiva
-  const {data:{session}}=await supabase.auth.getSession();
-  if(session){
-    const {data:profile}=await supabase
-      .from('profiles').select('*').eq('id',session.user.id).single();
-    if(profile){
-      currentUser={...profile,id:session.user.id};
-      isLoggedIn=true;
-      // Carica interessi utente
-      const {data:ui}=await supabase
-        .from('user_interests')
-        .select('interests(name)')
-        .eq('user_id',session.user.id);
-      userInterests=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
-      currentUser.interests=userInterests;
-    }
-  }
-
-  await loadEvents();
-
-  setTimeout(()=>{
-    document.getElementById('splash').style.display='none';
-    document.getElementById('appShell').style.display='flex';
-    navigate(isLoggedIn?(currentUser?.admin?'admin':'home'):'login');
-  },1800);
-};
-
-/* ================================================================
-   LOAD EVENTS DA SUPABASE
-================================================================ */
+/* ── LOAD EVENTS ── */
 async function loadEvents(){
-  const {data,error}=await supabase
-    .from('events')
-    .select('*')
-    .eq('status','active')
-    .order('created_at',{ascending:false});
+  const {data,error}=await supabase.from('events').select('*').eq('status','active').order('created_at',{ascending:false});
   if(!error&&data)events=data;
 }
 
-/* ================================================================
-   LOGIN
-================================================================ */
+/* ── LOGIN ── */
 function drawLogin(){
   document.getElementById('content').innerHTML=`
     <div style="text-align:center;padding:30px 0 20px">
@@ -675,14 +398,14 @@ function drawLogin(){
       <p style="color:#888;font-size:14px">Condividi Esperienze, Crea Connessioni</p>
     </div>
     <label>Email</label>
-    <input id="loginEmail" type="email" placeholder="tua@email.com" autocomplete="email">
+    <input id="loginEmail" type="email" placeholder="tua@email.com">
     <label>Password</label>
-    <input id="loginPwd" type="password" placeholder="••••••••" autocomplete="current-password">
+    <input id="loginPwd" type="password" placeholder="••••••••">
     <div class="btn" onclick="doLogin()" style="margin-top:20px">Accedi</div>
     <div class="btn secondary" onclick="navigate('register')" style="margin-top:8px">Non hai un account? Registrati</div>
     <div style="text-align:center;margin:16px 0;color:#aaa;font-size:13px">oppure</div>
     <div class="btn outline" onclick="googleLogin()">🔑 Continua con Google</div>
-    <div style="text-align:center;margin-top:20px">
+    <div style="text-align:center;margin-top:16px">
       <small style="color:#6c5ce7;cursor:pointer" onclick="adminLogin()">🔐 Accesso Admin (demo)</small>
     </div>`;
 }
@@ -691,35 +414,22 @@ async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pwd=document.getElementById('loginPwd').value;
   if(!email||!pwd){toast('⚠️ Inserisci email e password');return;}
-
-  const btn=document.querySelector('.btn');
-  if(btn){btn.textContent='⏳ Accesso in corso...';btn.style.opacity='.7';}
-
+  toast('⏳ Accesso in corso...');
   const {data,error}=await supabase.auth.signInWithPassword({email,password:pwd});
-  if(error){toast('❌ '+error.message);if(btn){btn.textContent='Accedi';btn.style.opacity='1';}return;}
-
-  const {data:profile}=await supabase
-    .from('profiles').select('*').eq('id',data.user.id).single();
-
-  currentUser={...profile,id:data.user.id};
+  if(error){toast('❌ '+error.message);return;}
+  const {data:profile}=await supabase.from('profiles').select('*').eq('id',data.user.id).single();
+  currentUser={...(profile||{}),id:data.user.id};
   isLoggedIn=true;
-
-  // Carica interessi
-  const {data:ui}=await supabase
-    .from('user_interests').select('interests(name)').eq('user_id',data.user.id);
+  const {data:ui}=await supabase.from('user_interests').select('interests(name)').eq('user_id',data.user.id);
   userInterests=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
   currentUser.interests=userInterests;
-
   await loadEvents();
-  toast('✅ Benvenuta '+currentUser.name+'!');
+  toast('✅ Benvenuto!');
   navigate('home');
 }
 
 async function googleLogin(){
-  const {error}=await supabase.auth.signInWithOAuth({
-    provider:'google',
-    options:{redirectTo:window.location.href}
-  });
+  const {error}=await supabase.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}});
   if(error)toast('❌ '+error.message);
 }
 
@@ -733,12 +443,11 @@ async function doLogout(){
   await supabase.auth.signOut();
   isLoggedIn=false;isAdmin=false;currentUser=null;
   userInterests=[];events=[];savedEvents=[];
-  navigate('login');
+  document.getElementById('appShell').style.display='none';
+  document.getElementById('splash').style.display='flex';
 }
 
-/* ================================================================
-   REGISTER
-================================================================ */
+/* ── REGISTER ── */
 function drawRegister(){
   document.getElementById('content').innerHTML=`
     <label>Nome *</label>
@@ -755,11 +464,11 @@ function drawRegister(){
       <div class="autocomplete-list" id="regCityList" style="display:none"></div>
     </div>
     <label>Bio (opzionale)</label>
-    <textarea id="regBio" placeholder="Raccontati in poche parole..." rows="2"></textarea>
+    <textarea id="regBio" placeholder="Raccontati..." rows="2"></textarea>
     <label>Instagram (opzionale)</label>
     <input id="regIG" placeholder="@username">
     <div class="btn" onclick="doRegister()" style="margin-top:20px">Registrati</div>
-    <div class="btn outline" onclick="googleLogin()" style="margin-top:8px">🔑 Registrati con Google</div>
+    <div class="btn outline" onclick="googleLogin()" style="margin-top:8px">🔑 Google</div>
     <div class="btn secondary" onclick="navigate('login')" style="margin-top:8px">Hai già un account? Accedi</div>`;
   setupGeoAutocomplete('regCity','regCityList',item=>{
     document.getElementById('regCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];
@@ -772,659 +481,293 @@ async function doRegister(){
   const pwd=document.getElementById('regPwd').value;
   const city=document.getElementById('regCity').value.trim();
   const birth=document.getElementById('regBirth').value;
-  if(!name||!email||!pwd||!city||!birth){toast('⚠️ Compila tutti i campi obbligatori');return;}
+  if(!name||!email||!pwd||!city||!birth){toast('⚠️ Compila tutti i campi');return;}
   if(pwd.length<6){toast('⚠️ Password di almeno 6 caratteri');return;}
-
-  toast('⏳ Registrazione in corso...');
-
+  toast('⏳ Registrazione...');
   const {data,error}=await supabase.auth.signUp({email,password:pwd});
   if(error){toast('❌ '+error.message);return;}
-
-  const {error:profErr}=await supabase.from('profiles').insert({
-    id:data.user.id,name,city,birth_date:birth,
-    bio:document.getElementById('regBio').value,
-    instagram:document.getElementById('regIG').value,
-    emoji:'🙂',completeness:40
-  });
-  if(profErr){toast('❌ '+profErr.message);return;}
-
+  await supabase.from('profiles').insert({id:data.user.id,name,city,birth_date:birth,bio:document.getElementById('regBio').value,instagram:document.getElementById('regIG').value,emoji:'🙂',completeness:40});
   currentUser={id:data.user.id,name,city,interests:[],completeness:40,emoji:'🙂'};
   isLoggedIn=true;userInterests=[];
   toast('✅ Registrazione completata!');
   navigate('onboarding');
 }
 
-/* ================================================================
-   ONBOARDING
-================================================================ */
+/* ── ONBOARDING ── */
 function drawOnboarding(){
-  let html=`
-    <div style="text-align:center;padding:20px 0 16px">
-      <h2 style="font-size:22px;font-weight:800">Quali sono i tuoi interessi?</h2>
-      <p style="color:#888;font-size:14px;margin-top:6px">Seleziona almeno 3 per trovare le esperienze perfette</p>
-    </div>
-    <div class="chips" id="interestChips">`;
+  let html='<div style="text-align:center;padding:20px 0 16px"><h2 style="font-size:22px;font-weight:800">Quali sono i tuoi interessi?</h2><p style="color:#888;font-size:14px;margin-top:6px">Seleziona almeno 3</p></div><div class="chips" id="interestChips">';
   allInterests.forEach(i=>{
-    const sel=userInterests.includes(i.label)?'selected':'';
-    html+=`<div class="chip ${sel}" onclick="toggleInterest('${i.label}',this)">${i.icon} ${i.label}</div>`;
+    html+='<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>';
   });
-  html+=`</div>
-    <div style="margin-top:24px">
-      <div class="btn" onclick="finishOnboarding()">Continua</div>
-      <div class="btn secondary" style="margin-top:8px" onclick="navigate('home')">Salta per ora</div>
-    </div>`;
+  html+='</div><div style="margin-top:24px"><div class="btn" onclick="finishOnboarding()">Continua</div><div class="btn secondary" style="margin-top:8px" onclick="navigate(\'home\')">Salta per ora</div></div>';
   document.getElementById('content').innerHTML=html;
 }
 
 function toggleInterest(label,el){
   el.classList.toggle('selected');
-  if(el.classList.contains('selected')){
-    if(!userInterests.includes(label))userInterests.push(label);
-  } else {
-    userInterests=userInterests.filter(i=>i!==label);
-  }
+  if(el.classList.contains('selected')){if(!userInterests.includes(label))userInterests.push(label);}
+  else{userInterests=userInterests.filter(i=>i!==label);}
 }
 
 async function finishOnboarding(){
   if(userInterests.length<3){toast('⚠️ Seleziona almeno 3 interessi');return;}
   if(currentUser?.id&&currentUser.id!=='admin'){
-    // Salva interessi su Supabase
     await supabase.from('user_interests').delete().eq('user_id',currentUser.id);
-    // Recupera id interessi
-    const {data:interestRows}=await supabase
-      .from('interests').select('id,name').in('name',userInterests);
-    if(interestRows?.length){
-      await supabase.from('user_interests').insert(
-        interestRows.map(i=>({user_id:currentUser.id,interest_id:i.id}))
-      );
-    }
+    const {data:iRows}=await supabase.from('interests').select('id,name').in('name',userInterests);
+    if(iRows?.length)await supabase.from('user_interests').insert(iRows.map(i=>({user_id:currentUser.id,interest_id:i.id})));
+    await supabase.from('profiles').update({completeness:60}).eq('id',currentUser.id);
     currentUser.interests=userInterests;
-    // Aggiorna completeness
-    await supabase.from('profiles')
-      .update({completeness:60}).eq('id',currentUser.id);
   }
   toast('✅ Interessi salvati!');
   navigate('home');
 }
 
-/* ================================================================
-   HOME
-================================================================ */
+/* ── HOME ── */
 async function drawHome(){
   showLoading();
   await loadEvents();
   const user=currentUser||{name:'Utente',completeness:40,interests:[]};
-  const firstName=user.name?.split(' ')[0]||'Utente';
-  const suggested=events.filter(e=>
-    (user.interests||userInterests||[]).some(t=>e.category===t||e.tags?.includes(t))
-  ).slice(0,5);
-  const nearby=events.filter(e=>!suggested.includes(e)).slice(0,4);
-
-  let html=`
-    <div style="margin-bottom:16px">
-      <div style="font-size:22px;font-weight:800">Ciao ${firstName}! 👋</div>
-      <div style="font-size:14px;color:#888;margin-top:2px">Ecco cosa abbiamo per te</div>
-    </div>`;
+  const fn=user.name?.split(' ')[0]||'Utente';
+  const suggested=events.filter(e=>(user.interests||[]).some(t=>e.category===t)).slice(0,5);
+  const rest=events.filter(e=>!suggested.includes(e)).slice(0,4);
+  let html='<div style="margin-bottom:16px"><div style="font-size:22px;font-weight:800">Ciao '+fn+'! 👋</div><div style="font-size:14px;color:#888;margin-top:2px">Ecco cosa abbiamo per te</div></div>';
 
   if((user.completeness||40)<80){
-    html+=`
-      <div class="card" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer" onclick="navigate('profile')">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div style="font-size:28px">🤳</div>
-          <div style="flex:1">
-            <div style="font-weight:700">Completa il tuo profilo</div>
-            <div style="font-size:13px;opacity:.85">Completato al ${user.completeness||40}%</div>
-            <div class="progress-bar" style="margin-top:6px;background:rgba(255,255,255,.3)">
-              <div class="progress-fill" style="width:${user.completeness||40}%;background:#fff"></div>
-            </div>
-          </div>
-        </div>
-      </div>`;
+    html+='<div class="card" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer" onclick="navigate(\'profile\')"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">🤳</div><div style="flex:1"><div style="font-weight:700">Completa il tuo profilo</div><div style="font-size:13px;opacity:.85">Completato al '+(user.completeness||40)+'%</div><div class="progress-bar" style="margin-top:6px;background:rgba(255,255,255,.3)"><div class="progress-fill" style="width:'+(user.completeness||40)+'%;background:#fff"></div></div></div></div></div>';
   }
 
-  html+=`<div class="section-header">
-    <span class="section-title">Consigliati per te</span>
-    <span class="section-link" onclick="navigate('search')">Vedi tutti</span>
-  </div>`;
+  html+='<div class="section-header"><span class="section-title">Consigliati per te</span><span class="section-link" onclick="navigate(\'search\')">Vedi tutti</span></div>';
 
-  if((suggested.length?suggested:events.slice(0,5)).length===0){
-    html+=`<div style="text-align:center;color:#aaa;padding:20px">Nessun evento disponibile.<br>Sii il primo a crearne uno! 🎉<br><br><div class="btn" onclick="navigate('create')">+ Crea evento</div></div>`;
+  const toShow=suggested.length?suggested:events.slice(0,5);
+  if(!toShow.length){
+    html+='<div style="text-align:center;color:#aaa;padding:20px">Nessun evento.<br><div class="btn" onclick="navigate(\'create\')" style="margin-top:10px">+ Crea il primo evento</div></div>';
   } else {
-    html+=`<div class="scroll-row">`;
-    (suggested.length?suggested:events.slice(0,5)).forEach(e=>{
+    html+='<div class="scroll-row">';
+    toShow.forEach(e=>{
       const dl=distLabel(e);
-      html+=`
-        <div class="scroll-card" onclick="navigate('eventDetail',${e.id})">
-          <div style="font-size:42px;text-align:center;padding:8px 0">${e.emoji||'🎉'}</div>
-          <div style="font-weight:700;font-size:14px;margin-bottom:4px">${e.title}</div>
-          <div style="font-size:12px;color:#888">${e.location||''}</div>
-          <div style="font-size:12px;color:#6c5ce7;margin-top:4px">
-            ${dl?`<span>📍${dl}</span>`:''}
-          </div>
-          ${e.price===0?'<div style="font-size:11px;color:#00b894">✅ Gratuito</div>':`<div style="font-size:11px;color:#e67e22">💰 €${e.price}</div>`}
-        </div>`;
+      html+='<div class="scroll-card" onclick="navigate(\'eventDetail\','+e.id+')"><div style="font-size:42px;text-align:center;padding:8px 0">'+(e.emoji||'🎉')+'</div><div style="font-weight:700;font-size:14px;margin-bottom:4px">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div>'+(dl?'<div style="font-size:11px;color:#6c5ce7;margin-top:3px">📍'+dl+'</div>':'')+(e.price===0?'<div style="font-size:11px;color:#00b894;margin-top:3px">✅ Gratuito</div>':'<div style="font-size:11px;color:#e67e22;margin-top:3px">💰 €'+e.price+'</div>')+'</div>';
     });
-    html+=`</div>`;
+    html+='</div>';
   }
 
-  html+=`
-    <div class="section-header" style="margin-top:18px">
-      <span class="section-title">Tutti gli eventi</span>
-    </div>`;
-
-  (nearby.length?nearby:events.slice(0,4)).forEach(e=>{
+  html+='<div class="section-header" style="margin-top:18px"><span class="section-title">Tutti gli eventi</span></div>';
+  const toShow2=rest.length?rest:events.slice(0,4);
+  toShow2.forEach(e=>{
     const dl=distLabel(e);
-    html+=`
-      <div class="card" onclick="navigate('eventDetail',${e.id})" style="cursor:pointer">
-        <div style="display:flex;gap:12px;align-items:center">
-          <div style="font-size:38px">${e.emoji||'🎉'}</div>
-          <div style="flex:1">
-            <div class="card-title">${e.title}</div>
-            <div class="card-meta">📍 ${e.location||''}
-              ${dl?`<span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px">📍${dl}</span>`:''}
-            </div>
-            <div class="card-meta">💰 ${e.price===0?'Gratuito':'€'+e.price}</div>
-          </div>
-          <div style="font-size:22px;color:#ddd">›</div>
-        </div>
-      </div>`;
+    html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:38px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px">📍'+dl+'</span>':'')+'</div><div class="card-meta">'+(e.price===0?'✅ Gratuito':'💰 €'+e.price)+'</div></div><div style="font-size:22px;color:#ddd">›</div></div></div>';
   });
 
-  html+=`
-    <div class="card" onclick="navigate('aiAssistant')"
-         style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer;margin-top:4px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div style="font-size:32px">🤖</div>
-        <div>
-          <div style="font-weight:700">AI Assistant</div>
-          <div style="font-size:13px;opacity:.85">Suggerimenti personalizzati</div>
-        </div>
-        <div style="margin-left:auto;font-size:22px">›</div>
-      </div>
-    </div>
-    <div class="btn" onclick="navigate('create')" style="margin-top:8px">+ Crea una nuova attività</div>`;
-
+  html+='<div class="card" onclick="navigate(\'aiAssistant\')" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer;margin-top:4px"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:32px">🤖</div><div><div style="font-weight:700">AI Assistant</div><div style="font-size:13px;opacity:.85">Suggerimenti personalizzati</div></div><div style="margin-left:auto;font-size:22px">›</div></div></div>';
+  html+='<div class="btn" onclick="navigate(\'create\')" style="margin-top:8px">+ Crea una nuova attività</div>';
   document.getElementById('content').innerHTML=html;
 }
 
-/* ================================================================
-   SEARCH
-================================================================ */
+/* ── SEARCH ── */
 function drawSearch(){
-  let html=`
-    <div class="search-bar">
-      <span>🔍</span>
-      <input id="searchInput" placeholder="Cerca eventi o attività..." oninput="filterEvents()">
-    </div>
-    ${userLocation?
-      `<div style="background:#f0eeff;border-radius:12px;padding:9px 14px;font-size:13px;color:#6c5ce7;margin-bottom:12px;display:flex;align-items:center;gap:8px">
-        <span>📍</span><span>Posizione rilevata</span>
-        <span style="margin-left:auto;cursor:pointer;color:#aaa" onclick="userLocation=null;drawSearch()">✕</span>
-      </div>`:
-      `<div style="background:#fff3e0;border-radius:12px;padding:9px 14px;font-size:13px;color:#e65100;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:8px" onclick="enableGeo()">
-        <span>📍</span><span>Attiva posizione per vedere le distanze</span>
-      </div>`}
-    <div class="filters" id="catFilters">
-      ${['Tutti','Musica','Arte','Sport','Trekking','Food','Cinema','Teatro','Viaggi'].map(c=>`
-        <div class="filter-chip ${(!activeFilters.category&&c==='Tutti')||activeFilters.category===c?'active':''}"
-             onclick="setCatFilter('${c==='Tutti'?'':c}',this)">${c}</div>`).join('')}
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:10px">
-      <div class="autocomplete-wrap" style="flex:1">
-        <input id="citySearchInput" placeholder="📍 Città..." oninput="filterEvents()" autocomplete="off">
-        <div class="autocomplete-list" id="citySearchList" style="display:none"></div>
-      </div>
-      <input id="dateSearchInput" type="date" onchange="filterEvents()" style="flex:1;margin-top:0">
-    </div>
-    ${userLocation?`
-      <div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06)">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <span style="font-size:13px;font-weight:700">📍 Distanza massima</span>
-          <span id="distVal" style="font-size:13px;color:#6c5ce7;font-weight:700">${activeFilters.maxDistance>=200?'Tutte':activeFilters.maxDistance+' km'}</span>
-        </div>
-        <input type="range" id="distSlider" min="0" max="200" step="5" value="${activeFilters.maxDistance}"
-               oninput="onDistSlider(this.value)" style="width:100%;accent-color:#6c5ce7;margin:0">
-      </div>`:''}
-    <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
-      <span style="font-size:13px;color:#888;white-space:nowrap">Ordina:</span>
-      <select id="sortSel" onchange="filterEvents()" style="margin-top:0;flex:1">
-        <option value="default">Rilevanza</option>
-        ${userLocation?'<option value="distance">📍 Distanza</option>':''}
-        <option value="price">💰 Prezzo</option>
-      </select>
-    </div>
-    <div id="searchResults"></div>`;
+  let html='<div class="search-bar"><span>🔍</span><input id="searchInput" placeholder="Cerca eventi..." oninput="filterEvents()"></div>';
+  html+=userLocation?'<div style="background:#f0eeff;border-radius:12px;padding:9px 14px;font-size:13px;color:#6c5ce7;margin-bottom:12px;display:flex;align-items:center;gap:8px"><span>📍</span><span>Posizione rilevata</span><span style="margin-left:auto;cursor:pointer;color:#aaa" onclick="userLocation=null;drawSearch()">✕</span></div>':'<div style="background:#fff3e0;border-radius:12px;padding:9px 14px;font-size:13px;color:#e65100;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:8px" onclick="enableGeo()"><span>📍</span><span>Attiva posizione per distanze</span></div>';
+  html+='<div class="filters" id="catFilters">'+['Tutti','Musica','Arte','Sport','Trekking','Food','Cinema','Teatro','Viaggi'].map(c=>'<div class="filter-chip '+((!activeFilters.category&&c==='Tutti')||activeFilters.category===c?'active':'')+'" onclick="setCatFilter(\''+(c==='Tutti'?'':c)+'\',this)">'+c+'</div>').join('')+'</div>';
+  html+='<div style="display:flex;gap:8px;margin-bottom:10px"><div class="autocomplete-wrap" style="flex:1"><input id="citySearchInput" placeholder="📍 Città..." oninput="filterEvents()" autocomplete="off"><div class="autocomplete-list" id="citySearchList" style="display:none"></div></div><input id="dateSearchInput" type="date" onchange="filterEvents()" style="flex:1;margin-top:0"></div>';
+  if(userLocation){html+='<div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700">📍 Distanza max</span><span id="distVal" style="font-size:13px;color:#6c5ce7;font-weight:700">'+(activeFilters.maxDistance>=200?'Tutte':activeFilters.maxDistance+' km')+'</span></div><input type="range" id="distSlider" min="0" max="200" step="5" value="'+activeFilters.maxDistance+'" oninput="onDistSlider(this.value)" style="width:100%;accent-color:#6c5ce7;margin:0"></div>';}
+  html+='<div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><span style="font-size:13px;color:#888;white-space:nowrap">Ordina:</span><select id="sortSel" onchange="filterEvents()" style="margin-top:0;flex:1"><option value="default">Rilevanza</option>'+(userLocation?'<option value="distance">📍 Distanza</option>':'')+'<option value="price">💰 Prezzo</option></select></div><div id="searchResults"></div>';
   document.getElementById('content').innerHTML=html;
-  setupGeoAutocomplete('citySearchInput','citySearchList',item=>{
-    document.getElementById('citySearchInput').value=item.address?.city||item.display_name.split(',')[0];
-    filterEvents();
-  });
+  setupGeoAutocomplete('citySearchInput','citySearchList',item=>{document.getElementById('citySearchInput').value=item.address?.city||item.display_name.split(',')[0];filterEvents();});
   filterEvents();
 }
 
-function setCatFilter(cat,el){
-  activeFilters.category=cat;
-  document.querySelectorAll('#catFilters .filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  filterEvents();
-}
-
-function onDistSlider(val){
-  activeFilters.maxDistance=parseInt(val);
-  const el=document.getElementById('distVal');
-  if(el)el.textContent=val>=200?'Tutte':val+' km';
-  filterEvents();
-}
-
-function enableGeo(){
-  navigator.geolocation.getCurrentPosition(p=>{
-    userLocation={lat:p.coords.latitude,lng:p.coords.longitude};
-    drawSearch();
-  },()=>toast('❌ Impossibile rilevare la posizione'));
-}
+function setCatFilter(cat,el){activeFilters.category=cat;document.querySelectorAll('#catFilters .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');filterEvents();}
+function onDistSlider(val){activeFilters.maxDistance=parseInt(val);const el=document.getElementById('distVal');if(el)el.textContent=val>=200?'Tutte':val+' km';filterEvents();}
+function enableGeo(){navigator.geolocation.getCurrentPosition(p=>{userLocation={lat:p.coords.latitude,lng:p.coords.longitude};drawSearch();},()=>toast('❌ Posizione non disponibile'));}
 
 function filterEvents(){
   const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
   const city=(document.getElementById('citySearchInput')?.value||'').toLowerCase();
   const sort=document.getElementById('sortSel')?.value||'default';
-
   let filtered=events.filter(e=>{
     const mQ=!q||e.title.toLowerCase().includes(q)||(e.category||'').toLowerCase().includes(q)||(e.description||'').toLowerCase().includes(q);
-    const mCity=!city||(e.location||'').toLowerCase().includes(city);
+    const mC=!city||(e.location||'').toLowerCase().includes(city);
     const mCat=!activeFilters.category||e.category===activeFilters.category;
-    let mDist=true;
-    if(userLocation&&e.latitude&&activeFilters.maxDistance<200){
-      mDist=parseFloat(haversine(userLocation.lat,userLocation.lng,e.latitude,e.longitude))<=activeFilters.maxDistance;
-    }
-    return mQ&&mCity&&mCat&&mDist;
+    let mD=true;
+    if(userLocation&&e.latitude&&activeFilters.maxDistance<200)mD=parseFloat(haversine(userLocation.lat,userLocation.lng,e.latitude,e.longitude))<=activeFilters.maxDistance;
+    return mQ&&mC&&mCat&&mD;
   });
-
-  if(sort==='distance'&&userLocation){
-    filtered.sort((a,b)=>parseFloat(haversine(userLocation.lat,userLocation.lng,a.latitude,a.longitude))-parseFloat(haversine(userLocation.lat,userLocation.lng,b.latitude,b.longitude)));
-  } else if(sort==='price'){
-    filtered.sort((a,b)=>a.price-b.price);
-  }
-
+  if(sort==='distance'&&userLocation)filtered.sort((a,b)=>parseFloat(haversine(userLocation.lat,userLocation.lng,a.latitude,a.longitude))-parseFloat(haversine(userLocation.lat,userLocation.lng,b.latitude,b.longitude)));
+  else if(sort==='price')filtered.sort((a,b)=>a.price-b.price);
   let html='';
-  if(!filtered.length){
-    html='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento trovato</div>';
-  }
+  if(!filtered.length)html='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento trovato</div>';
   filtered.forEach(e=>{
     const dl=distLabel(e);
-    html+=`
-      <div class="card" style="cursor:pointer" onclick="navigate('eventDetail',${e.id})">
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <div style="font-size:40px">${e.emoji||'🎉'}</div>
-          <div style="flex:1">
-            <span class="card-tag tag-${(e.category||'altro').toLowerCase()}">${e.category||'Altro'}</span>
-            <div class="card-title">${e.title}</div>
-            <div class="card-meta">📍 ${e.location||''}
-              ${dl?`<span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px;font-weight:700">📍${dl}</span>`:''}
-            </div>
-            ${e.price===0?'<div class="card-meta" style="color:#00b894">✅ Gratuito</div>':`<div class="card-meta" style="color:#e67e22">💰 €${e.price}</div>`}
-          </div>
-        </div>
-      </div>`;
+    html+='<div class="card" style="cursor:pointer" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:40px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px;font-weight:700">📍'+dl+'</span>':'')+'</div>'+(e.price===0?'<div class="card-meta" style="color:#00b894">✅ Gratuito</div>':'<div class="card-meta" style="color:#e67e22">💰 €'+e.price+'</div>')+'</div></div></div>';
   });
   document.getElementById('searchResults').innerHTML=html;
 }
 
-/* ================================================================
-   SAVED EVENTS
-================================================================ */
+/* ── SAVED EVENTS ── */
 function drawSavedEvents(){
   const saved=events.filter(e=>savedEvents.includes(e.id));
-  let html=`<div class="section-title" style="margin-bottom:14px">I tuoi preferiti 🔖</div>`;
-  if(!saved.length){
-    html+=`<div style="text-align:center;color:#aaa;padding:40px">Nessun evento salvato.<br>Premi 🔖 su un evento!</div>`;
-  }
-  saved.forEach(e=>{
-    html+=`
-      <div class="card" onclick="navigate('eventDetail',${e.id})" style="cursor:pointer">
-        <div style="display:flex;gap:12px;align-items:center">
-          <div style="font-size:36px">${e.emoji||'🎉'}</div>
-          <div><div class="card-title">${e.title}</div>
-          <div class="card-meta">📍 ${e.location||''}</div></div>
-        </div>
-      </div>`;
-  });
+  let html='<div class="section-title" style="margin-bottom:14px">I tuoi preferiti 🔖</div>';
+  if(!saved.length)html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento salvato.<br>Premi 🔖!</div>';
+  saved.forEach(e=>{html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+'</div></div></div></div>';});
   document.getElementById('content').innerHTML=html;
 }
+function toggleSave(id){if(savedEvents.includes(id)){savedEvents=savedEvents.filter(i=>i!==id);toast('Rimosso dai preferiti');}else{savedEvents.push(id);toast('🔖 Salvato!');}}
 
-function toggleSave(id){
-  if(savedEvents.includes(id)){
-    savedEvents=savedEvents.filter(i=>i!==id);
-    toast('Rimosso dai preferiti');
-  } else {
-    savedEvents.push(id);
-    toast('🔖 Salvato nei preferiti!');
-  }
-}
-
-/* ================================================================
-   EVENT DETAIL
-================================================================ */
+/* ── EVENT DETAIL ── */
 async function drawEventDetail(eventId){
   showLoading();
-  // Carica evento fresco da Supabase
-  const {data:e,error}=await supabase
-    .from('events').select('*').eq('id',eventId).single();
+  const {data:e,error}=await supabase.from('events').select('*').eq('id',eventId).single();
   if(error||!e){toast('❌ Evento non trovato');goBack();return;}
-
-  // Conta partecipanti
-  const {count:partCount}=await supabase
-    .from('event_participants')
-    .select('*',{count:'exact',head:true})
-    .eq('event_id',eventId);
-
-  // Controlla se partecipo
+  const {count:pCount}=await supabase.from('event_participants').select('*',{count:'exact',head:true}).eq('event_id',eventId);
   let isMine=false;
   if(currentUser?.id&&currentUser.id!=='admin'){
-    const {data:myPart}=await supabase
-      .from('event_participants')
-      .select('user_id').eq('event_id',eventId).eq('user_id',currentUser.id).single();
-    isMine=!!myPart;
+    const {data:mp}=await supabase.from('event_participants').select('user_id').eq('event_id',eventId).eq('user_id',currentUser.id).single();
+    isMine=!!mp;
   }
-
   const dl=distLabel(e);
   const isSaved=savedEvents.includes(e.id);
-
-  let html=`
-    <div class="detail-hero">${e.emoji||'🎉'}</div>
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
-      <div>
-        <span class="card-tag tag-${(e.category||'altro').toLowerCase()}">${e.category||'Altro'}</span>
-        <div class="card-title" style="font-size:20px">${e.title}</div>
-      </div>
-      <span style="font-size:24px;cursor:pointer" onclick="shareEvent(${e.id})">⬆️</span>
-    </div>
-    <div class="detail-row"><span class="icon">📍</span>
-      <div>${e.location||''}${e.address?`<br><span style="color:#888;font-size:13px">${e.address}</span>`:''}
-      ${dl?`<br><span style="color:#6c5ce7;font-size:12px;font-weight:700">📍 ${dl} da te</span>`:''}</div>
-    </div>
-    ${e.date_time?`<div class="detail-row"><span class="icon">📅</span>${new Date(e.date_time).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div>`:''}
-    <div class="detail-row"><span class="icon">📝</span><div style="color:#555;line-height:1.5">${e.description||'Nessuna descrizione'}</div></div>
-    <div class="detail-row"><span class="icon">👥</span>${partCount||0}/${e.max_participants} partecipanti</div>
-    ${e.price===0?'<div class="detail-row"><span class="icon">✅</span><div style="color:#00b894;font-weight:600">Gratuito</div></div>':`<div class="detail-row"><span class="icon">💰</span>€${e.price} a persona</div>`}
-    ${e.external_link?`<div class="detail-row"><span class="icon">🔗</span><a href="${e.external_link}" target="_blank" style="color:#6c5ce7;font-size:13px">Sito esterno</a></div>`:''}`;
-
+  let html='<div class="detail-hero">'+(e.emoji||'🎉')+'</div>';
+  html+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px"><div><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title" style="font-size:20px">'+e.title+'</div></div><span style="font-size:24px;cursor:pointer" onclick="shareEvent('+e.id+')">⬆️</span></div>';
+  html+='<div class="detail-row"><span class="icon">📍</span><div>'+(e.location||'')+(e.address?'<br><span style="color:#888;font-size:13px">'+e.address+'</span>':'')+(dl?'<br><span style="color:#6c5ce7;font-size:12px;font-weight:700">📍 '+dl+' da te</span>':'')+'</div></div>';
+  if(e.date_time)html+='<div class="detail-row"><span class="icon">📅</span>'+new Date(e.date_time).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'</div>';
+  html+='<div class="detail-row"><span class="icon">📝</span><div style="color:#555;line-height:1.5">'+(e.description||'Nessuna descrizione')+'</div></div>';
+  html+='<div class="detail-row"><span class="icon">👥</span>'+(pCount||0)+'/'+e.max_participants+' partecipanti</div>';
+  html+=e.price===0?'<div class="detail-row"><span class="icon">✅</span><div style="color:#00b894;font-weight:600">Gratuito</div></div>':'<div class="detail-row"><span class="icon">💰</span>€'+e.price+' a persona</div>';
+  if(e.external_link)html+='<div class="detail-row"><span class="icon">🔗</span><a href="'+e.external_link+'" target="_blank" style="color:#6c5ce7">Sito esterno</a></div>';
   if(isMine){
-    html+=`
-      <div class="btn green" onclick="navigate('eventGroup',${e.id})">💬 Vai al Gruppo Chat</div>
-      <div class="btn secondary" onclick="leaveEvent(${e.id})">Abbandona evento</div>
-      <div class="btn outline" onclick="navigate('feedback',${e.id})" style="margin-top:8px">⭐ Lascia feedback</div>`;
+    html+='<div class="btn green" onclick="navigate(\'eventGroup\','+e.id+')">💬 Vai al Gruppo Chat</div>';
+    html+='<div class="btn secondary" onclick="leaveEvent('+e.id+')">Abbandona evento</div>';
+    html+='<div class="btn outline" onclick="navigate(\'feedback\','+e.id+')" style="margin-top:8px">⭐ Lascia feedback</div>';
   } else {
-    const full=(partCount||0)>=e.max_participants;
-    html+=`
-      <div class="btn ${full?'secondary':''}" onclick="${full?`toast('⚠️ Evento al completo!')`:`joinEvent(${e.id})`}">${full?'🔒 Evento completo':'Partecipa'}</div>
-      <div class="btn secondary" onclick="toggleSave(${e.id})" style="margin-top:8px">🔖 ${isSaved?'Salvato ✓':'Mi interessa'}</div>`;
+    const full=(pCount||0)>=e.max_participants;
+    html+='<div class="btn '+(full?'secondary':'')+'" onclick="'+(full?'toast(\'⚠️ Evento al completo!\')':'joinEvent('+e.id+')')+'">'+( full?'🔒 Evento completo':'Partecipa')+'</div>';
+    html+='<div class="btn secondary" onclick="toggleSave('+e.id+')" style="margin-top:8px">🔖 '+(isSaved?'Salvato ✓':'Mi interessa')+'</div>';
   }
-
-  html+=`<div style="margin-top:16px;text-align:center">
-    <span style="color:#ff4757;font-size:13px;cursor:pointer" onclick="navigate('report',${e.id})">🚩 Segnala evento</span>
-  </div>`;
-
+  html+='<div style="margin-top:16px;text-align:center"><span style="color:#ff4757;font-size:13px;cursor:pointer" onclick="navigate(\'report\','+e.id+')">🚩 Segnala evento</span></div>';
   document.getElementById('content').innerHTML=html;
 }
 
 async function joinEvent(id){
-  if(!currentUser||!isLoggedIn){toast('⚠️ Devi essere loggato');navigate('login');return;}
-  const {error}=await supabase.from('event_participants').insert({
-    event_id:id,user_id:currentUser.id
-  });
+  if(!isLoggedIn){toast('⚠️ Devi essere loggato');navigate('login');return;}
+  const {error}=await supabase.from('event_participants').insert({event_id:id,user_id:currentUser.id});
   if(error){toast('❌ '+error.message);return;}
-  toast('✅ Hai aderito all\'evento!');
+  toast('✅ Hai aderito!');
   notifications.unshift({id:Date.now(),text:'Hai aderito a un evento!',time:'ora',read:false,icon:'✅'});
   drawEventDetail(id);
 }
-
 async function leaveEvent(id){
-  const {error}=await supabase.from('event_participants')
-    .delete().eq('event_id',id).eq('user_id',currentUser.id);
+  const {error}=await supabase.from('event_participants').delete().eq('event_id',id).eq('user_id',currentUser.id);
   if(error){toast('❌ '+error.message);return;}
-  toast('👋 Hai abbandonato l\'evento');
-  navigate('home');
+  toast('👋 Hai abbandonato l\'evento');navigate('home');
 }
-
 function shareEvent(id){
   const e=events.find(ev=>ev.id===id);
-  if(navigator.share){
-    navigator.share({title:e?.title||'EventConnect',text:'Vieni a questo evento!',url:window.location.href});
-  } else {
-    navigator.clipboard?.writeText(window.location.href);
-    toast('🔗 Link copiato!');
-  }
+  if(navigator.share)navigator.share({title:e?.title||'EventConnect',text:'Vieni a questo evento!',url:window.location.href});
+  else{navigator.clipboard?.writeText(window.location.href);toast('🔗 Link copiato!');}
 }
 
-/* ================================================================
-   CREATE EVENT
-================================================================ */
+/* ── CREATE EVENT ── */
 function drawCreate(){
-  if(!isLoggedIn){toast('⚠️ Devi essere loggato per creare eventi');navigate('login');return;}
+  if(!isLoggedIn){toast('⚠️ Devi essere loggato');navigate('login');return;}
   selectedEmoji='🎉';
   document.getElementById('content').innerHTML=`
     <div style="text-align:center;padding:10px 0 16px">
-      <div id="eventEmojiPicker"
-           style="width:80px;height:80px;border-radius:18px;background:#f0eeff;
-                  margin:auto;display:flex;align-items:center;justify-content:center;
-                  font-size:36px;cursor:pointer;border:2px dashed #6c5ce7"
-           onclick="pickEmoji()">🎉</div>
+      <div id="emojiPick" style="width:80px;height:80px;border-radius:18px;background:#f0eeff;margin:auto;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px dashed #6c5ce7" onclick="pickEmoji()">🎉</div>
       <div style="font-size:13px;color:#888;margin-top:6px">Tocca per scegliere emoji</div>
     </div>
-    <label>Titolo attività *</label>
-    <input id="createTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
-    <label>Descrizione *</label>
-    <textarea id="createDesc" placeholder="Descrivi l'esperienza..." rows="3"></textarea>
+    <label>Titolo *</label><input id="cTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
+    <label>Descrizione *</label><textarea id="cDesc" placeholder="Descrivi l'esperienza..." rows="3"></textarea>
     <label>Categoria *</label>
-    <select id="createCat">
-      <option value="">Seleziona categoria...</option>
-      <option>Musica</option><option>Arte</option><option>Sport</option>
-      <option>Trekking</option><option>Food</option><option>Cinema</option>
-      <option>Teatro</option><option>Viaggi</option><option>Tecnologia</option>
-      <option>Benessere</option><option>Altro</option>
-    </select>
-    <label>Data e ora *</label>
-    <input id="createDate" type="datetime-local">
+    <select id="cCat"><option value="">Seleziona...</option><option>Musica</option><option>Arte</option><option>Sport</option><option>Trekking</option><option>Food</option><option>Cinema</option><option>Teatro</option><option>Viaggi</option><option>Tecnologia</option><option>Benessere</option><option>Altro</option></select>
+    <label>Data e ora *</label><input id="cDate" type="datetime-local">
     <label>Città *</label>
-    <div class="autocomplete-wrap">
-      <input id="createCity" placeholder="Es. Milano" autocomplete="off">
-      <div class="autocomplete-list" id="createCityList" style="display:none"></div>
-    </div>
-    <label>Indirizzo / Luogo *</label>
-    <div class="autocomplete-wrap">
-      <input id="createAddr" placeholder="Es. Via Borsieri 37, Milano" autocomplete="off">
-      <div class="autocomplete-list" id="createAddrList" style="display:none"></div>
-    </div>
-    <div id="coordsInfo" style="font-size:12px;color:#00b894;margin-top:4px;display:none">✅ Coordinate geolocalizzate</div>
-    <div id="createCoordLat" style="display:none"></div>
-    <div id="createCoordLng" style="display:none"></div>
-    <label>Max partecipanti *</label>
-    <input id="createMax" type="number" placeholder="Es. 10" min="2" max="100">
-    <label>Prezzo (€, 0 se gratuito)</label>
-    <input id="createPrice" type="number" placeholder="0" min="0" step="0.5" value="0">
-    <label>Link esterno (opzionale)</label>
-    <input id="createLink" type="url" placeholder="https://...">
-    <div class="btn" onclick="submitCreateEvent()" style="margin-top:20px">🎉 Crea attività</div>
+    <div class="autocomplete-wrap"><input id="cCity" placeholder="Es. Milano" autocomplete="off"><div class="autocomplete-list" id="cCityList" style="display:none"></div></div>
+    <label>Indirizzo *</label>
+    <div class="autocomplete-wrap"><input id="cAddr" placeholder="Es. Via Borsieri 37, Milano" autocomplete="off"><div class="autocomplete-list" id="cAddrList" style="display:none"></div></div>
+    <div id="coordsOk" style="font-size:12px;color:#00b894;margin-top:4px;display:none">✅ Coordinate rilevate</div>
+    <div id="cLat" style="display:none"></div><div id="cLng" style="display:none"></div>
+    <label>Max partecipanti *</label><input id="cMax" type="number" placeholder="Es. 10" min="2" max="100">
+    <label>Prezzo (€)</label><input id="cPrice" type="number" placeholder="0" min="0" step="0.5" value="0">
+    <label>Link esterno (opzionale)</label><input id="cLink" type="url" placeholder="https://...">
+    <div class="btn" onclick="submitCreate()" style="margin-top:20px">🎉 Crea attività</div>
     <div class="btn secondary" onclick="navigate('home')" style="margin-top:8px">Annulla</div>`;
-
-  setupGeoAutocomplete('createCity','createCityList',item=>{
-    document.getElementById('createCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];
-  });
-  setupGeoAutocomplete('createAddr','createAddrList',item=>{
-    document.getElementById('createCoordLat').textContent=item.lat;
-    document.getElementById('createCoordLng').textContent=item.lon;
-    document.getElementById('coordsInfo').style.display='block';
-  });
+  setupGeoAutocomplete('cCity','cCityList',item=>{document.getElementById('cCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
+  setupGeoAutocomplete('cAddr','cAddrList',item=>{document.getElementById('cLat').textContent=item.lat;document.getElementById('cLng').textContent=item.lon;document.getElementById('coordsOk').style.display='block';});
 }
 
-const emojiOptions=['🎷','🖼️','🍹','⚽','🥾','🏔️','🚣','🎸','🎭','🎬','🍕','✈️','💻','🧘','🎉','🎨','🏋️','🎤'];
-function pickEmoji(){
-  let html='<div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px;justify-content:center">';
-  emojiOptions.forEach(em=>{
-    html+=`<div style="font-size:34px;cursor:pointer;padding:4px" onclick="chooseEmoji('${em}')">${em}</div>`;
-  });
-  html+='</div>';
-  showModal('Scegli emoji',html);
-}
-function chooseEmoji(em){
-  selectedEmoji=em;
-  document.getElementById('eventEmojiPicker').textContent=em;
-  closeModal();
-}
+const emojiOpts=['🎷','🖼️','🍹','⚽','🥾','🏔️','🚣','🎸','🎭','🎬','🍕','✈️','💻','🧘','🎉','🎨','🏋️','🎤'];
+function pickEmoji(){let h='<div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px;justify-content:center">';emojiOpts.forEach(em=>{h+='<div style="font-size:34px;cursor:pointer;padding:4px" onclick="chooseEmoji(\''+em+'\')">'+em+'</div>';});h+='</div>';showModal('Scegli emoji',h);}
+function chooseEmoji(em){selectedEmoji=em;document.getElementById('emojiPick').textContent=em;closeModal();}
 
-async function submitCreateEvent(){
-  const title=document.getElementById('createTitle').value.trim();
-  const desc=document.getElementById('createDesc').value.trim();
-  const cat=document.getElementById('createCat').value;
-  const dateRaw=document.getElementById('createDate').value;
-  const city=document.getElementById('createCity').value.trim();
-  const addr=document.getElementById('createAddr').value.trim();
-  const maxP=parseInt(document.getElementById('createMax').value)||10;
-  const price=parseFloat(document.getElementById('createPrice').value)||0;
-  const link=document.getElementById('createLink').value.trim();
-  const lat=parseFloat(document.getElementById('createCoordLat').textContent)||null;
-  const lng=parseFloat(document.getElementById('createCoordLng').textContent)||null;
-
+async function submitCreate(){
+  const title=document.getElementById('cTitle').value.trim();
+  const desc=document.getElementById('cDesc').value.trim();
+  const cat=document.getElementById('cCat').value;
+  const dateRaw=document.getElementById('cDate').value;
+  const city=document.getElementById('cCity').value.trim();
+  const addr=document.getElementById('cAddr').value.trim();
+  const maxP=parseInt(document.getElementById('cMax').value)||10;
+  const price=parseFloat(document.getElementById('cPrice').value)||0;
+  const link=document.getElementById('cLink').value.trim();
+  const lat=parseFloat(document.getElementById('cLat').textContent)||null;
+  const lng=parseFloat(document.getElementById('cLng').textContent)||null;
   if(!title){toast('⚠️ Inserisci il titolo');return;}
   if(!cat){toast('⚠️ Seleziona la categoria');return;}
   if(!dateRaw){toast('⚠️ Inserisci data e ora');return;}
   if(!city){toast('⚠️ Inserisci la città');return;}
   if(!addr){toast('⚠️ Inserisci l\'indirizzo');return;}
-  if(!maxP||maxP<2){toast('⚠️ Inserisci il numero massimo di partecipanti (min 2)');return;}
-
-  toast('⏳ Creazione in corso...');
-
-  const {data,error}=await supabase.from('events').insert({
-    creator_id:currentUser.id,
-    title,description:desc,category:cat,
-    date_time:new Date(dateRaw).toISOString(),
-    location:city,address:addr,
-    max_participants:maxP,price,
-    emoji:selectedEmoji,
-    latitude:lat,longitude:lng,
-    external_link:link||null,
-    status:'active'
-  }).select().single();
-
+  if(maxP<2){toast('⚠️ Min 2 partecipanti');return;}
+  toast('⏳ Creazione...');
+  const {data,error}=await supabase.from('events').insert({creator_id:currentUser.id,title,description:desc,category:cat,date_time:new Date(dateRaw).toISOString(),location:city,address:addr,max_participants:maxP,price,emoji:selectedEmoji,latitude:lat,longitude:lng,external_link:link||null,status:'active'}).select().single();
   if(error){toast('❌ '+error.message);return;}
-
-  // Creatore come primo partecipante
-  await supabase.from('event_participants').insert({
-    event_id:data.id,user_id:currentUser.id
-  });
-
-  // Aggiorna lista locale
+  await supabase.from('event_participants').insert({event_id:data.id,user_id:currentUser.id});
   await loadEvents();
-  notifications.unshift({id:Date.now(),text:`Hai creato "${title}"`,time:'ora',read:false,icon:'🎉'});
-  toast('✅ Evento creato con successo!');
+  notifications.unshift({id:Date.now(),text:'Hai creato "'+title+'"',time:'ora',read:false,icon:'🎉'});
+  toast('✅ Evento creato!');
   navigate('eventDetail',data.id);
 }
 
-/* ================================================================
-   CHAT LIST
-================================================================ */
+/* ── CHAT LIST ── */
 async function drawChatList(){
   if(!isLoggedIn){navigate('login');return;}
   showLoading();
-
-  // Carica eventi a cui partecipo
-  const {data:myParts}=await supabase
-    .from('event_participants')
-    .select('event_id')
-    .eq('user_id',currentUser.id);
-
-  const myEventIds=(myParts||[]).map(p=>p.event_id);
-
+  const {data:myParts}=await supabase.from('event_participants').select('event_id').eq('user_id',currentUser.id);
+  const ids=(myParts||[]).map(p=>p.event_id);
   let myEvents=[];
-  if(myEventIds.length){
-    const {data}=await supabase
-      .from('events').select('*').in('id',myEventIds);
-    myEvents=data||[];
-  }
-
-  let html=`<div class="section-title" style="margin-bottom:14px">Le tue chat</div>`;
-  if(!myEvents.length){
-    html+=`<div style="text-align:center;color:#aaa;padding:40px">
-      Nessun gruppo ancora.<br>Partecipa a un evento!
-      <br><br><div class="btn" onclick="navigate('search')">Esplora eventi</div>
-    </div>`;
-  }
-  myEvents.forEach(e=>{
-    html+=`
-      <div class="card" onclick="navigate('eventGroup',${e.id})" style="cursor:pointer">
-        <div style="display:flex;gap:12px;align-items:center">
-          <div style="font-size:36px">${e.emoji||'🎉'}</div>
-          <div style="flex:1">
-            <div style="font-weight:700">${e.title}</div>
-            <div style="font-size:13px;color:#888">Tocca per aprire la chat</div>
-          </div>
-          <div style="font-size:20px;color:#ddd">›</div>
-        </div>
-      </div>`;
-  });
+  if(ids.length){const {data}=await supabase.from('events').select('*').in('id',ids);myEvents=data||[];}
+  let html='<div class="section-title" style="margin-bottom:14px">Le tue chat</div>';
+  if(!myEvents.length)html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun gruppo ancora.<br><div class="btn" onclick="navigate(\'search\')" style="margin-top:10px">Esplora eventi</div></div>';
+  myEvents.forEach(e=>{html+='<div class="card" onclick="navigate(\'eventGroup\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:13px;color:#888">Tocca per aprire la chat</div></div><div style="font-size:20px;color:#ddd">›</div></div></div>';});
   document.getElementById('content').innerHTML=html;
 }
 
-/* ================================================================
-   EVENT GROUP
-================================================================ */
+/* ── EVENT GROUP ── */
 async function drawEventGroup(eventId){
   const {data:e}=await supabase.from('events').select('*').eq('id',eventId).single();
   if(!e)return;
   document.getElementById('headerTitle').textContent=e.title;
-
-  let html=`
-    <div style="background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
-      <div style="font-size:28px">${e.emoji||'🎉'}</div>
-      <div><div style="font-weight:700">${e.title}</div>
-      <div style="font-size:12px;color:#888">${e.location||''}</div></div>
-    </div>
-    <div class="tabs">
-      <div class="tab ${activeTab==='chat'?'active':''}" onclick="switchTab('chat',${e.id})">💬 Chat</div>
-      <div class="tab ${activeTab==='participants'?'active':''}" onclick="switchTab('participants',${e.id})">👥 Partecipanti</div>
-      <div class="tab ${activeTab==='details'?'active':''}" onclick="switchTab('details',${e.id})">ℹ️ Dettagli</div>
-    </div>
-    <div id="groupTabContent">`;
-
-  if(activeTab==='chat') html+=await renderChat(e);
-  else if(activeTab==='participants') html+=await renderParticipants(e);
+  let html='<div style="background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px"><div style="font-size:28px">'+(e.emoji||'🎉')+'</div><div><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div></div></div>';
+  html+='<div class="tabs"><div class="tab '+(activeTab==='chat'?'active':'')+'" onclick="switchTab(\'chat\','+e.id+')">💬 Chat</div><div class="tab '+(activeTab==='participants'?'active':'')+'" onclick="switchTab(\'participants\','+e.id+')">👥 Partecipanti</div><div class="tab '+(activeTab==='details'?'active':'')+'" onclick="switchTab(\'details\','+e.id+')">ℹ️ Dettagli</div></div>';
+  html+='<div id="groupTabContent">';
+  if(activeTab==='chat')html+=await renderChat(e);
+  else if(activeTab==='participants')html+=await renderParticipants(e);
   else html+=renderEventDetails(e);
-
-  html+=`</div>`;
+  html+='</div>';
   document.getElementById('content').innerHTML=html;
+  if(activeTab==='chat'){setTimeout(()=>{const c=document.getElementById('chatMsgs');if(c)c.scrollTop=c.scrollHeight;},50);}
 }
 
-function switchTab(tab,eventId){
-  activeTab=tab;
-  drawEventGroup(eventId);
-}
+function switchTab(tab,eventId){activeTab=tab;drawEventGroup(eventId);}
 
 async function renderChat(e){
-  const {data:msgs}=await supabase
-    .from('messages')
-    .select('*,profiles(name,emoji)')
-    .eq('event_id',e.id)
-    .order('created_at',{ascending:true});
-
-  let html=`<div class="chat-messages" id="chatMsgs">`;
-  if(!msgs||!msgs.length){
-    html+=`<div style="text-align:center;color:#aaa;padding:20px">Nessun messaggio. Inizia la conversazione! 👋</div>`;
-  }
+  const {data:msgs}=await supabase.from('messages').select('*,profiles(name,emoji)').eq('event_id',e.id).order('created_at',{ascending:true});
+  let html='<div class="chat-messages" id="chatMsgs">';
+  if(!msgs||!msgs.length)html+='<div style="text-align:center;color:#aaa;padding:20px">Nessun messaggio. Inizia! 👋</div>';
   (msgs||[]).forEach(m=>{
     const isMine=m.sender_id===currentUser?.id;
     const time=new Date(m.created_at).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
-    html+=`<div class="msg-wrap ${isMine?'me':'them'}">
-      ${!isMine?`<div class="msg-sender">${m.profiles?.name||'Utente'}</div>`:''}
-      <div class="msg-bubble ${isMine?'sent':'received'}">${m.message}</div>
-      <div class="msg-time">${time}</div>
-    </div>`;
+    html+='<div class="msg-wrap '+(isMine?'me':'them')+'">'+(!isMine?'<div class="msg-sender">'+(m.profiles?.name||'Utente')+'</div>':'')+'<div class="msg-bubble '+(isMine?'sent':'received')+'">'+m.message+'</div><div class="msg-time">'+time+'</div></div>';
   });
-  html+=`</div>
-    <div class="chat-input-row">
-      <input id="msgInput" placeholder="Scrivi un messaggio..."
-             onkeypress="if(event.key==='Enter')sendMessage(${e.id})">
-      <button class="send-btn" onclick="sendMessage(${e.id})">➤</button>
-    </div>`;
+  html+='</div><div class="chat-input-row"><input id="msgInput" placeholder="Scrivi un messaggio..." onkeypress="if(event.key===\'Enter\')sendMessage('+e.id+')"><button class="send-btn" onclick="sendMessage('+e.id+')">➤</button></div>';
   return html;
 }
 
@@ -1432,333 +775,123 @@ async function sendMessage(eventId){
   const inp=document.getElementById('msgInput');
   if(!inp||!inp.value.trim())return;
   if(!isLoggedIn){toast('⚠️ Devi essere loggato');return;}
-
-  const {error}=await supabase.from('messages').insert({
-    event_id:eventId,
-    sender_id:currentUser.id,
-    message:inp.value.trim()
-  });
+  const {error}=await supabase.from('messages').insert({event_id:eventId,sender_id:currentUser.id,message:inp.value.trim()});
   if(error){toast('❌ '+error.message);return;}
   inp.value='';
   await drawEventGroup(eventId);
-  setTimeout(()=>{
-    const c=document.getElementById('chatMsgs');
-    if(c)c.scrollTop=c.scrollHeight;
-  },50);
 }
 
 async function renderParticipants(e){
-  const {data:parts}=await supabase
-    .from('event_participants')
-    .select('*,profiles(id,name,city,verified,emoji,interests)')
-    .eq('event_id',e.id);
-
-  let html=`<div style="font-size:13px;color:#888;margin-bottom:12px">${parts?.length||0}/${e.max_participants} partecipanti</div>`;
+  const {data:parts}=await supabase.from('event_participants').select('*,profiles(id,name,city,verified,emoji)').eq('event_id',e.id);
+  let html='<div style="font-size:13px;color:#888;margin-bottom:12px">'+(parts?.length||0)+'/'+e.max_participants+' partecipanti</div>';
   (parts||[]).forEach(p=>{
-    const u=p.profiles;
-    if(!u)return;
-    html+=`
-      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
-        <div class="avatar">${u.emoji||'👤'}</div>
-        <div style="flex:1">
-          <div style="font-weight:600">${u.name} ${u.verified?'<span class="verified-badge">✅</span>':''}</div>
-          <div style="font-size:12px;color:#888">📍 ${u.city||''}</div>
-        </div>
-        ${u.id!==currentUser?.id?`
-          <div style="display:flex;gap:8px">
-            <span style="cursor:pointer;font-size:18px" onclick="navigate('report',${e.id})" title="Segnala">🚩</span>
-            <span style="cursor:pointer;font-size:18px" onclick="blockUser('${u.id}')" title="Blocca">🚫</span>
-          </div>`:`<span style="font-size:12px;background:#f0eeff;color:#6c5ce7;border-radius:10px;padding:3px 8px">Tu</span>`}
-      </div>`;
+    const u=p.profiles;if(!u)return;
+    html+='<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:600">'+u.name+(u.verified?' <span class="verified-badge">✅</span>':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div>'+(u.id!==currentUser?.id?'<div style="display:flex;gap:8px"><span style="cursor:pointer;font-size:18px" onclick="navigate(\'report\','+e.id+')" title="Segnala">🚩</span><span style="cursor:pointer;font-size:18px" onclick="blockUser(\''+u.id+'\')" title="Blocca">🚫</span></div>':'<span style="font-size:12px;background:#f0eeff;color:#6c5ce7;border-radius:10px;padding:3px 8px">Tu</span>')+'</div>';
   });
   return html;
 }
 
-function blockUser(uid){
-  if(!blockedUsers.includes(uid)){
-    blockedUsers.push(uid);
-    toast('🚫 Utente bloccato');
-  } else {
-    blockedUsers=blockedUsers.filter(i=>i!==uid);
-    toast('🔓 Utente sbloccato');
-  }
-}
+function blockUser(uid){if(!blockedUsers.includes(uid)){blockedUsers.push(uid);toast('🚫 Utente bloccato');}else{blockedUsers=blockedUsers.filter(i=>i!==uid);toast('🔓 Sbloccato');}}
 
 function renderEventDetails(e){
   const dl=distLabel(e);
-  return `
-    ${e.date_time?`<div class="detail-row"><span class="icon">📅</span>${new Date(e.date_time).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div>`:''}
-    <div class="detail-row"><span class="icon">📍</span>${e.address||e.location||''}${dl?`<br><span style="color:#6c5ce7;font-size:12px">📍 ${dl} da te</span>`:''}</div>
-    <div class="detail-row"><span class="icon">📝</span><span style="color:#555">${e.description||''}</span></div>
-    ${e.external_link?`<div class="detail-row"><span class="icon">🔗</span><a href="${e.external_link}" target="_blank" style="color:#6c5ce7">${e.external_link}</a></div>`:''}
-    <div class="btn" onclick="navigate('feedback',${e.id})" style="margin-top:16px">⭐ Lascia feedback</div>`;
+  let html='';
+  if(e.date_time)html+='<div class="detail-row"><span class="icon">📅</span>'+new Date(e.date_time).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'</div>';
+  html+='<div class="detail-row"><span class="icon">📍</span>'+(e.address||e.location||'')+(dl?'<br><span style="color:#6c5ce7;font-size:12px">📍 '+dl+' da te</span>':'')+'</div>';
+  html+='<div class="detail-row"><span class="icon">📝</span><span style="color:#555">'+(e.description||'')+'</span></div>';
+  if(e.external_link)html+='<div class="detail-row"><span class="icon">🔗</span><a href="'+e.external_link+'" target="_blank" style="color:#6c5ce7">'+e.external_link+'</a></div>';
+  html+='<div class="btn" onclick="navigate(\'feedback\','+e.id+')" style="margin-top:16px">⭐ Lascia feedback</div>';
+  return html;
 }
 
-/* ================================================================
-   PROFILE
-================================================================ */
+/* ── PROFILE ── */
 async function drawProfile(){
   if(!isLoggedIn){navigate('login');return;}
   showLoading();
-
-  const {data:user}=await supabase
-    .from('profiles').select('*').eq('id',currentUser.id).single();
-  if(user){currentUser={...currentUser,...user};}
-
-  const {data:ui}=await supabase
-    .from('user_interests').select('interests(name)').eq('user_id',currentUser.id);
+  const {data:user}=await supabase.from('profiles').select('*').eq('id',currentUser.id).single();
+  if(user)currentUser={...currentUser,...user};
+  const {data:ui}=await supabase.from('user_interests').select('interests(name)').eq('user_id',currentUser.id);
   userInterests=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
   currentUser.interests=userInterests;
-
-  const {count:evCount}=await supabase
-    .from('event_participants').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id);
-
-  const completion=currentUser.completeness||40;
-
-  let html=`
-    <div style="text-align:center;padding:20px 0 10px">
-      <div class="avatar xl" style="margin:auto;margin-bottom:12px">${currentUser.emoji||'👤'}</div>
-      <div style="font-size:21px;font-weight:800">${currentUser.name||'Utente'}</div>
-      ${currentUser.verified?`<div style="margin-top:4px"><span class="verified-badge">✅ Profilo Verificato</span></div>`:''}
-      <div style="font-size:14px;color:#888;margin-top:6px">📍 ${currentUser.city||''}</div>
-      <div style="font-size:14px;color:#555;margin-top:8px;padding:0 16px;line-height:1.5">${currentUser.bio||'Nessuna bio ancora'}</div>
-    </div>
-    <div style="margin:12px 0;text-align:center">
-      ${userInterests.map(i=>`<span class="card-tag tag-${i.toLowerCase()}">${i}</span>`).join('')}
-    </div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:13px;font-weight:700">Completamento profilo</span>
-        <span style="font-size:13px;color:#6c5ce7;font-weight:700">${completion}%</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${completion}%"></div></div>
-    </div>
-    <div class="profile-stats">
-      <div class="profile-stat"><div class="num">${evCount||0}</div><div class="lbl">Eventi</div></div>
-      <div class="profile-stat"><div class="num">${userInterests.length}</div><div class="lbl">Interessi</div></div>
-      <div class="profile-stat"><div class="num">${currentUser.verified?'✅':'❌'}</div><div class="lbl">Verificato</div></div>
-    </div>
-
-    <!-- MODIFICA PROFILO -->
-    <div class="card">
-      <div style="font-weight:700;margin-bottom:12px">✏️ Modifica profilo</div>
-      <label>Bio</label>
-      <textarea id="editBio" rows="2" placeholder="Raccontati...">${currentUser.bio||''}</textarea>
-      <label>Città</label>
-      <div class="autocomplete-wrap">
-        <input id="editCity" value="${currentUser.city||''}" autocomplete="off">
-        <div class="autocomplete-list" id="editCityList" style="display:none"></div>
-      </div>
-      <label>Interessi</label>
-      <div class="chips" id="profileChips">
-        ${allInterests.map(i=>`
-          <div class="chip ${userInterests.includes(i.label)?'selected':''}"
-               onclick="toggleProfileInterest('${i.label}',this)">${i.icon} ${i.label}</div>`).join('')}
-      </div>
-      <div class="btn" onclick="saveProfile()" style="margin-top:14px">💾 Salva modifiche</div>
-    </div>
-    <div class="btn secondary" onclick="navigate('matchPeople')">🤝 Persone compatibili</div>
-    <div class="btn secondary" onclick="navigate('aiAssistant')" style="margin-top:8px">🤖 AI Assistant</div>
-    <div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>`;
-
+  const {count:evCount}=await supabase.from('event_participants').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id);
+  const comp=currentUser.completeness||40;
+  let html='<div style="text-align:center;padding:20px 0 10px"><div class="avatar xl" style="margin:auto;margin-bottom:12px">'+(currentUser.emoji||'👤')+'</div><div style="font-size:21px;font-weight:800">'+(currentUser.name||'Utente')+'</div>'+(currentUser.verified?'<div style="margin-top:4px"><span class="verified-badge">✅ Profilo Verificato</span></div>':'')+'<div style="font-size:14px;color:#888;margin-top:6px">📍 '+(currentUser.city||'')+'</div><div style="font-size:14px;color:#555;margin-top:8px;padding:0 16px;line-height:1.5">'+(currentUser.bio||'Nessuna bio ancora')+'</div></div>';
+  html+='<div style="margin:12px 0;text-align:center">'+userInterests.map(i=>'<span class="card-tag tag-'+i.toLowerCase()+'">'+i+'</span>').join('')+'</div>';
+  html+='<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:700">Completamento profilo</span><span style="font-size:13px;color:#6c5ce7;font-weight:700">'+comp+'%</span></div><div class="progress-bar"><div class="progress-fill" style="width:'+comp+'%"></div></div></div>';
+  html+='<div class="profile-stats"><div class="profile-stat"><div class="num">'+(evCount||0)+'</div><div class="lbl">Eventi</div></div><div class="profile-stat"><div class="num">'+userInterests.length+'</div><div class="lbl">Interessi</div></div><div class="profile-stat"><div class="num">'+(currentUser.verified?'✅':'❌')+'</div><div class="lbl">Verificato</div></div></div>';
+  html+='<div class="card"><div style="font-weight:700;margin-bottom:12px">✏️ Modifica profilo</div><label>Bio</label><textarea id="editBio" rows="2" placeholder="Raccontati...">'+(currentUser.bio||'')+'</textarea><label>Città</label><div class="autocomplete-wrap"><input id="editCity" value="'+(currentUser.city||'')+'" autocomplete="off"><div class="autocomplete-list" id="editCityList" style="display:none"></div></div><label>Interessi</label><div class="chips" id="profileChips">'+allInterests.map(i=>'<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleProfileInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>').join('')+'</div><div class="btn" onclick="saveProfile()" style="margin-top:14px">💾 Salva modifiche</div></div>';
+  html+='<div class="btn secondary" onclick="navigate(\'matchPeople\')">🤝 Persone compatibili</div><div class="btn secondary" onclick="navigate(\'aiAssistant\')" style="margin-top:8px">🤖 AI Assistant</div><div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>';
   document.getElementById('content').innerHTML=html;
-  setupGeoAutocomplete('editCity','editCityList',item=>{
-    const city=item.address?.city||item.address?.town||item.display_name.split(',')[0];
-    document.getElementById('editCity').value=city;
-  });
+  setupGeoAutocomplete('editCity','editCityList',item=>{document.getElementById('editCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
 }
 
-function toggleProfileInterest(label,el){
-  el.classList.toggle('selected');
-  if(el.classList.contains('selected')){
-    if(!userInterests.includes(label))userInterests.push(label);
-  } else {
-    userInterests=userInterests.filter(i=>i!==label);
-  }
-}
+function toggleProfileInterest(label,el){el.classList.toggle('selected');if(el.classList.contains('selected')){if(!userInterests.includes(label))userInterests.push(label);}else{userInterests=userInterests.filter(i=>i!==label);}}
 
 async function saveProfile(){
   const bio=document.getElementById('editBio').value;
   const city=document.getElementById('editCity').value;
-
-  const {error}=await supabase.from('profiles').update({
-    bio,city,
-    completeness:Math.min(100,(currentUser.completeness||40)+15)
-  }).eq('id',currentUser.id);
-
+  const {error}=await supabase.from('profiles').update({bio,city,completeness:Math.min(100,(currentUser.completeness||40)+15)}).eq('id',currentUser.id);
   if(error){toast('❌ '+error.message);return;}
-
-  // Aggiorna interessi
   await supabase.from('user_interests').delete().eq('user_id',currentUser.id);
-  const {data:interestRows}=await supabase
-    .from('interests').select('id,name').in('name',userInterests);
-  if(interestRows?.length){
-    await supabase.from('user_interests').insert(
-      interestRows.map(i=>({user_id:currentUser.id,interest_id:i.id}))
-    );
-  }
-
+  const {data:iRows}=await supabase.from('interests').select('id,name').in('name',userInterests);
+  if(iRows?.length)await supabase.from('user_interests').insert(iRows.map(i=>({user_id:currentUser.id,interest_id:i.id})));
   currentUser.bio=bio;currentUser.city=city;currentUser.interests=userInterests;
-  toast('✅ Profilo aggiornato!');
-  drawProfile();
+  toast('✅ Profilo aggiornato!');drawProfile();
 }
 
-/* ================================================================
-   AI ASSISTANT
-================================================================ */
+/* ── AI ASSISTANT ── */
 function drawAI(){
   const user=currentUser||{name:'Utente'};
-  let html=`
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="font-size:50px">🤖</div>
-      <div style="font-weight:700;font-size:18px">AI Assistant</div>
-      <div style="font-size:13px;color:#888">Il tuo assistente personale</div>
-    </div>
-    <div class="ai-bubble">
-      Ciao ${user.name?.split(' ')[0]||''}! 👋<br>
-      Dimmi cosa vorresti fare e ti aiuto a trovare le esperienze perfette.<br><br>
-      <b>Prova:</b> "Cercami eventi di trekking" • "Voglio conoscere nuove persone" • "Cosa c'è vicino a me?"
-    </div>
-    <div style="font-weight:700;font-size:14px;margin-bottom:10px">💡 Suggeriti per te</div>`;
-
-  const suggested=events
-    .filter(e=>userInterests.some(t=>e.category===t))
-    .slice(0,3);
-
-  suggested.forEach(e=>{
-    html+=`
-      <div class="ai-suggestion" onclick="navigate('eventDetail',${e.id})">
-        <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:28px">${e.emoji||'🎉'}</span>
-          <div>
-            <div style="font-weight:700;font-size:14px">${e.title}</div>
-            <div style="font-size:12px;color:#888">${e.location||''}</div>
-          </div>
-          <div style="margin-left:auto;font-size:18px;color:#ddd">›</div>
-        </div>
-      </div>`;
-  });
-
-  if(!suggested.length){
-    html+=`<div style="text-align:center;color:#aaa;padding:16px">Nessun evento trovato. <span style="color:#6c5ce7;cursor:pointer" onclick="navigate('search')">Esplora tutti gli eventi →</span></div>`;
-  }
-
-  html+=`
-    <div class="ai-suggestion" onclick="navigate('matchPeople')" style="margin-top:4px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:28px">🤝</span>
-        <div><div style="font-weight:700;font-size:14px">Persone compatibili</div>
-        <div style="font-size:12px;color:#888">Trova persone con i tuoi interessi</div></div>
-        <div style="margin-left:auto">›</div>
-      </div>
-    </div>
-    <div class="chat-messages" id="aiChatMsgs" style="margin-top:16px;min-height:40px;max-height:240px"></div>
-    <div class="chat-input-row">
-      <input id="aiInput" placeholder="Scrivi cosa vorresti fare..."
-             onkeypress="if(event.key==='Enter')sendAI()">
-      <button class="send-btn" onclick="sendAI()">➤</button>
-    </div>`;
+  let html='<div style="text-align:center;margin-bottom:16px"><div style="font-size:50px">🤖</div><div style="font-weight:700;font-size:18px">AI Assistant</div><div style="font-size:13px;color:#888">Il tuo assistente personale</div></div>';
+  html+='<div class="ai-bubble">Ciao '+(user.name?.split(' ')[0]||'')+'! 👋<br>Dimmi cosa vorresti fare e ti aiuto.<br><br><b>Prova:</b> "Cercami eventi di trekking" • "Voglio conoscere nuove persone"</div>';
+  html+='<div style="font-weight:700;font-size:14px;margin-bottom:10px">💡 Suggeriti per te</div>';
+  const sug=events.filter(e=>userInterests.some(t=>e.category===t)).slice(0,3);
+  sug.forEach(e=>{html+='<div class="ai-suggestion" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div><div style="font-weight:700;font-size:14px">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div></div><div style="margin-left:auto;font-size:18px;color:#ddd">›</div></div></div>';});
+  if(!sug.length)html+='<div style="text-align:center;color:#aaa;padding:16px">Nessun evento trovato. <span style="color:#6c5ce7;cursor:pointer" onclick="navigate(\'search\')">Esplora →</span></div>';
+  html+='<div class="ai-suggestion" onclick="navigate(\'matchPeople\')" style="margin-top:4px"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">🤝</span><div><div style="font-weight:700;font-size:14px">Persone compatibili</div><div style="font-size:12px;color:#888">Trova persone con i tuoi interessi</div></div><div style="margin-left:auto">›</div></div></div>';
+  html+='<div class="chat-messages" id="aiChatMsgs" style="margin-top:16px;min-height:40px;max-height:240px"></div>';
+  html+='<div class="chat-input-row"><input id="aiInput" placeholder="Scrivi cosa vorresti fare..." onkeypress="if(event.key===\'Enter\')sendAI()"><button class="send-btn" onclick="sendAI()">➤</button></div>';
   document.getElementById('content').innerHTML=html;
 }
 
 function sendAI(){
   const inp=document.getElementById('aiInput');
   if(!inp||!inp.value.trim())return;
-  const text=inp.value.trim();
-  inp.value='';
+  const text=inp.value.trim();inp.value='';
   const chat=document.getElementById('aiChatMsgs');
-
-  // Msg utente
-  const uWrap=document.createElement('div');
-  uWrap.className='msg-wrap me';
-  uWrap.innerHTML=`<div class="msg-bubble sent">${text}</div>`;
-  chat.appendChild(uWrap);
-  chat.scrollTop=chat.scrollHeight;
-
-  // Typing
-  const typing=document.createElement('div');
-  typing.className='msg-wrap them';typing.id='aiTyping';
-  typing.innerHTML=`<div class="msg-bubble received" style="padding:14px">
-    <span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span>
-  </div>`;
-  chat.appendChild(typing);
-  chat.scrollTop=chat.scrollHeight;
-
+  const uW=document.createElement('div');uW.className='msg-wrap me';uW.innerHTML='<div class="msg-bubble sent">'+text+'</div>';chat.appendChild(uW);
+  const ty=document.createElement('div');ty.className='msg-wrap them';ty.id='aiTyping';ty.innerHTML='<div class="msg-bubble received" style="padding:14px"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span></div>';chat.appendChild(ty);chat.scrollTop=chat.scrollHeight;
   setTimeout(()=>{
     document.getElementById('aiTyping')?.remove();
-    const result=getAIReply(text);
-    const aWrap=document.createElement('div');
-    aWrap.className='msg-wrap them';
-    aWrap.innerHTML=`<div class="msg-bubble received" style="background:#f0eeff">${result.reply}</div>`;
-    chat.appendChild(aWrap);
-
-    if(result.suggest){
-      const ev=events.find(e=>e.category===result.suggest);
-      if(ev){
-        const card=document.createElement('div');
-        card.className='ai-suggestion';card.style.marginTop='8px';
-        card.onclick=()=>navigate('eventDetail',ev.id);
-        card.innerHTML=`<div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:24px">${ev.emoji||'🎉'}</span>
-          <div><div style="font-weight:700;font-size:13px">${ev.title}</div>
-          <div style="font-size:12px;color:#888">${ev.location||''}</div></div>
-          <div style="margin-left:auto">›</div></div>`;
-        chat.appendChild(card);
-      }
-    }
+    const r=getAIReply(text);
+    const aW=document.createElement('div');aW.className='msg-wrap them';aW.innerHTML='<div class="msg-bubble received" style="background:#f0eeff">'+r.reply+'</div>';chat.appendChild(aW);
+    if(r.suggest){const ev=events.find(e=>e.category===r.suggest);if(ev){const c=document.createElement('div');c.className='ai-suggestion';c.style.marginTop='8px';c.onclick=()=>navigate('eventDetail',ev.id);c.innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:24px">'+(ev.emoji||'🎉')+'</span><div><div style="font-weight:700;font-size:13px">'+ev.title+'</div><div style="font-size:12px;color:#888">'+(ev.location||'')+'</div></div><div style="margin-left:auto">›</div></div>';chat.appendChild(c);}}
     chat.scrollTop=chat.scrollHeight;
   },1000);
 }
 
-/* ================================================================
-   MATCH PERSONE (da Supabase)
-================================================================ */
+/* ── MATCH PERSONE ── */
 async function drawMatchPeople(){
   showLoading();
-  const {data:allProfiles}=await supabase
-    .from('profiles').select('*').neq('id',currentUser?.id||'');
-
-  // Per ogni profilo carica interessi
+  const {data:profiles}=await supabase.from('profiles').select('*').neq('id',currentUser?.id||'');
   const results=[];
-  for(const u of (allProfiles||[]).slice(0,10)){
+  for(const u of (profiles||[]).slice(0,10)){
     if(blockedUsers.includes(u.id))continue;
-    const {data:ui}=await supabase
-      .from('user_interests').select('interests(name)').eq('user_id',u.id);
-    const uInts=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
-    const common=userInterests.filter(i=>uInts.includes(i));
-    const total=new Set([...userInterests,...uInts]).size;
+    const {data:ui}=await supabase.from('user_interests').select('interests(name)').eq('user_id',u.id);
+    const uI=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
+    const common=userInterests.filter(i=>uI.includes(i));
+    const total=new Set([...userInterests,...uI]).size;
     const pct=Math.min(95,Math.round((common.length/Math.max(total,1))*100+35));
     results.push({...u,commonInterests:common,pct});
   }
   results.sort((a,b)=>b.pct-a.pct);
-
-  let html=`<div style="font-size:14px;color:#888;margin-bottom:16px">Basato sui tuoi interessi in comune</div>`;
-  if(!results.length){
-    html+=`<div style="text-align:center;color:#aaa;padding:40px">Nessun utente trovato ancora</div>`;
-  }
-  results.forEach(u=>{
-    html+=`
-      <div class="match-row">
-        <div class="avatar">${u.emoji||'👤'}</div>
-        <div style="flex:1">
-          <div style="font-weight:700">${u.name} ${u.verified?'✅':''}</div>
-          <div style="font-size:12px;color:#888">📍 ${u.city||''}</div>
-          <div style="font-size:12px;color:#6c5ce7;margin:2px 0">
-            ${u.commonInterests.length} interessi in comune: ${u.commonInterests.join(', ')||'nessuno'}
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="compat-bar"><div class="compat-fill" style="width:${u.pct}%"></div></div>
-          </div>
-        </div>
-        <div class="match-pct">${u.pct}%</div>
-      </div>`;
-  });
+  let html='<div style="font-size:14px;color:#888;margin-bottom:16px">Basato sui tuoi interessi in comune</div>';
+  if(!results.length)html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun utente trovato ancora</div>';
+  results.forEach(u=>{html+='<div class="match-row"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:700">'+u.name+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div><div style="font-size:12px;color:#6c5ce7;margin:2px 0">'+u.commonInterests.length+' interessi in comune: '+(u.commonInterests.join(', ')||'nessuno')+'</div><div class="compat-bar"><div class="compat-fill" style="width:'+u.pct+'%"></div></div></div><div class="match-pct">'+u.pct+'%</div></div>';});
   document.getElementById('content').innerHTML=html;
 }
 
-/* ================================================================
-   FEEDBACK
-================================================================ */
+/* ── FEEDBACK ── */
 function drawFeedback(eventId){
   selectedStars=0;thumbValue=null;repeatValue=null;
   const e=events.find(ev=>ev.id===eventId)||{title:'Evento'};
@@ -1769,9 +902,7 @@ function drawFeedback(eventId){
       <div style="font-size:14px;color:#888;margin-top:6px">Com'è andata a <b>${e.title}</b>?</div>
     </div>
     <div style="font-size:15px;font-weight:700;text-align:center">Valuta la tua esperienza</div>
-    <div class="stars">
-      ${[1,2,3,4,5].map(s=>`<span class="star" onclick="setStar(${s})" id="star${s}">★</span>`).join('')}
-    </div>
+    <div class="stars">${[1,2,3,4,5].map(s=>'<span class="star" onclick="setStar('+s+')" id="star'+s+'">★</span>').join('')}</div>
     <div style="font-size:14px;font-weight:700;margin-top:16px">Ti sei trovato bene con le persone?</div>
     <div style="display:flex;gap:16px;justify-content:center;margin:14px 0">
       <span style="font-size:40px;cursor:pointer" id="thumbUp" onclick="selectThumb(true)">👍</span>
@@ -1782,239 +913,86 @@ function drawFeedback(eventId){
       <div class="btn sm secondary" id="repeatYes" onclick="setRepeat(true)">👍 Sì</div>
       <div class="btn sm secondary" id="repeatNo" onclick="setRepeat(false)">👎 No</div>
     </div>
-    <label>Lascia un commento (opzionale)</label>
+    <label>Commento (opzionale)</label>
     <textarea id="feedbackComment" placeholder="Descrivi la tua esperienza..." rows="3"></textarea>
     <div class="btn" onclick="submitFeedback(${eventId})" style="margin-top:16px">📤 Invia feedback</div>`;
 }
 
-function setStar(n){
-  selectedStars=n;
-  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<n));
-}
-function selectThumb(v){
-  thumbValue=v;
-  document.getElementById('thumbUp').style.opacity=v?1:.4;
-  document.getElementById('thumbDown').style.opacity=v?.4:1;
-}
-function setRepeat(v){
-  repeatValue=v;
-  document.getElementById('repeatYes').className=`btn sm ${v?'':'secondary'}`;
-  document.getElementById('repeatNo').className=`btn sm ${v?'secondary':''}`;
-}
+function setStar(n){selectedStars=n;document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<n));}
+function selectThumb(v){thumbValue=v;document.getElementById('thumbUp').style.opacity=v?1:.4;document.getElementById('thumbDown').style.opacity=v?.4:1;}
+function setRepeat(v){repeatValue=v;document.getElementById('repeatYes').className='btn sm '+(v?'':'secondary');document.getElementById('repeatNo').className='btn sm '+(v?'secondary':'');}
 
 async function submitFeedback(eventId){
   if(!selectedStars){toast('⭐ Seleziona almeno una stella');return;}
-  const comment=document.getElementById('feedbackComment').value;
-
-  const {error}=await supabase.from('feedback').insert({
-    event_id:eventId,
-    from_user_id:currentUser.id,
-    rating:selectedStars,
-    comment,
-    would_meet_again:repeatValue
-  });
+  const {error}=await supabase.from('feedback').insert({event_id:eventId,from_user_id:currentUser.id,rating:selectedStars,comment:document.getElementById('feedbackComment').value,would_meet_again:repeatValue});
   if(error){toast('❌ '+error.message);return;}
   toast('✅ Feedback inviato! Grazie 🙏');
   setTimeout(()=>navigate('home'),1500);
 }
 
-/* ================================================================
-   NOTIFICATIONS
-================================================================ */
+/* ── NOTIFICATIONS ── */
 function drawNotifications(){
   const unread=notifications.filter(n=>!n.read).length;
-  let html=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <div style="font-size:14px;color:#888">${unread} non lette</div>
-      <span class="section-link" onclick="markAllRead()">Segna tutte lette</span>
-    </div>`;
-  if(!notifications.length){
-    html+=`<div style="text-align:center;color:#aaa;padding:40px">Nessuna notifica</div>`;
-  }
-  notifications.forEach(n=>{
-    html+=`
-      <div class="notif-item" onclick="markRead(${n.id})" style="cursor:pointer">
-        <div class="notif-dot ${n.read?'read':''}"></div>
-        <div style="font-size:24px">${n.icon}</div>
-        <div style="flex:1">
-          <div style="font-size:14px;${n.read?'color:#888':''}">${n.text}</div>
-          <div style="font-size:12px;color:#aaa;margin-top:3px">${n.time}</div>
-        </div>
-      </div>`;
-  });
+  let html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-size:14px;color:#888">'+unread+' non lette</div><span class="section-link" onclick="markAllRead()">Segna tutte lette</span></div>';
+  if(!notifications.length)html+='<div style="text-align:center;color:#aaa;padding:40px">Nessuna notifica</div>';
+  notifications.forEach(n=>{html+='<div class="notif-item" onclick="markRead('+n.id+')" style="cursor:pointer"><div class="notif-dot '+(n.read?'read':'')+'"></div><div style="font-size:24px">'+n.icon+'</div><div style="flex:1"><div style="font-size:14px;'+(n.read?'color:#888':'')+'">'+n.text+'</div><div style="font-size:12px;color:#aaa;margin-top:3px">'+n.time+'</div></div></div>';});
   document.getElementById('content').innerHTML=html;
 }
-
-function markRead(id){notifications.find(n=>n.id===id)&&(notifications.find(n=>n.id===id).read=true);drawNotifications();}
+function markRead(id){const n=notifications.find(x=>x.id===id);if(n)n.read=true;drawNotifications();}
 function markAllRead(){notifications.forEach(n=>n.read=true);drawNotifications();}
 
-/* ================================================================
-   REPORT
-================================================================ */
+/* ── REPORT ── */
 function drawReport(){
-  const reasons=['Profilo falso','Comportamento inappropriato','Molestie','Spam','Mancata presenza all\'evento','Contenuto inappropriato'];
-  let html=`
-    <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:48px">🚩</div>
-      <div style="font-weight:800;font-size:18px;margin-top:8px">Segnala</div>
-      <div style="font-size:13px;color:#888;margin-top:4px">Aiutaci a mantenere la community sicura</div>
-    </div>
-    <div style="font-weight:700;margin-bottom:10px">Motivo</div>`;
-  reasons.forEach(r=>{
-    html+=`<div class="report-option ${reportSelected===r?'selected':''}" onclick="selectReason('${r}',this)">${r}</div>`;
-  });
-  html+=`
-    <label>Descrizione (opzionale)</label>
-    <textarea id="reportDesc" placeholder="Descrivi la situazione..." rows="3"></textarea>
-    <div class="btn danger" onclick="submitReport()" style="margin-top:16px">🚩 Invia segnalazione</div>
-    <div class="btn secondary" onclick="goBack()" style="margin-top:8px">Annulla</div>`;
+  const reasons=['Profilo falso','Comportamento inappropriato','Molestie','Spam','Mancata presenza','Contenuto inappropriato'];
+  let html='<div style="text-align:center;margin-bottom:20px"><div style="font-size:48px">🚩</div><div style="font-weight:800;font-size:18px;margin-top:8px">Segnala</div><div style="font-size:13px;color:#888;margin-top:4px">Aiutaci a mantenere la community sicura</div></div><div style="font-weight:700;margin-bottom:10px">Motivo</div>';
+  reasons.forEach(r=>{html+='<div class="report-option '+(reportSelected===r?'selected':'')+'" onclick="selectReason(\''+r+'\',this)">'+r+'</div>';});
+  html+='<label>Descrizione (opzionale)</label><textarea id="reportDesc" placeholder="Descrivi..." rows="3"></textarea><div class="btn danger" onclick="submitReport()" style="margin-top:16px">🚩 Invia segnalazione</div><div class="btn secondary" onclick="goBack()" style="margin-top:8px">Annulla</div>';
   document.getElementById('content').innerHTML=html;
 }
-
-function selectReason(r,el){
-  reportSelected=r;
-  document.querySelectorAll('.report-option').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
+function selectReason(r,el){reportSelected=r;document.querySelectorAll('.report-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');}
 async function submitReport(){
   if(!reportSelected){toast('⚠️ Seleziona un motivo');return;}
-  const desc=document.getElementById('reportDesc').value;
-  const {error}=await supabase.from('reports').insert({
-    reporter_id:currentUser?.id||null,
-    reason:reportSelected,
-    description:desc,
-    event_id:currentEventId||null
-  });
+  const {error}=await supabase.from('reports').insert({reporter_id:currentUser?.id||null,reason:reportSelected,description:document.getElementById('reportDesc').value,event_id:currentEventId||null});
   if(error){toast('❌ '+error.message);return;}
-  reportSelected='';
-  toast('✅ Segnalazione inviata. Grazie!');
-  goBack();
+  reportSelected='';toast('✅ Segnalazione inviata!');goBack();
 }
 
-/* ================================================================
-   ADMIN DASHBOARD
-================================================================ */
+/* ── ADMIN ── */
 async function drawAdmin(){
   showLoading();
-  const [{count:userCount},{count:evCount},{data:reps}]=await Promise.all([
+  const [{count:uC},{count:eC},{data:reps}]=await Promise.all([
     supabase.from('profiles').select('*',{count:'exact',head:true}),
     supabase.from('events').select('*',{count:'exact',head:true}),
     supabase.from('reports').select('*').eq('status','pending')
   ]);
-
-  let html=`
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-num">${userCount||0}</div><div class="stat-label">Utenti</div></div>
-      <div class="stat-card"><div class="stat-num">${evCount||0}</div><div class="stat-label">Eventi</div></div>
-      <div class="stat-card"><div class="stat-num" style="color:#ff4757">${reps?.length||0}</div><div class="stat-label">Segnalazioni</div></div>
-    </div>
-    <div class="tabs">
-      <div class="tab active" onclick="adminTab('reports',this)">🚩 Segnalazioni</div>
-      <div class="tab" onclick="adminTab('users',this)">👥 Utenti</div>
-      <div class="tab" onclick="adminTab('events',this)">📅 Eventi</div>
-    </div>
-    <div id="adminTabContent">`;
-
-  if(!reps||!reps.length){
-    html+=`<div style="text-align:center;color:#aaa;padding:30px">✅ Nessuna segnalazione pendente</div>`;
-  } else {
-    reps.forEach(r=>{
-      html+=`
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div>
-              <div style="font-weight:700">${r.reason}</div>
-              <div style="font-size:12px;color:#aaa">${new Date(r.created_at).toLocaleDateString('it-IT')}</div>
-            </div>
-            <span class="badge red">pending</span>
-          </div>
-          ${r.description?`<div style="font-size:13px;color:#666;margin-bottom:8px">${r.description}</div>`:''}
-          <div style="display:flex;gap:8px">
-            <div class="btn sm danger" onclick="adminResolve(${r.id},'resolved')">✅ Risolvi</div>
-            <div class="btn sm secondary" onclick="adminResolve(${r.id},'dismissed')">Ignora</div>
-          </div>
-        </div>`;
-    });
-  }
-  html+=`</div>`;
+  let html='<div class="stat-grid"><div class="stat-card"><div class="stat-num">'+(uC||0)+'</div><div class="stat-label">Utenti</div></div><div class="stat-card"><div class="stat-num">'+(eC||0)+'</div><div class="stat-label">Eventi</div></div><div class="stat-card"><div class="stat-num" style="color:#ff4757">'+(reps?.length||0)+'</div><div class="stat-label">Segnalazioni</div></div></div>';
+  html+='<div class="tabs"><div class="tab active" onclick="adminTab(\'reports\',this)">🚩 Segnalazioni</div><div class="tab" onclick="adminTab(\'users\',this)">👥 Utenti</div><div class="tab" onclick="adminTab(\'events\',this)">📅 Eventi</div></div><div id="adminTabContent">';
+  if(!reps||!reps.length)html+='<div style="text-align:center;color:#aaa;padding:30px">✅ Nessuna segnalazione pendente</div>';
+  else reps.forEach(r=>{html+='<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><div><div style="font-weight:700">'+r.reason+'</div><div style="font-size:12px;color:#aaa">'+new Date(r.created_at).toLocaleDateString('it-IT')+'</div></div><span class="badge red">pending</span></div>'+(r.description?'<div style="font-size:13px;color:#666;margin-bottom:8px">'+r.description+'</div>':'')+'<div style="display:flex;gap:8px"><div class="btn sm danger" onclick="adminResolve('+r.id+',\'resolved\')">✅ Risolvi</div><div class="btn sm secondary" onclick="adminResolve('+r.id+',\'dismissed\')">Ignora</div></div></div>';});
+  html+='</div>';
   document.getElementById('content').innerHTML=html;
 }
 
 async function adminTab(tab,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  const container=document.getElementById('adminTabContent');
-  container.innerHTML=`<div class="loading"><div class="spinner"></div></div>`;
-
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  const c=document.getElementById('adminTabContent');c.innerHTML='<div class="loading"><div class="spinner"></div></div>';
   if(tab==='reports'){
     const {data}=await supabase.from('reports').select('*').order('created_at',{ascending:false}).limit(20);
-    let html='';
-    (data||[]).forEach(r=>{
-      html+=`
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div><div style="font-weight:700">${r.reason}</div>
-            <div style="font-size:12px;color:#aaa">${new Date(r.created_at).toLocaleDateString('it-IT')}</div></div>
-            <span class="badge ${r.status==='pending'?'red':'green'}">${r.status}</span>
-          </div>
-          ${r.status==='pending'?`
-            <div style="display:flex;gap:8px">
-              <div class="btn sm danger" onclick="adminResolve(${r.id},'resolved')">✅ Risolvi</div>
-              <div class="btn sm secondary" onclick="adminResolve(${r.id},'dismissed')">Ignora</div>
-            </div>`:''}
-        </div>`;
-    });
-    container.innerHTML=html||'<div style="text-align:center;color:#aaa;padding:30px">Nessuna segnalazione</div>';
+    let h='';(data||[]).forEach(r=>{h+='<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><div><div style="font-weight:700">'+r.reason+'</div><div style="font-size:12px;color:#aaa">'+new Date(r.created_at).toLocaleDateString('it-IT')+'</div></div><span class="badge '+(r.status==='pending'?'red':'green')+'">'+r.status+'</span></div>'+(r.status==='pending'?'<div style="display:flex;gap:8px"><div class="btn sm danger" onclick="adminResolve('+r.id+',\'resolved\')">✅ Risolvi</div><div class="btn sm secondary" onclick="adminResolve('+r.id+',\'dismissed\')">Ignora</div></div>':'')+'</div>';});
+    c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessuna segnalazione</div>';
   } else if(tab==='users'){
     const {data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(20);
-    let html='';
-    (data||[]).forEach(u=>{
-      html+=`
-        <div class="card">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div class="avatar">${u.emoji||'👤'}</div>
-            <div style="flex:1">
-              <div style="font-weight:700">${u.name||'Utente'} ${u.verified?'✅':''}</div>
-              <div style="font-size:12px;color:#888">📍 ${u.city||''}</div>
-            </div>
-            <div class="btn sm danger" onclick="toast('Funzione disponibile presto')">🚫</div>
-          </div>
-        </div>`;
-    });
-    container.innerHTML=html||'<div style="text-align:center;color:#aaa;padding:30px">Nessun utente</div>';
+    let h='';(data||[]).forEach(u=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:700">'+(u.name||'Utente')+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div><div class="btn sm danger" onclick="toast(\'Presto disponibile\')">🚫</div></div></div>';});
+    c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun utente</div>';
   } else if(tab==='events'){
     const {data}=await supabase.from('events').select('*').order('created_at',{ascending:false}).limit(20);
-    let html='';
-    (data||[]).forEach(e=>{
-      html+=`
-        <div class="card">
-          <div style="display:flex;align-items:center;gap:12px">
-            <span style="font-size:28px">${e.emoji||'🎉'}</span>
-            <div style="flex:1">
-              <div style="font-weight:700">${e.title}</div>
-              <div style="font-size:12px;color:#888">${e.location||''} • <span class="badge ${e.status==='active'?'green':'red'}">${e.status}</span></div>
-            </div>
-            <div class="btn sm danger" onclick="adminRemoveEvent(${e.id})">🗑️</div>
-          </div>
-        </div>`;
-    });
-    container.innerHTML=html||'<div style="text-align:center;color:#aaa;padding:30px">Nessun evento</div>';
+    let h='';(data||[]).forEach(e=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+' • <span class="badge '+(e.status==='active'?'green':'red')+'">'+e.status+'</span></div></div><div class="btn sm danger" onclick="adminRemoveEvent('+e.id+')">🗑️</div></div></div>';});
+    c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun evento</div>';
   }
 }
 
-async function adminResolve(id,status){
-  await supabase.from('reports').update({status}).eq('id',id);
-  toast(status==='resolved'?'✅ Risolto':'🗑️ Ignorato');
-  drawAdmin();
-}
-
-async function adminRemoveEvent(id){
-  await supabase.from('events').update({status:'removed'}).eq('id',id);
-  toast('🗑️ Evento rimosso');
-  await loadEvents();
-  drawAdmin();
-}
+async function adminResolve(id,status){await supabase.from('reports').update({status}).eq('id',id);toast(status==='resolved'?'✅ Risolto':'🗑️ Ignorato');drawAdmin();}
+async function adminRemoveEvent(id){await supabase.from('events').update({status:'removed'}).eq('id',id);toast('🗑️ Evento rimosso');await loadEvents();drawAdmin();}
 </script>
 </body>
 </html>
