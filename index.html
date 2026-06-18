@@ -176,34 +176,33 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
     <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">🤖 AI Assistant</div>
   </div>
 
-  <!-- BASSO: 3 pulsanti -->
-  <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;">
+<!-- BASSO: 3 pulsanti -->
+<div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;">
 
-    <button onclick="splashGo('register')"
-      style="width:100%;padding:16px;border-radius:16px;border:none;
-             background:#fff;color:#6c5ce7;font-size:17px;font-weight:800;
-             cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,.18);">
-      🚀 Registrati – è gratis
-    </button>
+  <button id="btnRegister"
+    style="width:100%;padding:16px;border-radius:16px;border:none;
+           background:#fff;color:#6c5ce7;font-size:17px;font-weight:800;
+           cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,.18);">
+    🚀 Registrati – è gratis
+  </button>
 
-    <button onclick="splashGo('login')"
-      style="width:100%;padding:16px;border-radius:16px;
-             border:2px solid rgba(255,255,255,.75);
-             background:transparent;color:#fff;
-             font-size:17px;font-weight:700;cursor:pointer;">
-      Accedi
-    </button>
+  <button id="btnLogin"
+    style="width:100%;padding:16px;border-radius:16px;
+           border:2px solid rgba(255,255,255,.75);
+           background:transparent;color:#fff;
+           font-size:17px;font-weight:700;cursor:pointer;">
+    Accedi
+  </button>
 
-    <button onclick="splashGo('admin')"
-      style="width:100%;padding:12px;border-radius:16px;border:none;
-             background:rgba(255,255,255,.18);color:#fff;
-             font-size:14px;cursor:pointer;">
-      🔐 Demo Admin
-    </button>
+  <button id="btnAdmin"
+    style="width:100%;padding:12px;border-radius:16px;border:none;
+           background:rgba(255,255,255,.18);color:#fff;
+           font-size:14px;cursor:pointer;">
+    🔐 Demo Admin
+  </button>
 
-    <div style="margin-top:8px;font-size:12px;opacity:.55;">
-      Vivi di più. Insieme. 🌟<br>Scopri. Condividi. Connettiti.
-    </div>
+  <div style="margin-top:8px;font-size:12px;opacity:.55;">
+    Vivi di più. Insieme. 🌟<br>Scopri. Condividi. Connettiti.
   </div>
 </div>
 
@@ -238,6 +237,7 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 </div>
 
 <script>
+
 /* ── SUPABASE ── */
 const SUPABASE_URL = 'https://sqevigimxneucauwljov.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxZXZpZ2lteG5ldWNhdXdsam92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDAyNjQsImV4cCI6MjA5NzM3NjI2NH0.0Eo-hIYVFYQJjyGh3viUTeymInTyqw6Ef7BF54uJOXU';
@@ -993,6 +993,24 @@ async function adminTab(tab,el){
 
 async function adminResolve(id,status){await supabase.from('reports').update({status}).eq('id',id);toast(status==='resolved'?'✅ Risolto':'🗑️ Ignorato');drawAdmin();}
 async function adminRemoveEvent(id){await supabase.from('events').update({status:'removed'}).eq('id',id);toast('🗑️ Evento rimosso');await loadEvents();drawAdmin();}
+/* ── COLLEGAMENTO PULSANTI SPLASH ── */
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('btnRegister').addEventListener('click', function() {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('appShell').style.display = 'flex';
+    navigate('register');
+  });
+  document.getElementById('btnLogin').addEventListener('click', function() {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('appShell').style.display = 'flex';
+    navigate('login');
+  });
+  document.getElementById('btnAdmin').addEventListener('click', function() {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('appShell').style.display = 'flex';
+    adminLogin();
+  });
+});
 </script>
 </body>
 </html>
