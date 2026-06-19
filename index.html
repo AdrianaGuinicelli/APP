@@ -36,95 +36,146 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ══════════════════════════════════════
    APP SHELL
 ══════════════════════════════════════ */
-.app{
-  display:none;
-  min-height:100vh;
-  flex-direction:column;
-}
+.app{display:none;min-height:100vh;flex-direction:column;}
 
-/* ── HEADER ── */
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
 .header{
-  padding:14px 20px;
+  padding:0 20px;
   background:#fff;
   display:flex;align-items:center;justify-content:space-between;
   border-bottom:1px solid #eee;
   position:sticky;top:0;z-index:100;
-  min-height:56px;
+  height:56px;
 }
 .header-left{display:flex;align-items:center;gap:10px;}
 .back-btn{font-size:26px;cursor:pointer;color:#6c5ce7;display:none;line-height:1;}
 .header-title{font-weight:700;font-size:17px;}
 .header-logo{font-size:17px;font-weight:800;background:linear-gradient(90deg,#6c5ce7,#a29bfe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.header-right{display:flex;align-items:center;gap:12px;}
-.header-icon{font-size:22px;cursor:pointer;position:relative;}
-.badge-dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#ff4757;border:2px solid #fff;}
+.header-right{display:flex;align-items:center;gap:4px;}
 
-/* ── LAYOUT PRINCIPALE ── */
-.app-body{
-  display:flex;
-  flex:1;
-  min-height:calc(100vh - 56px);
+/* Icone header destra */
+.hdr-icon-btn{
+  position:relative;
+  width:40px;height:40px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;cursor:pointer;
+  transition:background .2s;
+  border:none;background:transparent;
+}
+.hdr-icon-btn:hover{background:#f0eeff;}
+.hdr-badge{
+  position:absolute;top:2px;right:2px;
+  width:16px;height:16px;
+  border-radius:50%;background:#ff4757;
+  border:2px solid #fff;
+  font-size:9px;font-weight:800;color:#fff;
+  display:flex;align-items:center;justify-content:center;
 }
 
-/* ── SIDEBAR (solo desktop) ── */
-.sidebar{
-  display:none;
-  width:220px;
-  flex-shrink:0;
-  background:#fff;
-  border-right:1px solid #eee;
-  padding:24px 0;
-  position:sticky;
-  top:56px;
-  height:calc(100vh - 56px);
-  overflow-y:auto;
-}
-.sidebar-item{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 24px;
-  cursor:pointer;
-  font-size:15px;
-  font-weight:600;
-  color:#666;
-  border-radius:0;
-  transition:all .2s;
-  border-left:3px solid transparent;
-}
-.sidebar-item:hover{background:#f8f7ff;color:#6c5ce7;}
-.sidebar-item.active{background:#f0eeff;color:#6c5ce7;border-left:3px solid #6c5ce7;}
-.sidebar-icon{font-size:20px;width:24px;text-align:center;}
-.sidebar-plus{
-  background:linear-gradient(135deg,#6c5ce7,#8e7dff);
-  color:#fff;border-radius:12px;
-  margin:8px 16px;padding:12px 16px;
-  display:flex;align-items:center;gap:10px;
-  cursor:pointer;font-weight:700;font-size:14px;
+/* Dropdown profilo */
+.profile-dropdown-wrap{position:relative;}
+.profile-avatar-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:14px;
+  cursor:pointer;border:none;flex-shrink:0;
   transition:opacity .2s;
 }
-.sidebar-plus:hover{opacity:.9;}
+.profile-avatar-btn:hover{opacity:.85;}
+.profile-dropdown{
+  position:absolute;top:calc(100% + 8px);right:0;
+  background:#fff;border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.15);
+  min-width:210px;padding:8px 0;
+  display:none;z-index:500;
+  border:1px solid #eee;
+}
+.profile-dropdown.open{display:block;}
+.pd-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;font-size:14px;
+  font-weight:500;color:#333;cursor:pointer;
+  transition:background .15s;
+}
+.pd-item:hover{background:#f5f5f7;}
+.pd-icon{font-size:17px;width:22px;text-align:center;}
+.pd-badge{
+  margin-left:auto;background:#6c5ce7;color:#fff;
+  border-radius:50px;padding:2px 8px;
+  font-size:11px;font-weight:800;
+}
+.pd-divider{height:1px;background:#eee;margin:4px 0;}
+.pd-item.logout{color:#ff4757;}
 
-/* ── CONTENT ── */
+/* ══════════════════════════════════════
+   CONTENT
+══════════════════════════════════════ */
+.app-body{display:flex;flex:1;}
 .content{
-  flex:1;
-  padding:20px;
-  overflow-y:auto;
-  max-width:100%;
+  flex:1;padding:20px;
+  overflow-y:auto;max-width:100%;
+  padding-bottom:90px;
 }
 
-/* ── NAVBAR MOBILE (solo mobile) ── */
+/* ══════════════════════════════════════
+   BOTTOM NAVBAR
+══════════════════════════════════════ */
 .navbar{
   display:flex;
   justify-content:space-around;align-items:center;
-  padding:8px 0 14px;
+  padding:6px 0 10px;
   border-top:1px solid #eee;
   background:#fff;
-  position:sticky;bottom:0;
+  position:fixed;bottom:0;left:0;right:0;
   z-index:100;
+  box-shadow:0 -2px 12px rgba(0,0,0,.08);
 }
-.nav-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;font-size:10px;color:#aaa;gap:2px;transition:color .2s;min-width:52px;}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;
+  cursor:pointer;color:#aaa;
+  gap:0;transition:color .2s;
+  min-width:52px;padding:4px 0;
+  position:relative;
+}
 .nav-item.active{color:#6c5ce7;}
-.nav-icon{font-size:22px;line-height:1;}
-.nav-plus{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-top:-14px;box-shadow:0 4px 14px rgba(108,92,231,.5);}
+.nav-item.active .nav-icon-wrap::after{
+  content:'';position:absolute;bottom:-4px;left:50%;
+  transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;
+  background:#6c5ce7;
+}
+.nav-icon-wrap{
+  position:relative;
+  width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-icon{font-size:24px;line-height:1;}
+.nav-dot{
+  position:absolute;top:-2px;right:-4px;
+  width:8px;height:8px;border-radius:50%;
+  background:#ff4757;border:2px solid #fff;
+}
+
+/* Pulsante centrale + */
+.nav-plus-wrap{
+  display:flex;flex-direction:column;
+  align-items:center;cursor:pointer;
+  margin-top:-18px;
+}
+.nav-plus{
+  background:linear-gradient(135deg,#6c5ce7,#8e7dff);
+  color:#fff;border-radius:50%;
+  width:52px;height:52px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  box-shadow:0 4px 16px rgba(108,92,231,.5);
+  transition:transform .2s;
+}
+.nav-plus:active{transform:scale(.93);}
 
 /* ══════════════════════════════════════
    COMPONENTI UI
@@ -136,13 +187,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn.danger{background:linear-gradient(90deg,#ff4757,#ff6b81);}
 .btn.green{background:linear-gradient(90deg,#00b894,#55efc4);}
 .btn.sm{padding:8px 14px;font-size:13px;border-radius:10px;width:auto;display:inline-block;margin-top:0;}
-
 .card{background:#fff;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
 .card-title{font-weight:700;font-size:16px;margin-bottom:4px;}
 .card-meta{font-size:13px;color:#666;display:flex;align-items:center;gap:6px;margin-bottom:3px;}
 .card-tag{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;margin-bottom:6px;margin-right:4px;}
-
-/* TAG COLORI */
 .tag-musica{background:#f0eeff;color:#6c5ce7;}
 .tag-arte{background:#fce4ec;color:#c2185b;}
 .tag-sport{background:#e8f8f5;color:#00897b;}
@@ -156,59 +204,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-libri{background:#fff8e1;color:#f57f17;}
 .tag-benessere{background:#f1f8e9;color:#558b2f;}
 .tag-cibo{background:#fff3e0;color:#e65100;}
-
-/* FORM */
 input,textarea,select{width:100%;padding:12px 14px;margin-top:8px;border-radius:12px;border:1.5px solid #e0e0e0;font-size:14px;outline:none;transition:border-color .2s;background:#fafafa;font-family:inherit;color:#222;}
 input:focus,textarea:focus,select:focus{border-color:#6c5ce7;background:#fff;}
 label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
-
-/* AUTOCOMPLETE */
 .autocomplete-wrap{position:relative;}
 .autocomplete-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #6c5ce7;border-radius:12px;z-index:200;max-height:180px;overflow-y:auto;box-shadow:0 8px 24px rgba(108,92,231,.15);}
 .autocomplete-item{padding:10px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;}
 .autocomplete-item:last-child{border-bottom:none;}
 .autocomplete-item:hover{background:#f0eeff;color:#6c5ce7;}
-
-/* AVATAR */
 .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;}
 .avatar.lg{width:80px;height:80px;font-size:30px;}
 .avatar.sm{width:32px;height:32px;font-size:13px;}
 .avatar.xl{width:100px;height:100px;font-size:36px;}
-
-/* BADGE */
 .badge{background:#6c5ce7;color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;}
 .badge.green{background:#00b894;}
 .badge.red{background:#ff4757;}
 .badge.orange{background:#e67e22;}
-
-/* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
 .chip{padding:9px 16px;border-radius:20px;border:2px solid #e0e0e0;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:6px;transition:all .2s;background:#fff;}
 .chip.selected{border-color:#6c5ce7;background:#f0eeff;color:#6c5ce7;font-weight:700;}
-
-/* SECTION */
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:8px;}
 .section-title{font-weight:700;font-size:17px;}
 .section-link{color:#6c5ce7;font-size:13px;cursor:pointer;}
-
-/* SEARCH */
 .search-bar{display:flex;align-items:center;gap:10px;background:#f5f5f7;border-radius:14px;padding:10px 14px;margin-bottom:12px;border:1.5px solid #e8e8e8;}
 .search-bar input{border:none;background:transparent;padding:0;margin:0;font-size:14px;flex:1;}
 .search-bar input:focus{border:none;background:transparent;}
-
-/* FILTERS */
 .filters{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
 .filters::-webkit-scrollbar{display:none;}
 .filter-chip{padding:7px 14px;border-radius:20px;border:1.5px solid #e0e0e0;cursor:pointer;font-size:13px;white-space:nowrap;background:#fff;transition:all .2s;flex-shrink:0;}
 .filter-chip.active{background:#6c5ce7;color:#fff;border-color:#6c5ce7;}
-
-/* SCROLL ROW */
 .scroll-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;}
 .scroll-row::-webkit-scrollbar{display:none;}
 .scroll-card{min-width:190px;background:#fff;border-radius:16px;padding:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);flex-shrink:0;cursor:pointer;transition:transform .15s;}
 .scroll-card:active{transform:scale(.97);}
-
-/* CHAT */
 .chat-messages{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:400px;overflow-y:auto;}
 .msg-wrap{display:flex;flex-direction:column;}
 .msg-wrap.me{align-items:flex-end;}
@@ -221,45 +249,29 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .chat-input-row{display:flex;gap:8px;align-items:center;margin-top:4px;}
 .chat-input-row input{margin:0;flex:1;}
 .send-btn{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-
-/* TABS */
 .tabs{display:flex;border-bottom:2px solid #eee;margin-bottom:14px;}
 .tab{flex:1;text-align:center;padding:10px;cursor:pointer;font-size:14px;font-weight:700;color:#aaa;}
 .tab.active{color:#6c5ce7;border-bottom:2px solid #6c5ce7;margin-bottom:-2px;}
-
-/* PROFILE */
 .profile-stats{display:flex;border-top:1px solid #eee;border-bottom:1px solid #eee;margin:14px 0;}
 .profile-stat{flex:1;text-align:center;padding:14px 0;}
 .profile-stat .num{font-size:20px;font-weight:800;color:#222;}
 .profile-stat .lbl{font-size:12px;color:#888;}
-
-/* MATCH */
 .match-row{display:flex;align-items:center;gap:12px;padding:13px;background:#fafafa;border-radius:14px;margin-bottom:10px;}
 .compat-bar{height:6px;border-radius:3px;background:#eee;margin-top:4px;flex:1;}
 .compat-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#6c5ce7,#00b894);}
 .match-pct{font-weight:800;color:#6c5ce7;font-size:16px;margin-left:auto;}
-
-/* STARS */
 .stars{display:flex;gap:8px;font-size:36px;justify-content:center;margin:16px 0;}
 .star{cursor:pointer;color:#ddd;transition:color .2s;}
 .star.active{color:#f39c12;}
-
-/* NOTIFICHE */
 .notif-item{display:flex;gap:12px;align-items:flex-start;padding:13px;background:#fff;border-radius:14px;margin-bottom:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);}
 .notif-dot{width:10px;height:10px;border-radius:50%;background:#6c5ce7;margin-top:5px;flex-shrink:0;}
 .notif-dot.read{background:#ddd;}
-
-/* REPORT */
 .report-option{padding:13px;border-radius:12px;border:1.5px solid #eee;margin-bottom:8px;cursor:pointer;font-size:14px;transition:all .2s;}
 .report-option.selected{border-color:#ff4757;background:#fff5f5;color:#ff4757;}
-
-/* STATS ADMIN */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
 .stat-card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,.07);}
 .stat-num{font-size:22px;font-weight:800;color:#6c5ce7;}
 .stat-label{font-size:11px;color:#888;margin-top:2px;}
-
-/* AI */
 .ai-bubble{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;border-radius:20px 20px 20px 4px;padding:14px 16px;font-size:14px;line-height:1.55;margin-bottom:12px;}
 .ai-suggestion{background:#f8f7ff;border-radius:14px;padding:13px;margin-bottom:10px;border:1.5px solid #e8e4ff;cursor:pointer;transition:background .2s;}
 .ai-suggestion:hover{background:#f0eeff;}
@@ -267,124 +279,120 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .ai-dot:nth-child(2){animation-delay:.15s;}
 .ai-dot:nth-child(3){animation-delay:.3s;}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-
-/* DETAIL */
 .detail-hero{width:100%;height:180px;border-radius:16px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:60px;margin-bottom:14px;}
 .detail-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;}
 .detail-row .icon{font-size:18px;width:24px;flex-shrink:0;margin-top:1px;}
-.participants-row{display:flex;margin:10px 0;}
-.participant-av{width:32px;height:32px;border-radius:50%;border:2px solid #fff;margin-left:-8px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;}
-.participant-av:first-child{margin-left:0;}
-
-/* PROGRESS */
 .progress-bar{height:6px;background:#eee;border-radius:3px;margin-top:6px;}
 .progress-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#6c5ce7,#00b894);transition:width .4s;}
-
-/* VERIFIED */
 .verified-badge{display:inline-flex;align-items:center;gap:4px;background:#e8f8f5;color:#00897b;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;}
-
-/* TOAST */
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(50,50,50,.92);color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;z-index:9999;white-space:nowrap;pointer-events:none;animation:fadeInOut 2.8s forwards;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(50,50,50,.92);color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;z-index:9999;white-space:nowrap;pointer-events:none;animation:fadeInOut 2.8s forwards;}
 @keyframes fadeInOut{0%{opacity:0;transform:translateX(-50%) translateY(10px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}80%{opacity:1;}100%{opacity:0;}}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
 .modal{background:#fff;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;}
 .modal-handle{width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 16px;}
-
-/* LOADING */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;gap:12px;color:#888;}
 .spinner{width:36px;height:36px;border:3px solid #f0eeff;border-top:3px solid #6c5ce7;border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .hidden{display:none!important;}
+.events-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 
 /* ══════════════════════════════════════
-   GRID EVENTI (desktop)
+   IMPOSTAZIONI — layout
 ══════════════════════════════════════ */
-.events-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
+.settings-section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.settings-section h3{font-size:16px;font-weight:700;color:#6c5ce7;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+
+/* Drag slot UI */
+.slots-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.slot-box{
+  width:52px;height:52px;border-radius:14px;
+  border:2px dashed #d0d0e0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;cursor:pointer;
+  background:#fafafa;position:relative;
+  transition:all .2s;
 }
+.slot-box.filled{border-style:solid;border-color:#6c5ce7;background:#f0eeff;}
+.slot-box .slot-remove{
+  position:absolute;top:-6px;right:-6px;
+  width:18px;height:18px;border-radius:50%;
+  background:#ff4757;color:#fff;
+  font-size:10px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.btn-pool{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.btn-pool-item{
+  padding:8px 14px;border-radius:20px;
+  border:2px solid #e0e0e0;background:#fff;
+  font-size:13px;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  transition:all .2s;
+}
+.btn-pool-item:hover{border-color:#6c5ce7;color:#6c5ce7;}
+.btn-pool-item.in-use{opacity:.4;pointer-events:none;}
 
-/* ══════════════════════════════════════
-   RESPONSIVE — TABLET (≥ 768px)
-══════════════════════════════════════ */
+/* Premium card */
+.premium-card{
+  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
+  border-radius:18px;padding:24px;color:#fff;
+  margin-bottom:16px;position:relative;overflow:hidden;
+}
+.premium-card::before{
+  content:'⭐';position:absolute;right:-10px;top:-10px;
+  font-size:120px;opacity:.08;
+}
+.premium-badge{
+  background:rgba(255,255,255,.25);
+  border-radius:50px;padding:4px 12px;
+  font-size:12px;font-weight:700;
+  display:inline-block;margin-bottom:10px;
+}
+.premium-features{list-style:none;margin:12px 0;display:flex;flex-direction:column;gap:8px;}
+.premium-features li{font-size:14px;opacity:.95;display:flex;align-items:center;gap:8px;}
+.btn-premium{
+  background:#fff;color:#6c5ce7;
+  border:none;border-radius:14px;
+  padding:13px;width:100%;
+  font-size:15px;font-weight:800;
+  cursor:pointer;margin-top:4px;
+  transition:opacity .2s;
+}
+.btn-premium:hover{opacity:.9;}
+.btn-premium.active-plan{background:rgba(255,255,255,.3);color:#fff;cursor:default;}
+
+/* Toggle switch */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-label{font-size:14px;font-weight:600;}
+.toggle-sub{font-size:12px;color:#888;margin-top:2px;}
+.switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ddd;transition:.3s;border-radius:24px;}
+.slider:before{position:absolute;content:'';height:18px;width:18px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+input:checked+.slider{background:#6c5ce7;}
+input:checked+.slider:before{transform:translateX(20px);}
+
+/* RESPONSIVE */
 @media(min-width:768px){
-  .content{padding:28px 32px;}
-
-  .events-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .scroll-row{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    overflow-x:visible;
-  }
+  .content{padding:28px 32px 100px;}
+  .events-grid{grid-template-columns:repeat(2,1fr);}
+  .scroll-row{display:grid;grid-template-columns:repeat(3,1fr);overflow-x:visible;}
   .scroll-card{min-width:unset;}
-
-  .modal{
-    border-radius:24px;
-    margin:auto;
-    max-width:600px;
-  }
+  .modal{border-radius:24px;margin:auto;max-width:600px;}
   .modal-overlay{align-items:center;}
-
   .stat-grid{grid-template-columns:repeat(3,1fr);}
-
   .detail-hero{height:240px;font-size:80px;}
 }
-
-/* ══════════════════════════════════════
-   RESPONSIVE — DESKTOP (≥ 1024px)
-══════════════════════════════════════ */
 @media(min-width:1024px){
-
-  /* Mostra sidebar, nascondi navbar mobile */
-  .sidebar{display:block;}
-  .navbar{display:none!important;}
-
-  /* Header più largo */
-  .header{padding:14px 32px;}
-
-  .content{
-    padding:32px 40px;
-    max-width:900px;
-  }
-
-  .events-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  /* Scroll row diventa griglia */
-  .scroll-row{
-    grid-template-columns:repeat(4,1fr);
-  }
-
-  /* Form più comodi */
-  .form-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-  }
-  .form-row label{margin-top:0;}
-
-  /* Chat più alta */
+  .header{padding:0 32px;}
+  .content{padding:32px 40px 100px;max-width:960px;margin:0 auto;}
+  .events-grid{grid-template-columns:repeat(2,1fr);}
+  .scroll-row{grid-template-columns:repeat(4,1fr);}
   .chat-messages{max-height:500px;}
-
-  /* Cards profilo affiancate */
-  .profile-grid{
-    display:grid;
-    grid-template-columns:280px 1fr;
-    gap:20px;
-    align-items:start;
-  }
+  .profile-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;}
 }
-
-/* ══════════════════════════════════════
-   RESPONSIVE — LARGE DESKTOP (≥ 1400px)
-══════════════════════════════════════ */
 @media(min-width:1400px){
   .events-grid{grid-template-columns:repeat(3,1fr);}
   .scroll-row{grid-template-columns:repeat(5,1fr);}
@@ -411,7 +419,7 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
     <button id="btnRegister" class="splash-btn-primary">🚀 Registrati – è gratis</button>
     <button id="btnLogin" class="splash-btn-secondary">Accedi</button>
     <button id="btnAdmin" class="splash-btn-ghost">🔐 Demo Admin</button>
-    <div class="splash-footer">Vivi di più. Insieme. 🌟<br>Scopri. Condividi. Connettiti.</div>
+    <div class="splash-footer">Vivi di più. Insieme. 🌟</div>
   </div>
 </div>
 
@@ -425,68 +433,22 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
       <span class="header-logo" id="headerLogo">🎉 EventConnect</span>
       <span class="header-title hidden" id="headerTitle"></span>
     </div>
-    <div class="header-right" id="headerRight"></div>
+    <div class="header-right" id="headerRight">
+      <!-- popolato da renderHeaderRight() -->
+    </div>
   </div>
 
-  <!-- BODY (sidebar + content) -->
+  <!-- BODY -->
   <div class="app-body">
-
-    <!-- SIDEBAR DESKTOP -->
-    <nav class="sidebar" id="sidebar">
-      <div class="sidebar-item" onclick="navigate('home')" id="snav-home">
-        <span class="sidebar-icon">🏠</span> Home
-      </div>
-      <div class="sidebar-item" onclick="navigate('search')" id="snav-search">
-        <span class="sidebar-icon">🔍</span> Cerca
-      </div>
-      <div class="sidebar-item" onclick="navigate('chatList')" id="snav-chatList">
-        <span class="sidebar-icon">💬</span> Chat
-      </div>
-      <div class="sidebar-item" onclick="navigate('matchPeople')" id="snav-matchPeople">
-        <span class="sidebar-icon">🤝</span> Match
-      </div>
-      <div class="sidebar-item" onclick="navigate('aiAssistant')" id="snav-aiAssistant">
-        <span class="sidebar-icon">🤖</span> AI Assistant
-      </div>
-      <div class="sidebar-item" onclick="navigate('notifications')" id="snav-notifications">
-        <span class="sidebar-icon">🔔</span> Notifiche
-      </div>
-      <div class="sidebar-item" onclick="navigate('savedEvents')" id="snav-savedEvents">
-        <span class="sidebar-icon">🔖</span> Preferiti
-      </div>
-      <div class="sidebar-item" onclick="navigate('profile')" id="snav-profile">
-        <span class="sidebar-icon">👤</span> Profilo
-      </div>
-      <div class="sidebar-plus" onclick="navigate('create')">
-        <span style="font-size:20px">＋</span> Crea attività
-      </div>
-    </nav>
-
-    <!-- CONTENT -->
     <div class="content" id="content"></div>
-
-  </div><!-- fine app-body -->
-
-  <!-- NAVBAR MOBILE -->
-  <div class="navbar" id="navbar" style="display:none;">
-    <div class="nav-item" onclick="navigate('home')" id="nav-home">
-      <span class="nav-icon">🏠</span><span>Home</span>
-    </div>
-    <div class="nav-item" onclick="navigate('search')" id="nav-search">
-      <span class="nav-icon">🔍</span><span>Cerca</span>
-    </div>
-    <div class="nav-item" onclick="navigate('create')" id="nav-create">
-      <div class="nav-plus">＋</div><span style="margin-top:4px">Crea</span>
-    </div>
-    <div class="nav-item" onclick="navigate('chatList')" id="nav-chatList">
-      <span class="nav-icon">💬</span><span>Chat</span>
-    </div>
-    <div class="nav-item" onclick="navigate('profile')" id="nav-profile">
-      <span class="nav-icon">👤</span><span>Profilo</span>
-    </div>
   </div>
 
-</div><!-- fine appShell -->
+  <!-- BOTTOM NAVBAR -->
+  <div class="navbar" id="navbar" style="display:none;">
+    <!-- popolato da renderNavbar() -->
+  </div>
+
+</div>
 
 <script>
 /* ── SUPABASE ── */
@@ -497,6 +459,40 @@ if (!window._supabaseClient) {
 }
 var supabase = window._supabaseClient;
 
+/* ══════════════════════════════════════
+   TUTTI GLI 8 PULSANTI DISPONIBILI
+══════════════════════════════════════ */
+const ALL_BUTTONS = [
+  { id:'home',          icon:'🏠', label:'Home',        page:'home' },
+  { id:'search',        icon:'🔍', label:'Cerca',       page:'search' },
+  { id:'create',        icon:'➕', label:'Crea',        page:'create', isPlus:true },
+  { id:'chatList',      icon:'💬', label:'Chat',        page:'chatList', badge:'chat' },
+  { id:'aiAssistant',   icon:'🤖', label:'AI',          page:'aiAssistant' },
+  { id:'notifications', icon:'🔔', label:'Notifiche',   page:'notifications', badge:'notif' },
+  { id:'savedEvents',   icon:'🔖', label:'Preferiti',   page:'savedEvents' },
+  { id:'matchPeople',   icon:'🤝', label:'Match',       page:'matchPeople' },
+];
+
+/* Configurazione default */
+const DEFAULT_BOTTOM = ['home','search','create','chatList','aiAssistant'];
+const DEFAULT_HEADER = ['notifications','savedEvents'];
+
+/* Carica preferenze utente (localStorage) */
+function loadNavPrefs(){
+  try{
+    const b=JSON.parse(localStorage.getItem('ec_bottom')||'null');
+    const h=JSON.parse(localStorage.getItem('ec_header')||'null');
+    return {
+      bottom: b||[...DEFAULT_BOTTOM],
+      header: h||[...DEFAULT_HEADER]
+    };
+  }catch(e){return {bottom:[...DEFAULT_BOTTOM],header:[...DEFAULT_HEADER]};}
+}
+function saveNavPrefs(prefs){
+  localStorage.setItem('ec_bottom',JSON.stringify(prefs.bottom));
+  localStorage.setItem('ec_header',JSON.stringify(prefs.header));
+}
+
 /* ── STATE ── */
 let currentUser=null,isLoggedIn=false,isAdmin=false;
 let navHistory=[],currentPage='',currentEventId=null;
@@ -505,12 +501,107 @@ let userLocation=null,activeFilters={category:'',maxDistance:200};
 let savedEvents=[],blockedUsers=[],activeTab='chat';
 let events=[],selectedEmoji='🎉',thumbValue=null,repeatValue=null;
 let notifications=[{id:1,text:'Benvenuto su EventConnect! 🎉',time:'ora',read:false,icon:'🎉'}];
+let isPremium=false;
+let profileDropdownOpen=false;
+
 const allInterests=[
   {icon:'🎵',label:'Musica'},{icon:'🎨',label:'Arte'},{icon:'⚽',label:'Sport'},
   {icon:'🥾',label:'Trekking'},{icon:'🎬',label:'Cinema'},{icon:'🍕',label:'Cibo'},
   {icon:'✈️',label:'Viaggi'},{icon:'💻',label:'Tecnologia'},{icon:'🎭',label:'Teatro'},
   {icon:'📚',label:'Libri'},{icon:'🧘',label:'Benessere'},{icon:'🎉',label:'Altro'}
 ];
+
+/* ══════════════════════════════════════
+   RENDER NAVBAR & HEADER
+══════════════════════════════════════ */
+function renderNavbar(){
+  const prefs=loadNavPrefs();
+  const navbar=document.getElementById('navbar');
+  if(!navbar)return;
+  let html='';
+  prefs.bottom.forEach(id=>{
+    const btn=ALL_BUTTONS.find(b=>b.id===id);
+    if(!btn)return;
+    const isActive=currentPage===btn.page;
+    const hasNotif=btn.badge==='notif'&&notifications.some(n=>!n.read);
+    const hasChat=btn.badge==='chat'&&false; // futuro
+
+    if(btn.isPlus){
+      html+=`<div class="nav-plus-wrap" onclick="navigate('create')">
+        <div class="nav-plus">${btn.icon}</div>
+      </div>`;
+    } else {
+      html+=`<div class="nav-item${isActive?' active':''}" onclick="navigate('${btn.page}')" id="nav-${btn.id}">
+        <div class="nav-icon-wrap">
+          <span class="nav-icon">${btn.icon}</span>
+          ${hasNotif||hasChat?'<span class="nav-dot"></span>':''}
+        </div>
+      </div>`;
+    }
+  });
+  navbar.innerHTML=html;
+}
+
+function renderHeaderRight(){
+  const prefs=loadNavPrefs();
+  const hr=document.getElementById('headerRight');
+  if(!hr)return;
+
+  let html='';
+
+  // Pulsanti header configurabili
+  prefs.header.forEach(id=>{
+    const btn=ALL_BUTTONS.find(b=>b.id===id);
+    if(!btn)return;
+    const hasNotif=btn.badge==='notif'&&notifications.some(n=>!n.read);
+    html+=`<button class="hdr-icon-btn" onclick="navigate('${btn.page}')" title="${btn.label}">
+      ${btn.icon}
+      ${hasNotif?'<span class="hdr-badge"></span>':''}
+    </button>`;
+  });
+
+  // Avatar profilo + dropdown (sempre fisso)
+  const initials=currentUser?.name?.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
+  html+=`<div class="profile-dropdown-wrap" id="profileDropWrap">
+    <button class="profile-avatar-btn" onclick="toggleProfileDropdown()" id="profileAvatarBtn">${initials}</button>
+    <div class="profile-dropdown" id="profileDropdown">
+      <div class="pd-item" onclick="closeDropdown();navigate('myevents')">
+        <span class="pd-icon">📅</span> I miei eventi
+        <span class="pd-badge">4</span>
+      </div>
+      <div class="pd-item" onclick="closeDropdown();navigate('matchPeople')">
+        <span class="pd-icon">🤝</span> Match persone
+      </div>
+      <div class="pd-item" onclick="closeDropdown();navigate('profile')">
+        <span class="pd-icon">👤</span> Profilo
+      </div>
+      <div class="pd-item" onclick="closeDropdown();navigate('settings')">
+        <span class="pd-icon">⚙️</span> Impostazioni
+      </div>
+      <div class="pd-divider"></div>
+      <div class="pd-item logout" onclick="closeDropdown();doLogout()">
+        <span class="pd-icon">🚪</span> Esci
+      </div>
+    </div>
+  </div>`;
+
+  hr.innerHTML=html;
+}
+
+function toggleProfileDropdown(){
+  const d=document.getElementById('profileDropdown');
+  if(!d)return;
+  profileDropdownOpen=!profileDropdownOpen;
+  d.classList.toggle('open',profileDropdownOpen);
+}
+function closeDropdown(){
+  profileDropdownOpen=false;
+  const d=document.getElementById('profileDropdown');
+  if(d)d.classList.remove('open');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#profileDropWrap'))closeDropdown();
+});
 
 /* ── INIT ── */
 window.onload=async function(){
@@ -535,18 +626,18 @@ window.onload=async function(){
 };
 
 /* ── SPLASH BUTTONS ── */
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('btnRegister').addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('btnRegister').addEventListener('click',function(){
     document.getElementById('splash').style.display='none';
     document.getElementById('appShell').style.display='flex';
     navigate('register');
   });
-  document.getElementById('btnLogin').addEventListener('click', function() {
+  document.getElementById('btnLogin').addEventListener('click',function(){
     document.getElementById('splash').style.display='none';
     document.getElementById('appShell').style.display='flex';
     navigate('login');
   });
-  document.getElementById('btnAdmin').addEventListener('click', function() {
+  document.getElementById('btnAdmin').addEventListener('click',function(){
     document.getElementById('splash').style.display='none';
     document.getElementById('appShell').style.display='flex';
     adminLogin();
@@ -608,7 +699,14 @@ function showModal(title,body){document.getElementById('globalModal')?.remove();
 function closeModal(){document.getElementById('globalModal')?.remove();}
 
 /* ── NAVIGATION ── */
-const PAGE_TITLES={home:'',search:'Cerca Eventi',create:'Crea Attività',chatList:'Chat',profile:'Profilo',onboarding:'I tuoi interessi',login:'Accedi',register:'Registrati',eventDetail:'Dettaglio Evento',eventGroup:'Gruppo Evento',aiAssistant:'AI Assistant',matchPeople:'Match Persone',feedback:'Feedback',notifications:'Notifiche',admin:'Admin Dashboard',report:'Segnala',savedEvents:'Preferiti'};
+const PAGE_TITLES={
+  home:'',search:'Cerca Eventi',create:'Crea Attività',chatList:'Chat',
+  profile:'Profilo',onboarding:'I tuoi interessi',login:'Accedi',register:'Registrati',
+  eventDetail:'Dettaglio Evento',eventGroup:'Gruppo Evento',aiAssistant:'AI Assistant',
+  matchPeople:'Match Persone',feedback:'Feedback',notifications:'Notifiche',
+  admin:'Admin Dashboard',report:'Segnala',savedEvents:'Preferiti',
+  settings:'Impostazioni',myevents:'I miei eventi'
+};
 
 function navigate(page,param){
   if(page!==currentPage)navHistory.push(currentPage);
@@ -618,53 +716,45 @@ function navigate(page,param){
   const map={
     home:drawHome,search:drawSearch,create:drawCreate,chatList:drawChatList,
     profile:drawProfile,onboarding:drawOnboarding,login:drawLogin,register:drawRegister,
-    eventDetail:()=>drawEventDetail(currentEventId),eventGroup:()=>drawEventGroup(currentEventId),
-    aiAssistant:drawAI,matchPeople:drawMatchPeople,feedback:()=>drawFeedback(currentEventId),
-    notifications:drawNotifications,admin:drawAdmin,report:()=>drawReport(),savedEvents:drawSavedEvents
+    eventDetail:()=>drawEventDetail(currentEventId),
+    eventGroup:()=>drawEventGroup(currentEventId),
+    aiAssistant:drawAI,matchPeople:drawMatchPeople,
+    feedback:()=>drawFeedback(currentEventId),
+    notifications:drawNotifications,admin:drawAdmin,
+    report:()=>drawReport(),savedEvents:drawSavedEvents,
+    settings:drawSettings,myevents:drawMyEvents
   };
   if(map[page])map[page]();
   document.getElementById('content').scrollTop=0;
   window.scrollTo(0,0);
 }
-
 function goBack(){if(navHistory.length)navigate(navHistory.pop());}
 
 function updateShell(page){
   const noNavPages=['login','register','onboarding'];
   const showNav=!noNavPages.includes(page);
 
-  /* Navbar mobile */
   document.getElementById('navbar').style.display=showNav?'flex':'none';
-  /* Sidebar desktop */
-  document.getElementById('sidebar').style.display=showNav?'':'none';
 
-  /* Active nav mobile */
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const nm={home:'nav-home',search:'nav-search',create:'nav-create',chatList:'nav-chatList',profile:'nav-profile'};
-  if(nm[page])document.getElementById(nm[page])?.classList.add('active');
-
-  /* Active sidebar desktop */
-  document.querySelectorAll('.sidebar-item').forEach(n=>n.classList.remove('active'));
-  const smap={home:'snav-home',search:'snav-search',chatList:'snav-chatList',matchPeople:'snav-matchPeople',aiAssistant:'snav-aiAssistant',notifications:'snav-notifications',savedEvents:'snav-savedEvents',profile:'snav-profile'};
-  if(smap[page])document.getElementById(smap[page])?.classList.add('active');
+  // Aggiorna navbar
+  if(showNav){
+    renderNavbar();
+    renderHeaderRight();
+  }
 
   const logo=document.getElementById('headerLogo');
   const title=document.getElementById('headerTitle');
   const back=document.getElementById('backBtn');
-  const hr=document.getElementById('headerRight');
-  const noBack=['home','search','create','chatList','profile','login','register','onboarding'];
+  const noBack=['home','search','create','chatList','profile','login','register','onboarding','settings','myevents','aiAssistant','notifications','savedEvents','matchPeople'];
   back.style.display=noBack.includes(page)?'none':'block';
 
   if(page==='home'){
     logo.classList.remove('hidden');title.classList.add('hidden');
-    hr.innerHTML='<span class="header-icon" onclick="navigate(\'savedEvents\')">🔖</span><span class="header-icon" onclick="navigate(\'notifications\')" style="position:relative">🔔<span class="badge-dot" style="'+(notifications.some(n=>!n.read)?'':'display:none')+'"></span></span>';
   } else if(page==='admin'){
     logo.classList.add('hidden');title.classList.remove('hidden');title.textContent='⚙️ Admin';
-    hr.innerHTML='<span class="header-icon" onclick="doLogout()">🚪</span>';
   } else {
     logo.classList.add('hidden');title.classList.remove('hidden');
     title.textContent=PAGE_TITLES[page]||page;
-    hr.innerHTML=page==='profile'?'<span class="header-icon" onclick="navigate(\'aiAssistant\')">🤖</span>':'';
   }
 }
 
@@ -683,10 +773,8 @@ function drawLogin(){
         <h2 style="font-size:24px;font-weight:800;margin:10px 0 6px">EventConnect</h2>
         <p style="color:#888;font-size:14px">Condividi Esperienze, Crea Connessioni</p>
       </div>
-      <label>Email</label>
-      <input id="loginEmail" type="email" placeholder="tua@email.com">
-      <label>Password</label>
-      <input id="loginPwd" type="password" placeholder="••••••••">
+      <label>Email</label><input id="loginEmail" type="email" placeholder="tua@email.com">
+      <label>Password</label><input id="loginPwd" type="password" placeholder="••••••••">
       <div class="btn" onclick="doLogin()" style="margin-top:20px">Accedi</div>
       <div class="btn secondary" onclick="navigate('register')" style="margin-top:8px">Non hai un account? Registrati</div>
       <div style="text-align:center;margin:16px 0;color:#aaa;font-size:13px">oppure</div>
@@ -738,29 +826,20 @@ async function doLogout(){
 function drawRegister(){
   document.getElementById('content').innerHTML=`
     <div style="max-width:600px;margin:0 auto;">
-      <label>Nome *</label>
-      <input id="regName" placeholder="Il tuo nome">
-      <label>Email *</label>
-      <input id="regEmail" type="email" placeholder="tua@email.com">
-      <label>Password *</label>
-      <input id="regPwd" type="password" placeholder="Almeno 6 caratteri">
+      <label>Nome *</label><input id="regName" placeholder="Il tuo nome">
+      <label>Email *</label><input id="regEmail" type="email" placeholder="tua@email.com">
+      <label>Password *</label><input id="regPwd" type="password" placeholder="Almeno 6 caratteri">
       <div class="form-row">
-        <div>
-          <label>Data di nascita *</label>
-          <input id="regBirth" type="date">
-        </div>
-        <div>
-          <label>Città *</label>
+        <div><label>Data di nascita *</label><input id="regBirth" type="date"></div>
+        <div><label>Città *</label>
           <div class="autocomplete-wrap">
             <input id="regCity" placeholder="Es. Milano" autocomplete="off">
             <div class="autocomplete-list" id="regCityList" style="display:none"></div>
           </div>
         </div>
       </div>
-      <label>Bio (opzionale)</label>
-      <textarea id="regBio" placeholder="Raccontati..." rows="2"></textarea>
-      <label>Instagram (opzionale)</label>
-      <input id="regIG" placeholder="@username">
+      <label>Bio (opzionale)</label><textarea id="regBio" placeholder="Raccontati..." rows="2"></textarea>
+      <label>Instagram (opzionale)</label><input id="regIG" placeholder="@username">
       <div class="btn" onclick="doRegister()" style="margin-top:20px">Registrati</div>
       <div class="btn outline" onclick="googleLogin()" style="margin-top:8px">🔑 Google</div>
       <div class="btn secondary" onclick="navigate('login')" style="margin-top:8px">Hai già un account? Accedi</div>
@@ -791,19 +870,15 @@ async function doRegister(){
 /* ── ONBOARDING ── */
 function drawOnboarding(){
   let html='<div style="max-width:600px;margin:0 auto;"><div style="text-align:center;padding:20px 0 16px"><h2 style="font-size:22px;font-weight:800">Quali sono i tuoi interessi?</h2><p style="color:#888;font-size:14px;margin-top:6px">Seleziona almeno 3</p></div><div class="chips" id="interestChips">';
-  allInterests.forEach(i=>{
-    html+='<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>';
-  });
+  allInterests.forEach(i=>{html+='<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>';});
   html+='</div><div style="margin-top:24px"><div class="btn" onclick="finishOnboarding()">Continua</div><div class="btn secondary" style="margin-top:8px" onclick="navigate(\'home\')">Salta per ora</div></div></div>';
   document.getElementById('content').innerHTML=html;
 }
-
 function toggleInterest(label,el){
   el.classList.toggle('selected');
   if(el.classList.contains('selected')){if(!userInterests.includes(label))userInterests.push(label);}
   else{userInterests=userInterests.filter(i=>i!==label);}
 }
-
 async function finishOnboarding(){
   if(userInterests.length<3){toast('⚠️ Seleziona almeno 3 interessi');return;}
   if(currentUser?.id&&currentUser.id!=='admin'){
@@ -813,32 +888,25 @@ async function finishOnboarding(){
     await supabase.from('profiles').update({completeness:60}).eq('id',currentUser.id);
     currentUser.interests=userInterests;
   }
-  toast('✅ Interessi salvati!');
-  navigate('home');
+  toast('✅ Interessi salvati!');navigate('home');
 }
 
 /* ── HOME ── */
 async function drawHome(){
-  showLoading();
-  await loadEvents();
+  showLoading();await loadEvents();
   const user=currentUser||{name:'Utente',completeness:40,interests:[]};
   const fn=user.name?.split(' ')[0]||'Utente';
   const suggested=events.filter(e=>(user.interests||[]).some(t=>e.category===t)).slice(0,8);
   const rest=events.filter(e=>!suggested.includes(e)).slice(0,6);
-
   let html='<div style="margin-bottom:20px"><div style="font-size:24px;font-weight:800">Ciao '+fn+'! 👋</div><div style="font-size:14px;color:#888;margin-top:4px">Ecco cosa abbiamo per te</div></div>';
-
   if((user.completeness||40)<80){
     html+='<div class="card" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer;margin-bottom:20px" onclick="navigate(\'profile\')"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">🤳</div><div style="flex:1"><div style="font-weight:700">Completa il tuo profilo</div><div style="font-size:13px;opacity:.85">Completato al '+(user.completeness||40)+'%</div><div class="progress-bar" style="margin-top:6px;background:rgba(255,255,255,.3)"><div class="progress-fill" style="width:'+(user.completeness||40)+'%;background:#fff"></div></div></div></div></div>';
   }
-
   html+='<div class="section-header"><span class="section-title">Consigliati per te</span><span class="section-link" onclick="navigate(\'search\')">Vedi tutti</span></div>';
   const toShow=suggested.length?suggested:events.slice(0,8);
-
   if(!toShow.length){
     html+='<div style="text-align:center;color:#aaa;padding:30px">Nessun evento.<br><div class="btn" onclick="navigate(\'create\')" style="margin-top:10px;max-width:200px;margin-left:auto;margin-right:auto">+ Crea il primo evento</div></div>';
   } else {
-    /* Su desktop usa griglia, su mobile usa scroll row */
     html+='<div class="scroll-row">';
     toShow.forEach(e=>{
       const dl=distLabel(e);
@@ -846,20 +914,234 @@ async function drawHome(){
     });
     html+='</div>';
   }
-
-  html+='<div class="section-header" style="margin-top:24px"><span class="section-title">Tutti gli eventi</span></div>';
-  html+='<div class="events-grid">';
+  html+='<div class="section-header" style="margin-top:24px"><span class="section-title">Tutti gli eventi</span></div><div class="events-grid">';
   const toShow2=rest.length?rest:events.slice(0,6);
   toShow2.forEach(e=>{
     const dl=distLabel(e);
     html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:38px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px">📍 '+dl+'</span>':'')+'</div><div class="card-meta">'+(e.price===0?'✅ Gratuito':'💰 €'+e.price)+'</div></div><div style="font-size:22px;color:#ddd">›</div></div></div>';
   });
   html+='</div>';
-
   html+='<div class="card" onclick="navigate(\'aiAssistant\')" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer;margin-top:8px"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:32px">🤖</div><div><div style="font-weight:700">AI Assistant</div><div style="font-size:13px;opacity:.85">Suggerimenti personalizzati</div></div><div style="margin-left:auto;font-size:22px">›</div></div></div>';
   html+='<div class="btn" onclick="navigate(\'create\')" style="margin-top:12px">+ Crea una nuova attività</div>';
-
   document.getElementById('content').innerHTML=html;
+}
+
+/* ── MY EVENTS ── */
+function drawMyEvents(){
+  let html='<div style="max-width:700px;margin:0 auto;">';
+  html+='<div style="font-size:14px;color:#888;margin-bottom:16px">Gli eventi che hai creato o a cui partecipi</div>';
+  if(!events.length){
+    html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento ancora.<br><div class="btn" onclick="navigate(\'create\')" style="margin-top:10px;max-width:200px;margin-left:auto;margin-right:auto">+ Crea un evento</div></div>';
+  } else {
+    html+='<div class="events-grid">';
+    events.slice(0,6).forEach(e=>{
+      html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+'</div></div></div></div>';
+    });
+    html+='</div>';
+  }
+  html+='</div>';
+  document.getElementById('content').innerHTML=html;
+}
+
+/* ── SETTINGS ══════════════════════════════════════ */
+function drawSettings(){
+  const prefs=loadNavPrefs();
+  document.getElementById('content').innerHTML=`<div style="max-width:700px;margin:0 auto;" id="settingsRoot"></div>`;
+  renderSettingsContent(prefs);
+}
+
+function renderSettingsContent(prefs){
+  const root=document.getElementById('settingsRoot');
+  if(!root)return;
+
+  /* ── Piano Premium ── */
+  let premHtml=`
+  <div class="premium-card">
+    <div class="premium-badge">${isPremium?'⭐ PREMIUM ATTIVO':'🔓 PIANO BASE'}</div>
+    <div style="font-size:22px;font-weight:800;margin-bottom:6px">${isPremium?'Sei Premium!':'Passa a Premium'}</div>
+    <div style="font-size:14px;opacity:.85;margin-bottom:4px">${isPremium?'Hai accesso a tutte le funzionalità':'Sblocca tutto il potenziale di EventConnect'}</div>
+    <ul class="premium-features">
+      <li>✅ Nessuna pubblicità</li>
+      <li>✅ Accesso prioritario agli eventi</li>
+      <li>✅ AI Assistant avanzato</li>
+      <li>✅ Badge Premium sul profilo</li>
+      <li>✅ Statistiche dettagliate</li>
+    </ul>
+    ${isPremium
+      ? `<div style="text-align:center;font-size:13px;opacity:.7;margin-top:8px">Piano Premium attivo • €4,99/mese</div>
+         <button class="btn-premium active-plan" style="margin-top:10px">✅ Piano attivo</button>`
+      : `<div style="text-align:center;font-size:20px;font-weight:900;margin:8px 0">€4,99 <span style="font-size:14px;font-weight:500;opacity:.8">/mese</span></div>
+         <button class="btn-premium" onclick="activatePremium()">🚀 Attiva Premium</button>
+         <div style="text-align:center;font-size:12px;opacity:.6;margin-top:8px">Cancella quando vuoi</div>`
+    }
+  </div>`;
+
+  /* ── Configuratore Navbar Basso (max 5) ── */
+  const bottomSlots=prefs.bottom;
+  const headerSlots=prefs.header;
+  const usedAll=[...bottomSlots,...headerSlots];
+
+  let bottomConfig=`
+  <div class="settings-section">
+    <h3>📱 Barra in basso <span style="font-size:12px;color:#888;font-weight:400">(max 5)</span></h3>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Clicca una slot per rimuovere • Clicca un pulsante disponibile per aggiungerlo</p>
+    <div class="slots-row" id="bottomSlots">`;
+
+  for(let i=0;i<5;i++){
+    const id=bottomSlots[i];
+    const btn=id?ALL_BUTTONS.find(b=>b.id===id):null;
+    if(btn){
+      bottomConfig+=`<div class="slot-box filled" title="${btn.label}">
+        ${btn.icon}
+        <span class="slot-remove" onclick="removeFromBottom('${btn.id}')">✕</span>
+      </div>`;
+    } else {
+      bottomConfig+=`<div class="slot-box" title="Slot vuota">＋</div>`;
+    }
+  }
+  bottomConfig+=`</div>
+    <div style="font-size:12px;font-weight:700;color:#aaa;margin:10px 0 6px">DISPONIBILI</div>
+    <div class="btn-pool" id="bottomPool">`;
+  ALL_BUTTONS.forEach(btn=>{
+    const inUse=bottomSlots.includes(btn.id)||headerSlots.includes(btn.id);
+    bottomConfig+=`<div class="btn-pool-item${inUse?' in-use':''}" onclick="addToBottom('${btn.id}')">${btn.icon} ${btn.label}</div>`;
+  });
+  bottomConfig+=`</div></div>`;
+
+  /* ── Configuratore Header Destra (max 3) ── */
+  let headerConfig=`
+  <div class="settings-section">
+    <h3>🔝 Barra in alto a destra <span style="font-size:12px;color:#888;font-weight:400">(max 3)</span></h3>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Il profilo è sempre fisso. Puoi aggiungere fino a 3 icone rapide.</p>
+    <div class="slots-row" id="headerSlots">`;
+
+  for(let i=0;i<3;i++){
+    const id=headerSlots[i];
+    const btn=id?ALL_BUTTONS.find(b=>b.id===id):null;
+    if(btn){
+      headerConfig+=`<div class="slot-box filled" title="${btn.label}">
+        ${btn.icon}
+        <span class="slot-remove" onclick="removeFromHeader('${btn.id}')">✕</span>
+      </div>`;
+    } else {
+      headerConfig+=`<div class="slot-box" title="Slot vuota">＋</div>`;
+    }
+  }
+  headerConfig+=`</div>
+    <div style="font-size:12px;font-weight:700;color:#aaa;margin:10px 0 6px">DISPONIBILI</div>
+    <div class="btn-pool" id="headerPool">`;
+  ALL_BUTTONS.forEach(btn=>{
+    const inUse=bottomSlots.includes(btn.id)||headerSlots.includes(btn.id);
+    headerConfig+=`<div class="btn-pool-item${inUse?' in-use':''}" onclick="addToHeader('${btn.id}')">${btn.icon} ${btn.label}</div>`;
+  });
+  headerConfig+=`</div></div>`;
+
+  /* ── Notifiche ── */
+  const notifSection=`
+  <div class="settings-section">
+    <h3>🔔 Notifiche</h3>
+    <div class="toggle-row">
+      <div><div class="toggle-label">Nuovi eventi consigliati</div><div class="toggle-sub">Ti avvisiamo quando escono eventi per te</div></div>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <div><div class="toggle-label">Messaggi chat</div><div class="toggle-sub">Notifiche per nuovi messaggi</div></div>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <div><div class="toggle-label">Promemoria eventi</div><div class="toggle-sub">24h prima dell'evento</div></div>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+  </div>`;
+
+  /* ── Privacy ── */
+  const privacySection=`
+  <div class="settings-section">
+    <h3>🔒 Privacy</h3>
+    <div class="toggle-row">
+      <div><div class="toggle-label">Profilo pubblico</div><div class="toggle-sub">Visibile a tutti gli utenti</div></div>
+      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <div><div class="toggle-label">Mostra distanza</div><div class="toggle-sub">Gli altri vedono quanto sei lontano</div></div>
+      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+    </div>
+  </div>`;
+
+  /* ── Account ── */
+  const accountSection=`
+  <div class="settings-section">
+    <h3>👤 Account</h3>
+    <div class="btn outline" onclick="navigate('profile')" style="margin-top:0">✏️ Modifica profilo</div>
+    <div class="btn secondary" style="margin-top:8px" onclick="toast('🔑 Funzione in arrivo!')">🔑 Cambia password</div>
+    <div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>
+  </div>`;
+
+  root.innerHTML = premHtml + bottomConfig + headerConfig + notifSection + privacySection + accountSection;
+}
+
+/* ── Gestione slot navbar ── */
+function addToBottom(id){
+  const prefs=loadNavPrefs();
+  if(prefs.bottom.includes(id)||prefs.header.includes(id)){toast('⚠️ Già presente');return;}
+  if(prefs.bottom.length>=5){toast('⚠️ Massimo 5 pulsanti in basso');return;}
+  prefs.bottom.push(id);
+  saveNavPrefs(prefs);
+  renderNavbar();
+  renderSettingsContent(prefs);
+}
+function removeFromBottom(id){
+  const prefs=loadNavPrefs();
+  prefs.bottom=prefs.bottom.filter(b=>b!==id);
+  saveNavPrefs(prefs);
+  renderNavbar();
+  renderSettingsContent(prefs);
+}
+function addToHeader(id){
+  const prefs=loadNavPrefs();
+  if(prefs.bottom.includes(id)||prefs.header.includes(id)){toast('⚠️ Già presente');return;}
+  if(prefs.header.length>=3){toast('⚠️ Massimo 3 pulsanti in alto');return;}
+  prefs.header.push(id);
+  saveNavPrefs(prefs);
+  renderHeaderRight();
+  renderSettingsContent(prefs);
+}
+function removeFromHeader(id){
+  const prefs=loadNavPrefs();
+  prefs.header=prefs.header.filter(h=>h!==id);
+  saveNavPrefs(prefs);
+  renderHeaderRight();
+  renderSettingsContent(prefs);
+}
+
+/* ── Premium ── */
+function activatePremium(){
+  showModal('⭐ Attiva Premium',`
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-size:48px;margin-bottom:10px">⭐</div>
+      <div style="font-size:18px;font-weight:800;color:#6c5ce7;margin-bottom:6px">EventConnect Premium</div>
+      <div style="font-size:24px;font-weight:900;margin-bottom:4px">€4,99<span style="font-size:14px;font-weight:400;color:#888">/mese</span></div>
+      <div style="font-size:13px;color:#888;margin-bottom:20px">Cancella quando vuoi. Senza impegno.</div>
+      <div style="background:#f0eeff;border-radius:14px;padding:14px;margin-bottom:16px;text-align:left">
+        <div style="font-weight:700;margin-bottom:8px;color:#6c5ce7">Cosa ottieni:</div>
+        <div style="font-size:13px;display:flex;flex-direction:column;gap:6px">
+          <div>✅ Nessuna pubblicità</div>
+          <div>✅ Accesso prioritario agli eventi</div>
+          <div>✅ AI Assistant avanzato illimitato</div>
+          <div>✅ Badge Premium sul profilo</div>
+          <div>✅ Statistiche dettagliate</div>
+        </div>
+      </div>
+      <div class="btn" onclick="confirmPremium()" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">🚀 Attiva ora – €4,99/mese</div>
+      <div style="font-size:11px;color:#aaa;margin-top:10px">Pagamento sicuro. Cancella in qualsiasi momento.</div>
+    </div>
+  `);
+}
+function confirmPremium(){
+  isPremium=true;
+  closeModal();
+  toast('⭐ Premium attivato! Benvenuto!');
+  drawSettings();
 }
 
 /* ── SEARCH ── */
@@ -870,20 +1152,16 @@ function drawSearch(){
     :'<div style="background:#fff3e0;border-radius:12px;padding:9px 14px;font-size:13px;color:#e65100;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:8px" onclick="enableGeo()"><span>📍</span><span>Attiva posizione per distanze</span></div>';
   html+='<div class="filters" id="catFilters">'+['Tutti','Musica','Arte','Sport','Trekking','Food','Cinema','Teatro','Viaggi'].map(c=>'<div class="filter-chip '+((!activeFilters.category&&c==='Tutti')||activeFilters.category===c?'active':'')+'" onclick="setCatFilter(\''+(c==='Tutti'?'':c)+'\',this)">'+c+'</div>').join('')+'</div>';
   html+='<div class="form-row" style="margin-bottom:10px"><div class="autocomplete-wrap"><input id="citySearchInput" placeholder="📍 Città..." oninput="filterEvents()" autocomplete="off" style="margin-top:0"><div class="autocomplete-list" id="citySearchList" style="display:none"></div></div><input id="dateSearchInput" type="date" onchange="filterEvents()" style="margin-top:0"></div>';
-  if(userLocation){
-    html+='<div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700">📍 Distanza max</span><span id="distVal" style="font-size:13px;color:#6c5ce7;font-weight:700">'+(activeFilters.maxDistance>=200?'Tutte':activeFilters.maxDistance+' km')+'</span></div><input type="range" id="distSlider" min="0" max="200" step="5" value="'+activeFilters.maxDistance+'" oninput="onDistSlider(this.value)" style="width:100%;accent-color:#6c5ce7;margin:0"></div>';
-  }
+  if(userLocation){html+='<div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700">📍 Distanza max</span><span id="distVal" style="font-size:13px;color:#6c5ce7;font-weight:700">'+(activeFilters.maxDistance>=200?'Tutte':activeFilters.maxDistance+' km')+'</span></div><input type="range" id="distSlider" min="0" max="200" step="5" value="'+activeFilters.maxDistance+'" oninput="onDistSlider(this.value)" style="width:100%;accent-color:#6c5ce7;margin:0"></div>';}
   html+='<div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><span style="font-size:13px;color:#888;white-space:nowrap">Ordina:</span><select id="sortSel" onchange="filterEvents()" style="margin-top:0;flex:1"><option value="default">Rilevanza</option>'+(userLocation?'<option value="distance">📍 Distanza</option>':'')+'<option value="price">💰 Prezzo</option></select></div>';
   html+='<div id="searchResults" class="events-grid"></div>';
   document.getElementById('content').innerHTML=html;
   setupGeoAutocomplete('citySearchInput','citySearchList',item=>{document.getElementById('citySearchInput').value=item.address?.city||item.display_name.split(',')[0];filterEvents();});
   filterEvents();
 }
-
 function setCatFilter(cat,el){activeFilters.category=cat;document.querySelectorAll('#catFilters .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');filterEvents();}
 function onDistSlider(val){activeFilters.maxDistance=parseInt(val);const el=document.getElementById('distVal');if(el)el.textContent=val>=200?'Tutte':val+' km';filterEvents();}
 function enableGeo(){navigator.geolocation.getCurrentPosition(p=>{userLocation={lat:p.coords.latitude,lng:p.coords.longitude};drawSearch();},()=>toast('❌ Posizione non disponibile'));}
-
 function filterEvents(){
   const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
   const city=(document.getElementById('citySearchInput')?.value||'').toLowerCase();
@@ -929,8 +1207,7 @@ async function drawEventDetail(eventId){
     const {data:mp}=await supabase.from('event_participants').select('user_id').eq('event_id',eventId).eq('user_id',currentUser.id).single();
     isMine=!!mp;
   }
-  const dl=distLabel(e);
-  const isSaved=savedEvents.includes(e.id);
+  const dl=distLabel(e);const isSaved=savedEvents.includes(e.id);
   let html='<div style="max-width:700px;margin:0 auto;">';
   html+='<div class="detail-hero">'+(e.emoji||'🎉')+'</div>';
   html+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px"><div><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title" style="font-size:20px">'+e.title+'</div></div><span style="font-size:24px;cursor:pointer" onclick="shareEvent('+e.id+')">⬆️</span></div>';
@@ -949,11 +1226,9 @@ async function drawEventDetail(eventId){
     html+='<div class="btn '+(full?'secondary':'')+'" onclick="'+(full?'toast(\'⚠️ Evento al completo!\')':'joinEvent('+e.id+')')+'">'+( full?'🔒 Evento completo':'Partecipa')+'</div>';
     html+='<div class="btn secondary" onclick="toggleSave('+e.id+')" style="margin-top:8px">🔖 '+(isSaved?'Salvato ✓':'Mi interessa')+'</div>';
   }
-  html+='<div style="margin-top:16px;text-align:center"><span style="color:#ff4757;font-size:13px;cursor:pointer" onclick="navigate(\'report\','+e.id+')">🚩 Segnala evento</span></div>';
-  html+='</div>';
+  html+='<div style="margin-top:16px;text-align:center"><span style="color:#ff4757;font-size:13px;cursor:pointer" onclick="navigate(\'report\','+e.id+')">🚩 Segnala evento</span></div></div>';
   document.getElementById('content').innerHTML=html;
 }
-
 async function joinEvent(id){
   if(!isLoggedIn){toast('⚠️ Devi essere loggato');navigate('login');return;}
   const {error}=await supabase.from('event_participants').insert({event_id:id,user_id:currentUser.id});
@@ -962,13 +1237,11 @@ async function joinEvent(id){
   notifications.unshift({id:Date.now(),text:'Hai aderito a un evento!',time:'ora',read:false,icon:'✅'});
   drawEventDetail(id);
 }
-
 async function leaveEvent(id){
   const {error}=await supabase.from('event_participants').delete().eq('event_id',id).eq('user_id',currentUser.id);
   if(error){toast('❌ '+error.message);return;}
   toast('👋 Hai abbandonato l\'evento');navigate('home');
 }
-
 function shareEvent(id){
   const e=events.find(ev=>ev.id===id);
   if(navigator.share)navigator.share({title:e?.title||'EventConnect',text:'Vieni a questo evento!',url:window.location.href});
@@ -988,34 +1261,20 @@ function drawCreate(){
       <label>Titolo *</label><input id="cTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
       <label>Descrizione *</label><textarea id="cDesc" placeholder="Descrivi l'esperienza..." rows="3"></textarea>
       <div class="form-row">
-        <div>
-          <label>Categoria *</label>
-          <select id="cCat"><option value="">Seleziona...</option><option>Musica</option><option>Arte</option><option>Sport</option><option>Trekking</option><option>Food</option><option>Cinema</option><option>Teatro</option><option>Viaggi</option><option>Tecnologia</option><option>Benessere</option><option>Altro</option></select>
-        </div>
-        <div>
-          <label>Data e ora *</label><input id="cDate" type="datetime-local">
-        </div>
+        <div><label>Categoria *</label><select id="cCat"><option value="">Seleziona...</option><option>Musica</option><option>Arte</option><option>Sport</option><option>Trekking</option><option>Food</option><option>Cinema</option><option>Teatro</option><option>Viaggi</option><option>Tecnologia</option><option>Benessere</option><option>Altro</option></select></div>
+        <div><label>Data e ora *</label><input id="cDate" type="datetime-local"></div>
       </div>
       <div class="form-row">
-        <div>
-          <label>Città *</label>
-          <div class="autocomplete-wrap"><input id="cCity" placeholder="Es. Milano" autocomplete="off"><div class="autocomplete-list" id="cCityList" style="display:none"></div></div>
-        </div>
-        <div>
-          <label>Max partecipanti *</label><input id="cMax" type="number" placeholder="Es. 10" min="2" max="100">
-        </div>
+        <div><label>Città *</label><div class="autocomplete-wrap"><input id="cCity" placeholder="Es. Milano" autocomplete="off"><div class="autocomplete-list" id="cCityList" style="display:none"></div></div></div>
+        <div><label>Max partecipanti *</label><input id="cMax" type="number" placeholder="Es. 10" min="2" max="100"></div>
       </div>
       <label>Indirizzo *</label>
       <div class="autocomplete-wrap"><input id="cAddr" placeholder="Es. Via Borsieri 37, Milano" autocomplete="off"><div class="autocomplete-list" id="cAddrList" style="display:none"></div></div>
       <div id="coordsOk" style="font-size:12px;color:#00b894;margin-top:4px;display:none">✅ Coordinate rilevate</div>
       <div id="cLat" style="display:none"></div><div id="cLng" style="display:none"></div>
       <div class="form-row">
-        <div>
-          <label>Prezzo (€)</label><input id="cPrice" type="number" placeholder="0" min="0" step="0.5" value="0">
-        </div>
-        <div>
-          <label>Link esterno (opzionale)</label><input id="cLink" type="url" placeholder="https://...">
-        </div>
+        <div><label>Prezzo (€)</label><input id="cPrice" type="number" placeholder="0" min="0" step="0.5" value="0"></div>
+        <div><label>Link esterno (opzionale)</label><input id="cLink" type="url" placeholder="https://..."></div>
       </div>
       <div class="btn" onclick="submitCreate()" style="margin-top:20px">🎉 Crea attività</div>
       <div class="btn secondary" onclick="navigate('home')" style="margin-top:8px">Annulla</div>
@@ -1023,11 +1282,9 @@ function drawCreate(){
   setupGeoAutocomplete('cCity','cCityList',item=>{document.getElementById('cCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
   setupGeoAutocomplete('cAddr','cAddrList',item=>{document.getElementById('cLat').textContent=item.lat;document.getElementById('cLng').textContent=item.lon;document.getElementById('coordsOk').style.display='block';});
 }
-
 const emojiOpts=['🎷','🖼️','🍹','⚽','🥾','🏔️','🚣','🎸','🎭','🎬','🍕','✈️','💻','🧘','🎉','🎨','🏋️','🎤'];
 function pickEmoji(){let h='<div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px;justify-content:center">';emojiOpts.forEach(em=>{h+='<div style="font-size:34px;cursor:pointer;padding:4px" onclick="chooseEmoji(\''+em+'\')">'+em+'</div>';});h+='</div>';showModal('Scegli emoji',h);}
 function chooseEmoji(em){selectedEmoji=em;document.getElementById('emojiPick').textContent=em;closeModal();}
-
 async function submitCreate(){
   const title=document.getElementById('cTitle').value.trim();
   const desc=document.getElementById('cDesc').value.trim();
@@ -1087,9 +1344,7 @@ async function drawEventGroup(eventId){
   document.getElementById('content').innerHTML=html;
   if(activeTab==='chat'){setTimeout(()=>{const c=document.getElementById('chatMsgs');if(c)c.scrollTop=c.scrollHeight;},50);}
 }
-
 function switchTab(tab,eventId){activeTab=tab;drawEventGroup(eventId);}
-
 async function renderChat(e){
   const {data:msgs}=await supabase.from('messages').select('*,profiles(name,emoji)').eq('event_id',e.id).order('created_at',{ascending:true});
   let html='<div class="chat-messages" id="chatMsgs">';
@@ -1102,17 +1357,14 @@ async function renderChat(e){
   html+='</div><div class="chat-input-row"><input id="msgInput" placeholder="Scrivi un messaggio..." onkeypress="if(event.key===\'Enter\')sendMessage('+e.id+')"><button class="send-btn" onclick="sendMessage('+e.id+')">➤</button></div>';
   return html;
 }
-
 async function sendMessage(eventId){
   const inp=document.getElementById('msgInput');
   if(!inp||!inp.value.trim())return;
   if(!isLoggedIn){toast('⚠️ Devi essere loggato');return;}
   const {error}=await supabase.from('messages').insert({event_id:eventId,sender_id:currentUser.id,message:inp.value.trim()});
   if(error){toast('❌ '+error.message);return;}
-  inp.value='';
-  await drawEventGroup(eventId);
+  inp.value='';await drawEventGroup(eventId);
 }
-
 async function renderParticipants(e){
   const {data:parts}=await supabase.from('event_participants').select('*,profiles(id,name,city,verified,emoji)').eq('event_id',e.id);
   let html='<div style="font-size:13px;color:#888;margin-bottom:12px">'+(parts?.length||0)+'/'+e.max_participants+' partecipanti</div>';
@@ -1122,12 +1374,9 @@ async function renderParticipants(e){
   });
   return html;
 }
-
 function blockUser(uid){if(!blockedUsers.includes(uid)){blockedUsers.push(uid);toast('🚫 Utente bloccato');}else{blockedUsers=blockedUsers.filter(i=>i!==uid);toast('🔓 Sbloccato');}}
-
 function renderEventDetails(e){
-  const dl=distLabel(e);
-  let html='';
+  const dl=distLabel(e);let html='';
   if(e.date_time)html+='<div class="detail-row"><span class="icon">📅</span>'+new Date(e.date_time).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'</div>';
   html+='<div class="detail-row"><span class="icon">📍</span>'+(e.address||e.location||'')+(dl?'<br><span style="color:#6c5ce7;font-size:12px">📍 '+dl+' da te</span>':'')+'</div>';
   html+='<div class="detail-row"><span class="icon">📝</span><span style="color:#555">'+(e.description||'')+'</span></div>';
@@ -1147,13 +1396,12 @@ async function drawProfile(){
   currentUser.interests=userInterests;
   const {count:evCount}=await supabase.from('event_participants').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id);
   const comp=currentUser.completeness||40;
-
   let html='<div class="profile-grid">';
-  /* Colonna sinistra: avatar + stats */
   html+='<div>';
   html+='<div style="text-align:center;padding:20px;background:#fff;border-radius:18px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px">';
   html+='<div class="avatar xl" style="margin:auto;margin-bottom:12px">'+(currentUser.emoji||'👤')+'</div>';
   html+='<div style="font-size:21px;font-weight:800">'+(currentUser.name||'Utente')+'</div>';
+  if(isPremium)html+='<div style="margin-top:4px"><span class="badge" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">⭐ Premium</span></div>';
   if(currentUser.verified)html+='<div style="margin-top:4px"><span class="verified-badge">✅ Verificato</span></div>';
   html+='<div style="font-size:14px;color:#888;margin-top:6px">📍 '+(currentUser.city||'')+'</div>';
   html+='<div style="font-size:14px;color:#555;margin-top:8px;line-height:1.5">'+(currentUser.bio||'Nessuna bio ancora')+'</div>';
@@ -1165,10 +1413,9 @@ async function drawProfile(){
   html+='</div>';
   html+='<div class="btn secondary" onclick="navigate(\'matchPeople\')" style="margin-top:8px">🤝 Match persone</div>';
   html+='<div class="btn secondary" onclick="navigate(\'aiAssistant\')" style="margin-top:8px">🤖 AI Assistant</div>';
+  html+='<div class="btn secondary" onclick="navigate(\'settings\')" style="margin-top:8px">⚙️ Impostazioni</div>';
   html+='<div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>';
   html+='</div>';
-
-  /* Colonna destra: edit + interessi */
   html+='<div>';
   html+='<div class="card"><div style="font-weight:700;margin-bottom:4px">Completamento profilo <span style="color:#6c5ce7">'+comp+'%</span></div><div class="progress-bar"><div class="progress-fill" style="width:'+comp+'%"></div></div></div>';
   html+='<div style="margin:8px 0">'+userInterests.map(i=>'<span class="card-tag tag-'+i.toLowerCase()+'">'+i+'</span>').join('')+'</div>';
@@ -1177,15 +1424,11 @@ async function drawProfile(){
   html+='<label>Città</label><div class="autocomplete-wrap"><input id="editCity" value="'+(currentUser.city||'')+'" autocomplete="off"><div class="autocomplete-list" id="editCityList" style="display:none"></div></div>';
   html+='<label>Interessi</label><div class="chips" id="profileChips">'+allInterests.map(i=>'<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleProfileInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>').join('')+'</div>';
   html+='<div class="btn" onclick="saveProfile()" style="margin-top:14px">💾 Salva modifiche</div></div>';
-  html+='</div>';
-  html+='</div>'; /* fine profile-grid */
-
+  html+='</div></div>';
   document.getElementById('content').innerHTML=html;
   setupGeoAutocomplete('editCity','editCityList',item=>{document.getElementById('editCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
 }
-
 function toggleProfileInterest(label,el){el.classList.toggle('selected');if(el.classList.contains('selected')){if(!userInterests.includes(label))userInterests.push(label);}else{userInterests=userInterests.filter(i=>i!==label);}}
-
 async function saveProfile(){
   const bio=document.getElementById('editBio').value;
   const city=document.getElementById('editCity').value;
@@ -1214,7 +1457,6 @@ function drawAI(){
   html+='</div>';
   document.getElementById('content').innerHTML=html;
 }
-
 function sendAI(){
   const inp=document.getElementById('aiInput');
   if(!inp||!inp.value.trim())return;
@@ -1280,11 +1522,9 @@ function drawFeedback(eventId){
       <div class="btn" onclick="submitFeedback(${eventId})" style="margin-top:16px">📤 Invia feedback</div>
     </div>`;
 }
-
 function setStar(n){selectedStars=n;document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<n));}
 function selectThumb(v){thumbValue=v;document.getElementById('thumbUp').style.opacity=v?1:.4;document.getElementById('thumbDown').style.opacity=v?.4:1;}
 function setRepeat(v){repeatValue=v;document.getElementById('repeatYes').className='btn sm '+(v?'':'secondary');document.getElementById('repeatNo').className='btn sm '+(v?'secondary':'');}
-
 async function submitFeedback(eventId){
   if(!selectedStars){toast('⭐ Seleziona almeno una stella');return;}
   const {error}=await supabase.from('feedback').insert({event_id:eventId,from_user_id:currentUser.id,rating:selectedStars,comment:document.getElementById('feedbackComment').value,would_meet_again:repeatValue});
@@ -1313,7 +1553,6 @@ function drawReport(){
   document.getElementById('content').innerHTML=html;
 }
 function selectReason(r,el){reportSelected=r;document.querySelectorAll('.report-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');}
-
 async function submitReport(){
   if(!reportSelected){toast('⚠️ Seleziona un motivo');return;}
   const {error}=await supabase.from('reports').insert({reporter_id:currentUser?.id||null,reason:reportSelected,description:document.getElementById('reportDesc').value,event_id:currentEventId||null});
@@ -1336,7 +1575,6 @@ async function drawAdmin(){
   html+='</div>';
   document.getElementById('content').innerHTML=html;
 }
-
 async function adminTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   const c=document.getElementById('adminTabContent');c.innerHTML='<div class="loading"><div class="spinner"></div></div>';
@@ -1347,16 +1585,13 @@ async function adminTab(tab,el){
   } else if(tab==='users'){
     const {data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(20);
     let h='<div class="events-grid">';(data||[]).forEach(u=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:700">'+(u.name||'Utente')+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div><div class="btn sm danger" onclick="toast(\'Presto disponibile\')">🚫</div></div></div>';});
-    h+='</div>';
-    c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun utente</div>';
+    h+='</div>';c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun utente</div>';
   } else if(tab==='events'){
     const {data}=await supabase.from('events').select('*').order('created_at',{ascending:false}).limit(20);
     let h='<div class="events-grid">';(data||[]).forEach(e=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+' • <span class="badge '+(e.status==='active'?'green':'red')+'">'+e.status+'</span></div></div><div class="btn sm danger" onclick="adminRemoveEvent('+e.id+')">🗑️</div></div></div>';});
-    h+='</div>';
-    c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun evento</div>';
+    h+='</div>';c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun evento</div>';
   }
 }
-
 async function adminResolve(id,status){await supabase.from('reports').update({status}).eq('id',id);toast(status==='resolved'?'✅ Risolto':'🗑️ Ignorato');drawAdmin();}
 async function adminRemoveEvent(id){await supabase.from('events').update({status:'removed'}).eq('id',id);toast('🗑️ Evento rimosso');await loadEvents();drawAdmin();}
 </script>
