@@ -6,22 +6,11 @@
 <title>EventConnect – Condividi Esperienze</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-/* ── RESET ── */
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;overflow-y:auto;min-height:100vh;}
 
-/* ══════════════════════════════════════
-   SPLASH
-══════════════════════════════════════ */
-.splash{
-  position:fixed;inset:0;
-  background:linear-gradient(160deg,#6c5ce7 0%,#a29bfe 100%);
-  z-index:999;color:#fff;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:space-between;
-  padding:60px 24px 44px;
-  text-align:center;
-}
+/* SPLASH */
+.splash{position:fixed;inset:0;background:linear-gradient(160deg,#6c5ce7 0%,#a29bfe 100%);z-index:999;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:60px 24px 44px;text-align:center;}
 .splash-logo{font-size:72px;line-height:1;}
 .splash-title{font-size:36px;font-weight:800;letter-spacing:-.5px;margin-top:14px;}
 .splash-sub{font-size:16px;opacity:.88;line-height:1.5;margin-top:10px;}
@@ -33,153 +22,48 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .splash-btn-ghost{width:100%;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,.18);color:#fff;font-size:14px;cursor:pointer;}
 .splash-footer{margin-top:8px;font-size:12px;opacity:.55;}
 
-/* ══════════════════════════════════════
-   APP SHELL
-══════════════════════════════════════ */
+/* APP SHELL */
 .app{display:none;min-height:100vh;flex-direction:column;}
 
-/* ══════════════════════════════════════
-   HEADER
-══════════════════════════════════════ */
-.header{
-  padding:0 20px;
-  background:#fff;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid #eee;
-  position:sticky;top:0;z-index:100;
-  height:56px;
-}
+/* HEADER */
+.header{padding:0 20px;background:#fff;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;position:sticky;top:0;z-index:100;height:56px;}
 .header-left{display:flex;align-items:center;gap:10px;}
 .back-btn{font-size:26px;cursor:pointer;color:#6c5ce7;display:none;line-height:1;}
 .header-title{font-weight:700;font-size:17px;}
 .header-logo{font-size:17px;font-weight:800;background:linear-gradient(90deg,#6c5ce7,#a29bfe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .header-right{display:flex;align-items:center;gap:4px;}
-
-/* Icone header destra */
-.hdr-icon-btn{
-  position:relative;
-  width:40px;height:40px;
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;cursor:pointer;
-  transition:background .2s;
-  border:none;background:transparent;
-}
+.hdr-icon-btn{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:background .2s;border:none;background:transparent;}
 .hdr-icon-btn:hover{background:#f0eeff;}
-.hdr-badge{
-  position:absolute;top:2px;right:2px;
-  width:16px;height:16px;
-  border-radius:50%;background:#ff4757;
-  border:2px solid #fff;
-  font-size:9px;font-weight:800;color:#fff;
-  display:flex;align-items:center;justify-content:center;
-}
-
-/* Dropdown profilo */
+.hdr-badge{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#ff4757;border:2px solid #fff;font-size:9px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;}
 .profile-dropdown-wrap{position:relative;}
-.profile-avatar-btn{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-weight:700;font-size:14px;
-  cursor:pointer;border:none;flex-shrink:0;
-  transition:opacity .2s;
-}
+.profile-avatar-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;cursor:pointer;border:none;flex-shrink:0;transition:opacity .2s;overflow:hidden;}
+.profile-avatar-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .profile-avatar-btn:hover{opacity:.85;}
-.profile-dropdown{
-  position:absolute;top:calc(100% + 8px);right:0;
-  background:#fff;border-radius:16px;
-  box-shadow:0 8px 32px rgba(0,0,0,.15);
-  min-width:210px;padding:8px 0;
-  display:none;z-index:500;
-  border:1px solid #eee;
-}
+.profile-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);min-width:210px;padding:8px 0;display:none;z-index:500;border:1px solid #eee;}
 .profile-dropdown.open{display:block;}
-.pd-item{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 18px;font-size:14px;
-  font-weight:500;color:#333;cursor:pointer;
-  transition:background .15s;
-}
+.pd-item{display:flex;align-items:center;gap:10px;padding:12px 18px;font-size:14px;font-weight:500;color:#333;cursor:pointer;transition:background .15s;}
 .pd-item:hover{background:#f5f5f7;}
 .pd-icon{font-size:17px;width:22px;text-align:center;}
-.pd-badge{
-  margin-left:auto;background:#6c5ce7;color:#fff;
-  border-radius:50px;padding:2px 8px;
-  font-size:11px;font-weight:800;
-}
+.pd-badge{margin-left:auto;background:#6c5ce7;color:#fff;border-radius:50px;padding:2px 8px;font-size:11px;font-weight:800;}
 .pd-divider{height:1px;background:#eee;margin:4px 0;}
 .pd-item.logout{color:#ff4757;}
 
-/* ══════════════════════════════════════
-   CONTENT
-══════════════════════════════════════ */
+/* CONTENT */
 .app-body{display:flex;flex:1;}
-.content{
-  flex:1;padding:20px;
-  overflow-y:auto;max-width:100%;
-  padding-bottom:90px;
-}
+.content{flex:1;padding:20px;overflow-y:auto;max-width:100%;padding-bottom:90px;}
 
-/* ══════════════════════════════════════
-   BOTTOM NAVBAR
-══════════════════════════════════════ */
-.navbar{
-  display:flex;
-  justify-content:space-around;align-items:center;
-  padding:6px 0 10px;
-  border-top:1px solid #eee;
-  background:#fff;
-  position:fixed;bottom:0;left:0;right:0;
-  z-index:100;
-  box-shadow:0 -2px 12px rgba(0,0,0,.08);
-}
-.nav-item{
-  display:flex;flex-direction:column;align-items:center;
-  cursor:pointer;color:#aaa;
-  gap:0;transition:color .2s;
-  min-width:52px;padding:4px 0;
-  position:relative;
-}
+/* BOTTOM NAVBAR */
+.navbar{display:flex;justify-content:space-around;align-items:center;padding:6px 0 10px;border-top:1px solid #eee;background:#fff;position:fixed;bottom:0;left:0;right:0;z-index:100;box-shadow:0 -2px 12px rgba(0,0,0,.08);}
+.nav-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;color:#aaa;gap:0;transition:color .2s;min-width:52px;padding:4px 0;position:relative;}
 .nav-item.active{color:#6c5ce7;}
-.nav-item.active .nav-icon-wrap::after{
-  content:'';position:absolute;bottom:-4px;left:50%;
-  transform:translateX(-50%);
-  width:4px;height:4px;border-radius:50%;
-  background:#6c5ce7;
-}
-.nav-icon-wrap{
-  position:relative;
-  width:28px;height:28px;
-  display:flex;align-items:center;justify-content:center;
-}
+.nav-icon-wrap{position:relative;width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
 .nav-icon{font-size:24px;line-height:1;}
-.nav-dot{
-  position:absolute;top:-2px;right:-4px;
-  width:8px;height:8px;border-radius:50%;
-  background:#ff4757;border:2px solid #fff;
-}
-
-/* Pulsante centrale + */
-.nav-plus-wrap{
-  display:flex;flex-direction:column;
-  align-items:center;cursor:pointer;
-  margin-top:-18px;
-}
-.nav-plus{
-  background:linear-gradient(135deg,#6c5ce7,#8e7dff);
-  color:#fff;border-radius:50%;
-  width:52px;height:52px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:28px;
-  box-shadow:0 4px 16px rgba(108,92,231,.5);
-  transition:transform .2s;
-}
+.nav-dot{position:absolute;top:-2px;right:-4px;width:8px;height:8px;border-radius:50%;background:#ff4757;border:2px solid #fff;}
+.nav-plus-wrap{display:flex;flex-direction:column;align-items:center;cursor:pointer;margin-top:-18px;}
+.nav-plus{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 16px rgba(108,92,231,.5);transition:transform .2s;}
 .nav-plus:active{transform:scale(.93);}
 
-/* ══════════════════════════════════════
-   COMPONENTI UI
-══════════════════════════════════════ */
+/* UI COMPONENTS */
 .btn{background:linear-gradient(90deg,#6c5ce7,#8e7dff);color:#fff;padding:13px;text-align:center;border-radius:14px;margin-top:10px;cursor:pointer;font-weight:700;font-size:15px;border:none;width:100%;display:block;transition:opacity .2s;}
 .btn:active{opacity:.8;}
 .btn.secondary{background:#f0f0f5;color:#6c5ce7;}
@@ -212,10 +96,11 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .autocomplete-item{padding:10px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;}
 .autocomplete-item:last-child{border-bottom:none;}
 .autocomplete-item:hover{background:#f0eeff;color:#6c5ce7;}
-.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
 .avatar.lg{width:80px;height:80px;font-size:30px;}
 .avatar.sm{width:32px;height:32px;font-size:13px;}
-.avatar.xl{width:100px;height:100px;font-size:36px;}
+.avatar.xl{width:110px;height:110px;font-size:36px;}
 .badge{background:#6c5ce7;color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;}
 .badge.green{background:#00b894;}
 .badge.red{background:#ff4757;}
@@ -279,7 +164,8 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .ai-dot:nth-child(2){animation-delay:.15s;}
 .ai-dot:nth-child(3){animation-delay:.3s;}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-.detail-hero{width:100%;height:180px;border-radius:16px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:60px;margin-bottom:14px;}
+.detail-hero{width:100%;height:180px;border-radius:16px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:60px;margin-bottom:14px;overflow:hidden;position:relative;}
+.detail-hero img{width:100%;height:100%;object-fit:cover;}
 .detail-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;}
 .detail-row .icon{font-size:18px;width:24px;flex-shrink:0;margin-top:1px;}
 .progress-bar{height:6px;background:#eee;border-radius:3px;margin-top:6px;}
@@ -297,72 +183,47 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .events-grid{display:grid;grid-template-columns:1fr;gap:14px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 
-/* ══════════════════════════════════════
-   IMPOSTAZIONI — layout
-══════════════════════════════════════ */
+/* Password strength */
+.pwd-strength{margin-top:6px;font-size:12px;display:flex;flex-direction:column;gap:4px;}
+.pwd-rule{display:flex;align-items:center;gap:6px;color:#aaa;}
+.pwd-rule.ok{color:#00b894;}
+.pwd-rule.fail{color:#ff4757;}
+
+/* Profile hero / cover */
+.profile-cover{width:100%;height:140px;border-radius:18px 18px 0 0;background:linear-gradient(135deg,#6c5ce7,#a29bfe);overflow:hidden;position:relative;cursor:pointer;}
+.profile-cover img{width:100%;height:100%;object-fit:cover;}
+.profile-cover-edit{position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,.45);color:#fff;border-radius:20px;padding:4px 10px;font-size:12px;display:flex;align-items:center;gap:4px;}
+.profile-avatar-wrap{position:relative;display:inline-block;margin-top:-44px;margin-left:16px;}
+.profile-avatar-wrap .avatar.xl{border:4px solid #fff;}
+.profile-avatar-edit{position:absolute;bottom:2px;right:2px;background:#6c5ce7;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:2px solid #fff;}
+
+/* Distance filter */
+.distance-section{background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 1px 8px rgba(0,0,0,.06);}
+
+/* Gender chips */
+.gender-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.gender-chip{padding:8px 18px;border-radius:20px;border:2px solid #e0e0e0;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:6px;transition:all .2s;background:#fff;font-weight:600;}
+.gender-chip.selected{border-color:#6c5ce7;background:#f0eeff;color:#6c5ce7;}
+
+/* Settings */
 .settings-section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
 .settings-section h3{font-size:16px;font-weight:700;color:#6c5ce7;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-
-/* Drag slot UI */
 .slots-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
-.slot-box{
-  width:52px;height:52px;border-radius:14px;
-  border:2px dashed #d0d0e0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;cursor:pointer;
-  background:#fafafa;position:relative;
-  transition:all .2s;
-}
+.slot-box{width:52px;height:52px;border-radius:14px;border:2px dashed #d0d0e0;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;background:#fafafa;position:relative;transition:all .2s;}
 .slot-box.filled{border-style:solid;border-color:#6c5ce7;background:#f0eeff;}
-.slot-box .slot-remove{
-  position:absolute;top:-6px;right:-6px;
-  width:18px;height:18px;border-radius:50%;
-  background:#ff4757;color:#fff;
-  font-size:10px;font-weight:800;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-}
+.slot-box .slot-remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#ff4757;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .btn-pool{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-.btn-pool-item{
-  padding:8px 14px;border-radius:20px;
-  border:2px solid #e0e0e0;background:#fff;
-  font-size:13px;cursor:pointer;
-  display:flex;align-items:center;gap:6px;
-  transition:all .2s;
-}
+.btn-pool-item{padding:8px 14px;border-radius:20px;border:2px solid #e0e0e0;background:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;}
 .btn-pool-item:hover{border-color:#6c5ce7;color:#6c5ce7;}
 .btn-pool-item.in-use{opacity:.4;pointer-events:none;}
-
-/* Premium card */
-.premium-card{
-  background:linear-gradient(135deg,#6c5ce7,#a29bfe);
-  border-radius:18px;padding:24px;color:#fff;
-  margin-bottom:16px;position:relative;overflow:hidden;
-}
-.premium-card::before{
-  content:'⭐';position:absolute;right:-10px;top:-10px;
-  font-size:120px;opacity:.08;
-}
-.premium-badge{
-  background:rgba(255,255,255,.25);
-  border-radius:50px;padding:4px 12px;
-  font-size:12px;font-weight:700;
-  display:inline-block;margin-bottom:10px;
-}
+.premium-card{background:linear-gradient(135deg,#6c5ce7,#a29bfe);border-radius:18px;padding:24px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden;}
+.premium-card::before{content:'⭐';position:absolute;right:-10px;top:-10px;font-size:120px;opacity:.08;}
+.premium-badge{background:rgba(255,255,255,.25);border-radius:50px;padding:4px 12px;font-size:12px;font-weight:700;display:inline-block;margin-bottom:10px;}
 .premium-features{list-style:none;margin:12px 0;display:flex;flex-direction:column;gap:8px;}
 .premium-features li{font-size:14px;opacity:.95;display:flex;align-items:center;gap:8px;}
-.btn-premium{
-  background:#fff;color:#6c5ce7;
-  border:none;border-radius:14px;
-  padding:13px;width:100%;
-  font-size:15px;font-weight:800;
-  cursor:pointer;margin-top:4px;
-  transition:opacity .2s;
-}
+.btn-premium{background:#fff;color:#6c5ce7;border:none;border-radius:14px;padding:13px;width:100%;font-size:15px;font-weight:800;cursor:pointer;margin-top:4px;transition:opacity .2s;}
 .btn-premium:hover{opacity:.9;}
 .btn-premium.active-plan{background:rgba(255,255,255,.3);color:#fff;cursor:default;}
-
-/* Toggle switch */
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;}
 .toggle-row:last-child{border-bottom:none;}
 .toggle-label{font-size:14px;font-weight:600;}
@@ -374,7 +235,9 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 input:checked+.slider{background:#6c5ce7;}
 input:checked+.slider:before{transform:translateX(20px);}
 
-/* RESPONSIVE */
+/* Email verify banner */
+.verify-banner{background:#fff3cd;border:1.5px solid #ffc107;border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:13px;color:#856404;}
+
 @media(min-width:768px){
   .content{padding:28px 32px 100px;}
   .events-grid{grid-template-columns:repeat(2,1fr);}
@@ -391,7 +254,7 @@ input:checked+.slider:before{transform:translateX(20px);}
   .events-grid{grid-template-columns:repeat(2,1fr);}
   .scroll-row{grid-template-columns:repeat(4,1fr);}
   .chat-messages{max-height:500px;}
-  .profile-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;}
+  .profile-grid{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start;}
 }
 @media(min-width:1400px){
   .events-grid{grid-template-columns:repeat(3,1fr);}
@@ -402,7 +265,7 @@ input:checked+.slider:before{transform:translateX(20px);}
 </head>
 <body>
 
-<!-- ══ SPLASH ══ -->
+<!-- SPLASH -->
 <div class="splash" id="splash">
   <div>
     <div class="splash-logo">🎉</div>
@@ -423,86 +286,59 @@ input:checked+.slider:before{transform:translateX(20px);}
   </div>
 </div>
 
-<!-- ══ APP SHELL ══ -->
+<!-- APP SHELL -->
 <div class="app" id="appShell">
-
-  <!-- HEADER -->
   <div class="header" id="appHeader">
     <div class="header-left">
       <span class="back-btn" id="backBtn" onclick="goBack()">‹</span>
       <span class="header-logo" id="headerLogo">🎉 EventConnect</span>
       <span class="header-title hidden" id="headerTitle"></span>
     </div>
-    <div class="header-right" id="headerRight">
-      <!-- popolato da renderHeaderRight() -->
-    </div>
+    <div class="header-right" id="headerRight"></div>
   </div>
-
-  <!-- BODY -->
   <div class="app-body">
     <div class="content" id="content"></div>
   </div>
-
-  <!-- BOTTOM NAVBAR -->
-  <div class="navbar" id="navbar" style="display:none;">
-    <!-- popolato da renderNavbar() -->
-  </div>
-
+  <div class="navbar" id="navbar" style="display:none;"></div>
 </div>
 
 <script>
 /* ── SUPABASE ── */
-const SUPABASE_URL = 'https://sqevigimxneucauwljov.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxZXZpZ2lteG5ldWNhdXdsam92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDAyNjQsImV4cCI6MjA5NzM3NjI2NH0.0Eo-hIYVFYQJjyGh3viUTeymInTyqw6Ef7BF54uJOXU';
-if (!window._supabaseClient) {
-  window._supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
-var supabase = window._supabaseClient;
+const SUPABASE_URL='https://sqevigimxneucauwljov.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxZXZpZ2lteG5ldWNhdXdsam92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDAyNjQsImV4cCI6MjA5NzM3NjI2NH0.0Eo-hIYVFYQJjyGh3viUTeymInTyqw6Ef7BF54uJOXU';
+if(!window._supabaseClient){window._supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}
+var supabase=window._supabaseClient;
 
-/* ══════════════════════════════════════
-   TUTTI GLI 8 PULSANTI DISPONIBILI
-══════════════════════════════════════ */
-const ALL_BUTTONS = [
-  { id:'home',          icon:'🏠', label:'Home',        page:'home' },
-  { id:'search',        icon:'🔍', label:'Cerca',       page:'search' },
-  { id:'create',        icon:'➕', label:'Crea',        page:'create', isPlus:true },
-  { id:'chatList',      icon:'💬', label:'Chat',        page:'chatList', badge:'chat' },
-  { id:'aiAssistant',   icon:'🤖', label:'AI',          page:'aiAssistant' },
-  { id:'notifications', icon:'🔔', label:'Notifiche',   page:'notifications', badge:'notif' },
-  { id:'savedEvents',   icon:'🔖', label:'Preferiti',   page:'savedEvents' },
-  { id:'matchPeople',   icon:'🤝', label:'Match',       page:'matchPeople' },
+/* ── ALL BUTTONS ── */
+const ALL_BUTTONS=[
+  {id:'home',icon:'🏠',label:'Home',page:'home'},
+  {id:'search',icon:'🔍',label:'Cerca',page:'search'},
+  {id:'create',icon:'➕',label:'Crea',page:'create',isPlus:true},
+  {id:'chatList',icon:'💬',label:'Chat',page:'chatList',badge:'chat'},
+  {id:'aiAssistant',icon:'🤖',label:'AI',page:'aiAssistant'},
+  {id:'notifications',icon:'🔔',label:'Notifiche',page:'notifications',badge:'notif'},
+  {id:'savedEvents',icon:'🔖',label:'Preferiti',page:'savedEvents'},
+  {id:'matchPeople',icon:'🤝',label:'Match',page:'matchPeople'},
 ];
+const DEFAULT_BOTTOM=['home','search','create','chatList','aiAssistant'];
+const DEFAULT_HEADER=['notifications','savedEvents'];
 
-/* Configurazione default */
-const DEFAULT_BOTTOM = ['home','search','create','chatList','aiAssistant'];
-const DEFAULT_HEADER = ['notifications','savedEvents'];
-
-/* Carica preferenze utente (localStorage) */
 function loadNavPrefs(){
-  try{
-    const b=JSON.parse(localStorage.getItem('ec_bottom')||'null');
-    const h=JSON.parse(localStorage.getItem('ec_header')||'null');
-    return {
-      bottom: b||[...DEFAULT_BOTTOM],
-      header: h||[...DEFAULT_HEADER]
-    };
-  }catch(e){return {bottom:[...DEFAULT_BOTTOM],header:[...DEFAULT_HEADER]};}
+  try{const b=JSON.parse(localStorage.getItem('ec_bottom')||'null');const h=JSON.parse(localStorage.getItem('ec_header')||'null');return{bottom:b||[...DEFAULT_BOTTOM],header:h||[...DEFAULT_HEADER]};}
+  catch(e){return{bottom:[...DEFAULT_BOTTOM],header:[...DEFAULT_HEADER]};}
 }
-function saveNavPrefs(prefs){
-  localStorage.setItem('ec_bottom',JSON.stringify(prefs.bottom));
-  localStorage.setItem('ec_header',JSON.stringify(prefs.header));
-}
+function saveNavPrefs(prefs){localStorage.setItem('ec_bottom',JSON.stringify(prefs.bottom));localStorage.setItem('ec_header',JSON.stringify(prefs.header));}
 
 /* ── STATE ── */
 let currentUser=null,isLoggedIn=false,isAdmin=false;
 let navHistory=[],currentPage='',currentEventId=null;
 let selectedStars=0,reportSelected='',userInterests=[];
-let userLocation=null,activeFilters={category:'',maxDistance:200};
+let userLocation=null,activeFilters={category:'',maxDistance:200,gender:'',organizerGender:''};
 let savedEvents=[],blockedUsers=[],activeTab='chat';
 let events=[],selectedEmoji='🎉',thumbValue=null,repeatValue=null;
 let notifications=[{id:1,text:'Benvenuto su EventConnect! 🎉',time:'ora',read:false,icon:'🎉'}];
-let isPremium=false;
-let profileDropdownOpen=false;
+let isPremium=false,profileDropdownOpen=false;
+let pendingEmailVerify=false;
 
 const allInterests=[
   {icon:'🎵',label:'Musica'},{icon:'🎨',label:'Arte'},{icon:'⚽',label:'Sport'},
@@ -511,97 +347,89 @@ const allInterests=[
   {icon:'📚',label:'Libri'},{icon:'🧘',label:'Benessere'},{icon:'🎉',label:'Altro'}
 ];
 
-/* ══════════════════════════════════════
-   RENDER NAVBAR & HEADER
-══════════════════════════════════════ */
+/* ── PASSWORD VALIDATION ── */
+function validatePassword(pwd){
+  return{
+    length: pwd.length>=8,
+    upper: /[A-Z]/.test(pwd),
+    number: /[0-9]/.test(pwd),
+    special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd)
+  };
+}
+function isPasswordValid(pwd){const v=validatePassword(pwd);return v.length&&v.upper&&v.number&&v.special;}
+function renderPwdStrength(pwd){
+  const v=validatePassword(pwd);
+  return`<div class="pwd-strength">
+    <div class="pwd-rule ${v.length?'ok':'fail'}">${v.length?'✅':'❌'} Almeno 8 caratteri</div>
+    <div class="pwd-rule ${v.upper?'ok':'fail'}">${v.upper?'✅':'❌'} Almeno una lettera maiuscola</div>
+    <div class="pwd-rule ${v.number?'ok':'fail'}">${v.number?'✅':'❌'} Almeno un numero</div>
+    <div class="pwd-rule ${v.special?'ok':'fail'}">${v.special?'✅':'❌'} Almeno un carattere speciale (!@#$...)</div>
+  </div>`;
+}
+
+/* ── NAVBAR ── */
 function renderNavbar(){
   const prefs=loadNavPrefs();
   const navbar=document.getElementById('navbar');
   if(!navbar)return;
   let html='';
   prefs.bottom.forEach(id=>{
-    const btn=ALL_BUTTONS.find(b=>b.id===id);
-    if(!btn)return;
+    const btn=ALL_BUTTONS.find(b=>b.id===id);if(!btn)return;
     const isActive=currentPage===btn.page;
     const hasNotif=btn.badge==='notif'&&notifications.some(n=>!n.read);
-    const hasChat=btn.badge==='chat'&&false; // futuro
-
     if(btn.isPlus){
-      html+=`<div class="nav-plus-wrap" onclick="navigate('create')">
-        <div class="nav-plus">${btn.icon}</div>
-      </div>`;
+      html+=`<div class="nav-plus-wrap" onclick="navigate('create')"><div class="nav-plus">${btn.icon}</div></div>`;
     } else {
-      html+=`<div class="nav-item${isActive?' active':''}" onclick="navigate('${btn.page}')" id="nav-${btn.id}">
-        <div class="nav-icon-wrap">
-          <span class="nav-icon">${btn.icon}</span>
-          ${hasNotif||hasChat?'<span class="nav-dot"></span>':''}
-        </div>
+      html+=`<div class="nav-item${isActive?' active':''}" onclick="navigate('${btn.page}')">
+        <div class="nav-icon-wrap"><span class="nav-icon">${btn.icon}</span>${hasNotif?'<span class="nav-dot"></span>':''}</div>
       </div>`;
     }
   });
   navbar.innerHTML=html;
 }
 
+function getAvatarHTML(user,size='36px'){
+  if(user?.photo_url){
+    return`<img src="${user.photo_url}" style="width:${size};height:${size};border-radius:50%;object-fit:cover;" />`;
+  }
+  const initials=(user?.name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const fs=size==='36px'?'14px':'12px';
+  return`<span style="font-size:${fs};font-weight:700;color:#fff;">${initials}</span>`;
+}
+
 function renderHeaderRight(){
   const prefs=loadNavPrefs();
   const hr=document.getElementById('headerRight');
   if(!hr)return;
-
   let html='';
-
-  // Pulsanti header configurabili
   prefs.header.forEach(id=>{
-    const btn=ALL_BUTTONS.find(b=>b.id===id);
-    if(!btn)return;
+    const btn=ALL_BUTTONS.find(b=>b.id===id);if(!btn)return;
     const hasNotif=btn.badge==='notif'&&notifications.some(n=>!n.read);
-    html+=`<button class="hdr-icon-btn" onclick="navigate('${btn.page}')" title="${btn.label}">
-      ${btn.icon}
-      ${hasNotif?'<span class="hdr-badge"></span>':''}
-    </button>`;
+    html+=`<button class="hdr-icon-btn" onclick="navigate('${btn.page}')" title="${btn.label}">${btn.icon}${hasNotif?'<span class="hdr-badge"></span>':''}</button>`;
   });
-
-  // Avatar profilo + dropdown (sempre fisso)
-  const initials=currentUser?.name?.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
+  const avatarContent=currentUser?.photo_url
+    ?`<img src="${currentUser.photo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
+    :(currentUser?.name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
   html+=`<div class="profile-dropdown-wrap" id="profileDropWrap">
-    <button class="profile-avatar-btn" onclick="toggleProfileDropdown()" id="profileAvatarBtn">${initials}</button>
+    <button class="profile-avatar-btn" onclick="toggleProfileDropdown()" id="profileAvatarBtn">${avatarContent}</button>
     <div class="profile-dropdown" id="profileDropdown">
-      <div class="pd-item" onclick="closeDropdown();navigate('myevents')">
-        <span class="pd-icon">📅</span> I miei eventi
-        <span class="pd-badge">4</span>
-      </div>
-      <div class="pd-item" onclick="closeDropdown();navigate('matchPeople')">
-        <span class="pd-icon">🤝</span> Match persone
-      </div>
-      <div class="pd-item" onclick="closeDropdown();navigate('profile')">
-        <span class="pd-icon">👤</span> Profilo
-      </div>
-      <div class="pd-item" onclick="closeDropdown();navigate('settings')">
-        <span class="pd-icon">⚙️</span> Impostazioni
-      </div>
+      <div class="pd-item" onclick="closeDropdown();navigate('myevents')"><span class="pd-icon">📅</span> I miei eventi<span class="pd-badge">4</span></div>
+      <div class="pd-item" onclick="closeDropdown();navigate('matchPeople')"><span class="pd-icon">🤝</span> Match persone</div>
+      <div class="pd-item" onclick="closeDropdown();navigate('profile')"><span class="pd-icon">👤</span> Profilo</div>
+      <div class="pd-item" onclick="closeDropdown();navigate('settings')"><span class="pd-icon">⚙️</span> Impostazioni</div>
       <div class="pd-divider"></div>
-      <div class="pd-item logout" onclick="closeDropdown();doLogout()">
-        <span class="pd-icon">🚪</span> Esci
-      </div>
+      <div class="pd-item logout" onclick="closeDropdown();doLogout()"><span class="pd-icon">🚪</span> Esci</div>
     </div>
   </div>`;
-
   hr.innerHTML=html;
 }
 
 function toggleProfileDropdown(){
-  const d=document.getElementById('profileDropdown');
-  if(!d)return;
-  profileDropdownOpen=!profileDropdownOpen;
-  d.classList.toggle('open',profileDropdownOpen);
+  const d=document.getElementById('profileDropdown');if(!d)return;
+  profileDropdownOpen=!profileDropdownOpen;d.classList.toggle('open',profileDropdownOpen);
 }
-function closeDropdown(){
-  profileDropdownOpen=false;
-  const d=document.getElementById('profileDropdown');
-  if(d)d.classList.remove('open');
-}
-document.addEventListener('click',e=>{
-  if(!e.target.closest('#profileDropWrap'))closeDropdown();
-});
+function closeDropdown(){profileDropdownOpen=false;const d=document.getElementById('profileDropdown');if(d)d.classList.remove('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('#profileDropWrap'))closeDropdown();});
 
 /* ── INIT ── */
 window.onload=async function(){
@@ -609,6 +437,14 @@ window.onload=async function(){
   try{
     const {data:{session}}=await supabase.auth.getSession();
     if(session){
+      if(!session.user.email_confirmed_at){
+        pendingEmailVerify=true;
+        document.getElementById('splash').style.display='none';
+        document.getElementById('appShell').style.display='flex';
+        navigate('login');
+        toast('⚠️ Verifica la tua email prima di accedere');
+        return;
+      }
       const {data:profile}=await supabase.from('profiles').select('*').eq('id',session.user.id).single();
       if(profile){
         currentUser={...profile,id:session.user.id};
@@ -625,7 +461,6 @@ window.onload=async function(){
   }catch(e){console.log('No session',e);}
 };
 
-/* ── SPLASH BUTTONS ── */
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('btnRegister').addEventListener('click',function(){
     document.getElementById('splash').style.display='none';
@@ -655,21 +490,13 @@ function setupGeoAutocomplete(iId,lId,cb){
   const inp=document.getElementById(iId),lst=document.getElementById(lId);
   if(!inp||!lst)return;
   inp.addEventListener('input',()=>{
-    clearTimeout(geoT);
-    const q=inp.value.trim();
-    if(q.length<3){lst.style.display='none';return;}
+    clearTimeout(geoT);const q=inp.value.trim();if(q.length<3){lst.style.display='none';return;}
     geoT=setTimeout(async()=>{
       try{
         const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q)+'&limit=5&accept-language=it');
-        const data=await r.json();
-        if(!data.length){lst.style.display='none';return;}
+        const data=await r.json();if(!data.length){lst.style.display='none';return;}
         lst.innerHTML='';lst.style.display='block';
-        data.forEach(item=>{
-          const d=document.createElement('div');
-          d.className='autocomplete-item';d.textContent=item.display_name;
-          d.onclick=()=>{inp.value=item.display_name;lst.style.display='none';if(cb)cb(item);};
-          lst.appendChild(d);
-        });
+        data.forEach(item=>{const d=document.createElement('div');d.className='autocomplete-item';d.textContent=item.display_name;d.onclick=()=>{inp.value=item.display_name;lst.style.display='none';if(cb)cb(item);};lst.appendChild(d);});
       }catch(e){lst.style.display='none';}
     },400);
   });
@@ -690,11 +517,7 @@ function getAIReply(t){const tx=t.toLowerCase();for(const r of aiR){if(r.kw.some
 
 /* ── TOAST ── */
 function toast(m){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
-
-/* ── LOADING ── */
 function showLoading(){document.getElementById('content').innerHTML='<div class="loading"><div class="spinner"></div><div>Caricamento...</div></div>';}
-
-/* ── MODAL ── */
 function showModal(title,body){document.getElementById('globalModal')?.remove();const o=document.createElement('div');o.className='modal-overlay';o.id='globalModal';o.innerHTML='<div class="modal"><div class="modal-handle"></div><div style="font-weight:700;font-size:16px;margin-bottom:14px">'+title+'</div>'+body+'<div class="btn secondary" onclick="closeModal()" style="margin-top:12px">Chiudi</div></div>';o.onclick=e=>{if(e.target===o)closeModal();};document.body.appendChild(o);}
 function closeModal(){document.getElementById('globalModal')?.remove();}
 
@@ -710,8 +533,7 @@ const PAGE_TITLES={
 
 function navigate(page,param){
   if(page!==currentPage)navHistory.push(currentPage);
-  currentPage=page;
-  if(param!==undefined)currentEventId=param;
+  currentPage=page;if(param!==undefined)currentEventId=param;
   updateShell(page);
   const map={
     home:drawHome,search:drawSearch,create:drawCreate,chatList:drawChatList,
@@ -725,40 +547,25 @@ function navigate(page,param){
     settings:drawSettings,myevents:drawMyEvents
   };
   if(map[page])map[page]();
-  document.getElementById('content').scrollTop=0;
-  window.scrollTo(0,0);
+  document.getElementById('content').scrollTop=0;window.scrollTo(0,0);
 }
 function goBack(){if(navHistory.length)navigate(navHistory.pop());}
 
 function updateShell(page){
   const noNavPages=['login','register','onboarding'];
   const showNav=!noNavPages.includes(page);
-
   document.getElementById('navbar').style.display=showNav?'flex':'none';
-
-  // Aggiorna navbar
-  if(showNav){
-    renderNavbar();
-    renderHeaderRight();
-  }
-
+  if(showNav){renderNavbar();renderHeaderRight();}
   const logo=document.getElementById('headerLogo');
   const title=document.getElementById('headerTitle');
   const back=document.getElementById('backBtn');
   const noBack=['home','search','create','chatList','profile','login','register','onboarding','settings','myevents','aiAssistant','notifications','savedEvents','matchPeople'];
   back.style.display=noBack.includes(page)?'none':'block';
-
-  if(page==='home'){
-    logo.classList.remove('hidden');title.classList.add('hidden');
-  } else if(page==='admin'){
-    logo.classList.add('hidden');title.classList.remove('hidden');title.textContent='⚙️ Admin';
-  } else {
-    logo.classList.add('hidden');title.classList.remove('hidden');
-    title.textContent=PAGE_TITLES[page]||page;
-  }
+  if(page==='home'){logo.classList.remove('hidden');title.classList.add('hidden');}
+  else if(page==='admin'){logo.classList.add('hidden');title.classList.remove('hidden');title.textContent='⚙️ Admin';}
+  else{logo.classList.add('hidden');title.classList.remove('hidden');title.textContent=PAGE_TITLES[page]||page;}
 }
 
-/* ── LOAD EVENTS ── */
 async function loadEvents(){
   const {data,error}=await supabase.from('events').select('*').eq('status','active').order('created_at',{ascending:false});
   if(!error&&data)events=data;
@@ -773,6 +580,7 @@ function drawLogin(){
         <h2 style="font-size:24px;font-weight:800;margin:10px 0 6px">EventConnect</h2>
         <p style="color:#888;font-size:14px">Condividi Esperienze, Crea Connessioni</p>
       </div>
+      ${pendingEmailVerify?`<div class="verify-banner">📧 Controlla la tua email e clicca il link di conferma per attivare il tuo account.</div>`:''}
       <label>Email</label><input id="loginEmail" type="email" placeholder="tua@email.com">
       <label>Password</label><input id="loginPwd" type="password" placeholder="••••••••">
       <div class="btn" onclick="doLogin()" style="margin-top:20px">Accedi</div>
@@ -789,19 +597,27 @@ async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pwd=document.getElementById('loginPwd').value;
   if(!email||!pwd){toast('⚠️ Inserisci email e password');return;}
+  if(!isValidEmail(email)){toast('⚠️ Email non valida');return;}
   toast('⏳ Accesso in corso...');
   const {data,error}=await supabase.auth.signInWithPassword({email,password:pwd});
   if(error){toast('❌ '+error.message);return;}
+  if(!data.user.email_confirmed_at){
+    pendingEmailVerify=true;
+    toast('⚠️ Verifica la tua email prima di accedere. Controlla la tua casella di posta.');
+    drawLogin();
+    return;
+  }
   const {data:profile}=await supabase.from('profiles').select('*').eq('id',data.user.id).single();
   currentUser={...(profile||{}),id:data.user.id};
-  isLoggedIn=true;
+  isLoggedIn=true;pendingEmailVerify=false;
   const {data:ui}=await supabase.from('user_interests').select('interests(name)').eq('user_id',data.user.id);
   userInterests=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
   currentUser.interests=userInterests;
   await loadEvents();
-  toast('✅ Benvenuto!');
-  navigate('home');
+  toast('✅ Benvenuto!');navigate('home');
 }
+
+function isValidEmail(email){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);}
 
 async function googleLogin(){
   const {error}=await supabase.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}});
@@ -809,15 +625,13 @@ async function googleLogin(){
 }
 
 function adminLogin(){
-  currentUser={id:'admin',name:'Admin',admin:true,emoji:'🔐',interests:[]};
-  isLoggedIn=true;isAdmin=true;
-  navigate('admin');
+  currentUser={id:'admin',name:'Admin',admin:true,emoji:'🔐',interests:[],photo_url:null};
+  isLoggedIn=true;isAdmin=true;navigate('admin');
 }
 
 async function doLogout(){
   await supabase.auth.signOut();
-  isLoggedIn=false;isAdmin=false;currentUser=null;
-  userInterests=[];events=[];savedEvents=[];
+  isLoggedIn=false;isAdmin=false;currentUser=null;userInterests=[];events=[];savedEvents=[];
   document.getElementById('appShell').style.display='none';
   document.getElementById('splash').style.display='flex';
 }
@@ -827,8 +641,12 @@ function drawRegister(){
   document.getElementById('content').innerHTML=`
     <div style="max-width:600px;margin:0 auto;">
       <label>Nome *</label><input id="regName" placeholder="Il tuo nome">
-      <label>Email *</label><input id="regEmail" type="email" placeholder="tua@email.com">
-      <label>Password *</label><input id="regPwd" type="password" placeholder="Almeno 6 caratteri">
+      <label>Email *</label><input id="regEmail" type="email" placeholder="tua@email.com" oninput="checkRegEmail()">
+      <div id="emailCheck" style="font-size:12px;margin-top:4px;color:#aaa"></div>
+      <label>Password *</label><input id="regPwd" type="password" placeholder="Almeno 8 caratteri" oninput="updatePwdStrength()">
+      <div id="pwdStrength"></div>
+      <label>Conferma Password *</label><input id="regPwd2" type="password" placeholder="Ripeti la password" oninput="checkPwdMatch()">
+      <div id="pwdMatch" style="font-size:12px;margin-top:4px;color:#aaa"></div>
       <div class="form-row">
         <div><label>Data di nascita *</label><input id="regBirth" type="date"></div>
         <div><label>Città *</label>
@@ -837,6 +655,12 @@ function drawRegister(){
             <div class="autocomplete-list" id="regCityList" style="display:none"></div>
           </div>
         </div>
+      </div>
+      <label>Genere *</label>
+      <div class="gender-chips">
+        <div class="gender-chip" id="gc_m" onclick="selectGender('m')">👨 Uomo</div>
+        <div class="gender-chip" id="gc_f" onclick="selectGender('f')">👩 Donna</div>
+        <div class="gender-chip" id="gc_o" onclick="selectGender('o')">🧑 Altro</div>
       </div>
       <label>Bio (opzionale)</label><textarea id="regBio" placeholder="Raccontati..." rows="2"></textarea>
       <label>Instagram (opzionale)</label><input id="regIG" placeholder="@username">
@@ -849,22 +673,73 @@ function drawRegister(){
   });
 }
 
+let selectedGender='';
+function selectGender(g){
+  selectedGender=g;
+  ['m','f','o'].forEach(x=>{document.getElementById('gc_'+x)?.classList.toggle('selected',x===g);});
+}
+function checkRegEmail(){
+  const email=document.getElementById('regEmail').value.trim();
+  const el=document.getElementById('emailCheck');
+  if(!email){el.textContent='';return;}
+  if(isValidEmail(email)){el.textContent='✅ Email valida';el.style.color='#00b894';}
+  else{el.textContent='❌ Formato email non valido';el.style.color='#ff4757';}
+}
+function updatePwdStrength(){
+  const pwd=document.getElementById('regPwd').value;
+  document.getElementById('pwdStrength').innerHTML=pwd?renderPwdStrength(pwd):'';
+  checkPwdMatch();
+}
+function checkPwdMatch(){
+  const p1=document.getElementById('regPwd').value;
+  const p2=document.getElementById('regPwd2').value;
+  const el=document.getElementById('pwdMatch');
+  if(!p2){el.textContent='';return;}
+  if(p1===p2){el.textContent='✅ Le password corrispondono';el.style.color='#00b894';}
+  else{el.textContent='❌ Le password non corrispondono';el.style.color='#ff4757';}
+}
+
 async function doRegister(){
   const name=document.getElementById('regName').value.trim();
   const email=document.getElementById('regEmail').value.trim();
   const pwd=document.getElementById('regPwd').value;
+  const pwd2=document.getElementById('regPwd2').value;
   const city=document.getElementById('regCity').value.trim();
   const birth=document.getElementById('regBirth').value;
-  if(!name||!email||!pwd||!city||!birth){toast('⚠️ Compila tutti i campi');return;}
-  if(pwd.length<6){toast('⚠️ Password di almeno 6 caratteri');return;}
+  if(!name||!email||!pwd||!city||!birth){toast('⚠️ Compila tutti i campi obbligatori');return;}
+  if(!isValidEmail(email)){toast('⚠️ Inserisci un\'email valida');return;}
+  if(!isPasswordValid(pwd)){toast('⚠️ La password non soddisfa i requisiti di sicurezza');return;}
+  if(pwd!==pwd2){toast('⚠️ Le password non corrispondono');return;}
+  if(!selectedGender){toast('⚠️ Seleziona il tuo genere');return;}
   toast('⏳ Registrazione...');
-  const {data,error}=await supabase.auth.signUp({email,password:pwd});
+  const {data,error}=await supabase.auth.signUp({
+    email,password:pwd,
+    options:{emailRedirectTo:window.location.href}
+  });
   if(error){toast('❌ '+error.message);return;}
-  await supabase.from('profiles').insert({id:data.user.id,name,city,birth_date:birth,bio:document.getElementById('regBio').value,instagram:document.getElementById('regIG').value,emoji:'🙂',completeness:40});
-  currentUser={id:data.user.id,name,city,interests:[],completeness:40,emoji:'🙂'};
-  isLoggedIn=true;userInterests=[];
-  toast('✅ Registrazione completata!');
-  navigate('onboarding');
+  await supabase.from('profiles').insert({
+    id:data.user.id,name,city,
+    birth_date:birth,
+    bio:document.getElementById('regBio').value,
+    instagram:document.getElementById('regIG').value,
+    emoji:'🙂',completeness:40,
+    gender:selectedGender,
+    max_distance:50,
+    secondary_cities:[]
+  });
+  currentUser={id:data.user.id,name,city,interests:[],completeness:40,emoji:'🙂',gender:selectedGender};
+  pendingEmailVerify=true;
+  showModal('📧 Verifica Email',`
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-size:60px;margin-bottom:12px">📧</div>
+      <div style="font-size:18px;font-weight:800;margin-bottom:8px">Controlla la tua email!</div>
+      <div style="font-size:14px;color:#555;line-height:1.6;margin-bottom:16px">
+        Abbiamo inviato un link di conferma a <b>${email}</b>.<br>
+        Clicca il link per attivare il tuo account e poi accedi.
+      </div>
+      <div class="btn" onclick="closeModal();navigate('login')">Vai al Login</div>
+    </div>
+  `);
 }
 
 /* ── ONBOARDING ── */
@@ -930,218 +805,14 @@ async function drawHome(){
 function drawMyEvents(){
   let html='<div style="max-width:700px;margin:0 auto;">';
   html+='<div style="font-size:14px;color:#888;margin-bottom:16px">Gli eventi che hai creato o a cui partecipi</div>';
-  if(!events.length){
-    html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento ancora.<br><div class="btn" onclick="navigate(\'create\')" style="margin-top:10px;max-width:200px;margin-left:auto;margin-right:auto">+ Crea un evento</div></div>';
-  } else {
+  if(!events.length){html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento ancora.</div>';}
+  else{
     html+='<div class="events-grid">';
-    events.slice(0,6).forEach(e=>{
-      html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+'</div></div></div></div>';
-    });
+    events.slice(0,6).forEach(e=>{html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+'</div></div></div></div>';});
     html+='</div>';
   }
   html+='</div>';
   document.getElementById('content').innerHTML=html;
-}
-
-/* ── SETTINGS ══════════════════════════════════════ */
-function drawSettings(){
-  const prefs=loadNavPrefs();
-  document.getElementById('content').innerHTML=`<div style="max-width:700px;margin:0 auto;" id="settingsRoot"></div>`;
-  renderSettingsContent(prefs);
-}
-
-function renderSettingsContent(prefs){
-  const root=document.getElementById('settingsRoot');
-  if(!root)return;
-
-  /* ── Piano Premium ── */
-  let premHtml=`
-  <div class="premium-card">
-    <div class="premium-badge">${isPremium?'⭐ PREMIUM ATTIVO':'🔓 PIANO BASE'}</div>
-    <div style="font-size:22px;font-weight:800;margin-bottom:6px">${isPremium?'Sei Premium!':'Passa a Premium'}</div>
-    <div style="font-size:14px;opacity:.85;margin-bottom:4px">${isPremium?'Hai accesso a tutte le funzionalità':'Sblocca tutto il potenziale di EventConnect'}</div>
-    <ul class="premium-features">
-      <li>✅ Nessuna pubblicità</li>
-      <li>✅ Accesso prioritario agli eventi</li>
-      <li>✅ AI Assistant avanzato</li>
-      <li>✅ Badge Premium sul profilo</li>
-      <li>✅ Statistiche dettagliate</li>
-    </ul>
-    ${isPremium
-      ? `<div style="text-align:center;font-size:13px;opacity:.7;margin-top:8px">Piano Premium attivo • €4,99/mese</div>
-         <button class="btn-premium active-plan" style="margin-top:10px">✅ Piano attivo</button>`
-      : `<div style="text-align:center;font-size:20px;font-weight:900;margin:8px 0">€4,99 <span style="font-size:14px;font-weight:500;opacity:.8">/mese</span></div>
-         <button class="btn-premium" onclick="activatePremium()">🚀 Attiva Premium</button>
-         <div style="text-align:center;font-size:12px;opacity:.6;margin-top:8px">Cancella quando vuoi</div>`
-    }
-  </div>`;
-
-  /* ── Configuratore Navbar Basso (max 5) ── */
-  const bottomSlots=prefs.bottom;
-  const headerSlots=prefs.header;
-  const usedAll=[...bottomSlots,...headerSlots];
-
-  let bottomConfig=`
-  <div class="settings-section">
-    <h3>📱 Barra in basso <span style="font-size:12px;color:#888;font-weight:400">(max 5)</span></h3>
-    <p style="font-size:13px;color:#888;margin-bottom:14px">Clicca una slot per rimuovere • Clicca un pulsante disponibile per aggiungerlo</p>
-    <div class="slots-row" id="bottomSlots">`;
-
-  for(let i=0;i<5;i++){
-    const id=bottomSlots[i];
-    const btn=id?ALL_BUTTONS.find(b=>b.id===id):null;
-    if(btn){
-      bottomConfig+=`<div class="slot-box filled" title="${btn.label}">
-        ${btn.icon}
-        <span class="slot-remove" onclick="removeFromBottom('${btn.id}')">✕</span>
-      </div>`;
-    } else {
-      bottomConfig+=`<div class="slot-box" title="Slot vuota">＋</div>`;
-    }
-  }
-  bottomConfig+=`</div>
-    <div style="font-size:12px;font-weight:700;color:#aaa;margin:10px 0 6px">DISPONIBILI</div>
-    <div class="btn-pool" id="bottomPool">`;
-  ALL_BUTTONS.forEach(btn=>{
-    const inUse=bottomSlots.includes(btn.id)||headerSlots.includes(btn.id);
-    bottomConfig+=`<div class="btn-pool-item${inUse?' in-use':''}" onclick="addToBottom('${btn.id}')">${btn.icon} ${btn.label}</div>`;
-  });
-  bottomConfig+=`</div></div>`;
-
-  /* ── Configuratore Header Destra (max 3) ── */
-  let headerConfig=`
-  <div class="settings-section">
-    <h3>🔝 Barra in alto a destra <span style="font-size:12px;color:#888;font-weight:400">(max 3)</span></h3>
-    <p style="font-size:13px;color:#888;margin-bottom:14px">Il profilo è sempre fisso. Puoi aggiungere fino a 3 icone rapide.</p>
-    <div class="slots-row" id="headerSlots">`;
-
-  for(let i=0;i<3;i++){
-    const id=headerSlots[i];
-    const btn=id?ALL_BUTTONS.find(b=>b.id===id):null;
-    if(btn){
-      headerConfig+=`<div class="slot-box filled" title="${btn.label}">
-        ${btn.icon}
-        <span class="slot-remove" onclick="removeFromHeader('${btn.id}')">✕</span>
-      </div>`;
-    } else {
-      headerConfig+=`<div class="slot-box" title="Slot vuota">＋</div>`;
-    }
-  }
-  headerConfig+=`</div>
-    <div style="font-size:12px;font-weight:700;color:#aaa;margin:10px 0 6px">DISPONIBILI</div>
-    <div class="btn-pool" id="headerPool">`;
-  ALL_BUTTONS.forEach(btn=>{
-    const inUse=bottomSlots.includes(btn.id)||headerSlots.includes(btn.id);
-    headerConfig+=`<div class="btn-pool-item${inUse?' in-use':''}" onclick="addToHeader('${btn.id}')">${btn.icon} ${btn.label}</div>`;
-  });
-  headerConfig+=`</div></div>`;
-
-  /* ── Notifiche ── */
-  const notifSection=`
-  <div class="settings-section">
-    <h3>🔔 Notifiche</h3>
-    <div class="toggle-row">
-      <div><div class="toggle-label">Nuovi eventi consigliati</div><div class="toggle-sub">Ti avvisiamo quando escono eventi per te</div></div>
-      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div><div class="toggle-label">Messaggi chat</div><div class="toggle-sub">Notifiche per nuovi messaggi</div></div>
-      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div><div class="toggle-label">Promemoria eventi</div><div class="toggle-sub">24h prima dell'evento</div></div>
-      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-    </div>
-  </div>`;
-
-  /* ── Privacy ── */
-  const privacySection=`
-  <div class="settings-section">
-    <h3>🔒 Privacy</h3>
-    <div class="toggle-row">
-      <div><div class="toggle-label">Profilo pubblico</div><div class="toggle-sub">Visibile a tutti gli utenti</div></div>
-      <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <div><div class="toggle-label">Mostra distanza</div><div class="toggle-sub">Gli altri vedono quanto sei lontano</div></div>
-      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-    </div>
-  </div>`;
-
-  /* ── Account ── */
-  const accountSection=`
-  <div class="settings-section">
-    <h3>👤 Account</h3>
-    <div class="btn outline" onclick="navigate('profile')" style="margin-top:0">✏️ Modifica profilo</div>
-    <div class="btn secondary" style="margin-top:8px" onclick="toast('🔑 Funzione in arrivo!')">🔑 Cambia password</div>
-    <div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>
-  </div>`;
-
-  root.innerHTML = premHtml + bottomConfig + headerConfig + notifSection + privacySection + accountSection;
-}
-
-/* ── Gestione slot navbar ── */
-function addToBottom(id){
-  const prefs=loadNavPrefs();
-  if(prefs.bottom.includes(id)||prefs.header.includes(id)){toast('⚠️ Già presente');return;}
-  if(prefs.bottom.length>=5){toast('⚠️ Massimo 5 pulsanti in basso');return;}
-  prefs.bottom.push(id);
-  saveNavPrefs(prefs);
-  renderNavbar();
-  renderSettingsContent(prefs);
-}
-function removeFromBottom(id){
-  const prefs=loadNavPrefs();
-  prefs.bottom=prefs.bottom.filter(b=>b!==id);
-  saveNavPrefs(prefs);
-  renderNavbar();
-  renderSettingsContent(prefs);
-}
-function addToHeader(id){
-  const prefs=loadNavPrefs();
-  if(prefs.bottom.includes(id)||prefs.header.includes(id)){toast('⚠️ Già presente');return;}
-  if(prefs.header.length>=3){toast('⚠️ Massimo 3 pulsanti in alto');return;}
-  prefs.header.push(id);
-  saveNavPrefs(prefs);
-  renderHeaderRight();
-  renderSettingsContent(prefs);
-}
-function removeFromHeader(id){
-  const prefs=loadNavPrefs();
-  prefs.header=prefs.header.filter(h=>h!==id);
-  saveNavPrefs(prefs);
-  renderHeaderRight();
-  renderSettingsContent(prefs);
-}
-
-/* ── Premium ── */
-function activatePremium(){
-  showModal('⭐ Attiva Premium',`
-    <div style="text-align:center;padding:10px 0">
-      <div style="font-size:48px;margin-bottom:10px">⭐</div>
-      <div style="font-size:18px;font-weight:800;color:#6c5ce7;margin-bottom:6px">EventConnect Premium</div>
-      <div style="font-size:24px;font-weight:900;margin-bottom:4px">€4,99<span style="font-size:14px;font-weight:400;color:#888">/mese</span></div>
-      <div style="font-size:13px;color:#888;margin-bottom:20px">Cancella quando vuoi. Senza impegno.</div>
-      <div style="background:#f0eeff;border-radius:14px;padding:14px;margin-bottom:16px;text-align:left">
-        <div style="font-weight:700;margin-bottom:8px;color:#6c5ce7">Cosa ottieni:</div>
-        <div style="font-size:13px;display:flex;flex-direction:column;gap:6px">
-          <div>✅ Nessuna pubblicità</div>
-          <div>✅ Accesso prioritario agli eventi</div>
-          <div>✅ AI Assistant avanzato illimitato</div>
-          <div>✅ Badge Premium sul profilo</div>
-          <div>✅ Statistiche dettagliate</div>
-        </div>
-      </div>
-      <div class="btn" onclick="confirmPremium()" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">🚀 Attiva ora – €4,99/mese</div>
-      <div style="font-size:11px;color:#aaa;margin-top:10px">Pagamento sicuro. Cancella in qualsiasi momento.</div>
-    </div>
-  `);
-}
-function confirmPremium(){
-  isPremium=true;
-  closeModal();
-  toast('⭐ Premium attivato! Benvenuto!');
-  drawSettings();
 }
 
 /* ── SEARCH ── */
@@ -1150,7 +821,15 @@ function drawSearch(){
   html+=userLocation
     ?'<div style="background:#f0eeff;border-radius:12px;padding:9px 14px;font-size:13px;color:#6c5ce7;margin-bottom:12px;display:flex;align-items:center;gap:8px"><span>📍</span><span>Posizione rilevata</span><span style="margin-left:auto;cursor:pointer;color:#aaa" onclick="userLocation=null;drawSearch()">✕</span></div>'
     :'<div style="background:#fff3e0;border-radius:12px;padding:9px 14px;font-size:13px;color:#e65100;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:8px" onclick="enableGeo()"><span>📍</span><span>Attiva posizione per distanze</span></div>';
+  // Categoria
+  html+='<div style="font-size:12px;font-weight:700;color:#aaa;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Categoria</div>';
   html+='<div class="filters" id="catFilters">'+['Tutti','Musica','Arte','Sport','Trekking','Food','Cinema','Teatro','Viaggi'].map(c=>'<div class="filter-chip '+((!activeFilters.category&&c==='Tutti')||activeFilters.category===c?'active':'')+'" onclick="setCatFilter(\''+(c==='Tutti'?'':c)+'\',this)">'+c+'</div>').join('')+'</div>';
+  // Genere preferito evento
+  html+='<div style="font-size:12px;font-weight:700;color:#aaa;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Evento aperto a</div>';
+  html+='<div class="filters" id="genderFilters">'+[['','Tutti'],['m','Solo uomini'],['f','Solo donne'],['mf','Misto']].map(([v,l])=>'<div class="filter-chip '+(activeFilters.gender===v?'active':'')+'" onclick="setGenderFilter(\''+v+'\',this)">'+l+'</div>').join('')+'</div>';
+  // Genere organizzatore
+  html+='<div style="font-size:12px;font-weight:700;color:#aaa;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Organizzatore</div>';
+  html+='<div class="filters" id="orgGenderFilters">'+[['','Tutti'],['m','👨 Uomo'],['f','👩 Donna']].map(([v,l])=>'<div class="filter-chip '+(activeFilters.organizerGender===v?'active':'')+'" onclick="setOrgGenderFilter(\''+v+'\',this)">'+l+'</div>').join('')+'</div>';
   html+='<div class="form-row" style="margin-bottom:10px"><div class="autocomplete-wrap"><input id="citySearchInput" placeholder="📍 Città..." oninput="filterEvents()" autocomplete="off" style="margin-top:0"><div class="autocomplete-list" id="citySearchList" style="display:none"></div></div><input id="dateSearchInput" type="date" onchange="filterEvents()" style="margin-top:0"></div>';
   if(userLocation){html+='<div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700">📍 Distanza max</span><span id="distVal" style="font-size:13px;color:#6c5ce7;font-weight:700">'+(activeFilters.maxDistance>=200?'Tutte':activeFilters.maxDistance+' km')+'</span></div><input type="range" id="distSlider" min="0" max="200" step="5" value="'+activeFilters.maxDistance+'" oninput="onDistSlider(this.value)" style="width:100%;accent-color:#6c5ce7;margin:0"></div>';}
   html+='<div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><span style="font-size:13px;color:#888;white-space:nowrap">Ordina:</span><select id="sortSel" onchange="filterEvents()" style="margin-top:0;flex:1"><option value="default">Rilevanza</option>'+(userLocation?'<option value="distance">📍 Distanza</option>':'')+'<option value="price">💰 Prezzo</option></select></div>';
@@ -1159,9 +838,13 @@ function drawSearch(){
   setupGeoAutocomplete('citySearchInput','citySearchList',item=>{document.getElementById('citySearchInput').value=item.address?.city||item.display_name.split(',')[0];filterEvents();});
   filterEvents();
 }
+
 function setCatFilter(cat,el){activeFilters.category=cat;document.querySelectorAll('#catFilters .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');filterEvents();}
+function setGenderFilter(g,el){activeFilters.gender=g;document.querySelectorAll('#genderFilters .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');filterEvents();}
+function setOrgGenderFilter(g,el){activeFilters.organizerGender=g;document.querySelectorAll('#orgGenderFilters .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');filterEvents();}
 function onDistSlider(val){activeFilters.maxDistance=parseInt(val);const el=document.getElementById('distVal');if(el)el.textContent=val>=200?'Tutte':val+' km';filterEvents();}
 function enableGeo(){navigator.geolocation.getCurrentPosition(p=>{userLocation={lat:p.coords.latitude,lng:p.coords.longitude};drawSearch();},()=>toast('❌ Posizione non disponibile'));}
+
 function filterEvents(){
   const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
   const city=(document.getElementById('citySearchInput')?.value||'').toLowerCase();
@@ -1172,7 +855,13 @@ function filterEvents(){
     const mCat=!activeFilters.category||e.category===activeFilters.category;
     let mD=true;
     if(userLocation&&e.latitude&&activeFilters.maxDistance<200)mD=parseFloat(haversine(userLocation.lat,userLocation.lng,e.latitude,e.longitude))<=activeFilters.maxDistance;
-    return mQ&&mC&&mCat&&mD;
+    // Filtro genere evento
+    let mG=true;
+    if(activeFilters.gender&&e.gender_preference){mG=e.gender_preference===''||e.gender_preference===activeFilters.gender||e.gender_preference==='mf';}
+    // Filtro genere organizzatore
+    let mOG=true;
+    if(activeFilters.organizerGender&&e.organizer_gender){mOG=e.organizer_gender===activeFilters.organizerGender;}
+    return mQ&&mC&&mCat&&mD&&mG&&mOG;
   });
   if(sort==='distance'&&userLocation)filtered.sort((a,b)=>parseFloat(haversine(userLocation.lat,userLocation.lng,a.latitude,a.longitude))-parseFloat(haversine(userLocation.lat,userLocation.lng,b.latitude,b.longitude)));
   else if(sort==='price')filtered.sort((a,b)=>a.price-b.price);
@@ -1180,7 +869,8 @@ function filterEvents(){
   if(!filtered.length)html='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun evento trovato</div>';
   filtered.forEach(e=>{
     const dl=distLabel(e);
-    html+='<div class="card" style="cursor:pointer" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:40px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px;font-weight:700">📍 '+dl+'</span>':'')+'</div>'+(e.price===0?'<div class="card-meta" style="color:#00b894">✅ Gratuito</div>':'<div class="card-meta" style="color:#e67e22">💰 €'+e.price+'</div>')+'</div></div></div>';
+    const gpLabel={'m':'👨 Solo uomini','f':'👩 Solo donne','mf':'👫 Misto','':''}[e.gender_preference||'']||'';
+    html+='<div class="card" style="cursor:pointer" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:40px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span>'+(gpLabel?'<span class="card-tag" style="background:#e8f4fd;color:#1565c0">'+gpLabel+'</span>':'')+'<div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px;font-weight:700">📍 '+dl+'</span>':'')+'</div>'+(e.price===0?'<div class="card-meta" style="color:#00b894">✅ Gratuito</div>':'<div class="card-meta" style="color:#e67e22">💰 €'+e.price+'</div>')+'</div></div></div>';
   });
   document.getElementById('searchResults').innerHTML=html;
 }
@@ -1189,7 +879,7 @@ function filterEvents(){
 function drawSavedEvents(){
   const saved=events.filter(e=>savedEvents.includes(e.id));
   let html='<div class="section-title" style="margin-bottom:14px">I tuoi preferiti 🔖</div><div class="events-grid">';
-  if(!saved.length)html+='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun evento salvato.<br>Premi 🔖!</div>';
+  if(!saved.length)html+='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun evento salvato.</div>';
   saved.forEach(e=>{html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+'</div></div></div></div>';});
   html+='</div>';
   document.getElementById('content').innerHTML=html;
@@ -1208,9 +898,10 @@ async function drawEventDetail(eventId){
     isMine=!!mp;
   }
   const dl=distLabel(e);const isSaved=savedEvents.includes(e.id);
+  const gpLabel={'m':'👨 Solo uomini','f':'👩 Solo donne','mf':'👫 Aperto a tutti','':'👫 Aperto a tutti'}[e.gender_preference||''];
   let html='<div style="max-width:700px;margin:0 auto;">';
-  html+='<div class="detail-hero">'+(e.emoji||'🎉')+'</div>';
-  html+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px"><div><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title" style="font-size:20px">'+e.title+'</div></div><span style="font-size:24px;cursor:pointer" onclick="shareEvent('+e.id+')">⬆️</span></div>';
+  html+='<div class="detail-hero">'+(e.cover_url?`<img src="${e.cover_url}" />`:'')+'<span style="font-size:60px;'+(e.cover_url?'display:none':'')+'">'+e.emoji+'</span></div>';
+  html+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px"><div><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><span class="card-tag" style="background:#e8f4fd;color:#1565c0">'+gpLabel+'</span><div class="card-title" style="font-size:20px">'+e.title+'</div></div><span style="font-size:24px;cursor:pointer" onclick="shareEvent('+e.id+')">⬆️</span></div>';
   html+='<div class="detail-row"><span class="icon">📍</span><div>'+(e.location||'')+(e.address?'<br><span style="color:#888;font-size:13px">'+e.address+'</span>':'')+(dl?'<br><span style="color:#6c5ce7;font-size:12px;font-weight:700">📍 '+dl+' da te</span>':'')+'</div></div>';
   if(e.date_time)html+='<div class="detail-row"><span class="icon">📅</span>'+new Date(e.date_time).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'</div>';
   html+='<div class="detail-row"><span class="icon">📝</span><div style="color:#555;line-height:1.5">'+(e.description||'Nessuna descrizione')+'</div></div>';
@@ -1251,7 +942,7 @@ function shareEvent(id){
 /* ── CREATE EVENT ── */
 function drawCreate(){
   if(!isLoggedIn){toast('⚠️ Devi essere loggato');navigate('login');return;}
-  selectedEmoji='🎉';
+  selectedEmoji='🎉';let createGenderPref='mf';
   document.getElementById('content').innerHTML=`
     <div style="max-width:700px;margin:0 auto;">
       <div style="text-align:center;padding:10px 0 16px">
@@ -1276,15 +967,29 @@ function drawCreate(){
         <div><label>Prezzo (€)</label><input id="cPrice" type="number" placeholder="0" min="0" step="0.5" value="0"></div>
         <div><label>Link esterno (opzionale)</label><input id="cLink" type="url" placeholder="https://..."></div>
       </div>
+      <label>A questo evento voglio *</label>
+      <div class="gender-chips" style="margin-top:8px">
+        <div class="gender-chip selected" id="cgp_mf" onclick="selectCreateGender('mf')">👫 Tutti (indifferente)</div>
+        <div class="gender-chip" id="cgp_m" onclick="selectCreateGender('m')">👨 Solo uomini</div>
+        <div class="gender-chip" id="cgp_f" onclick="selectCreateGender('f')">👩 Solo donne</div>
+      </div>
+      <input type="hidden" id="cGenderPref" value="mf">
       <div class="btn" onclick="submitCreate()" style="margin-top:20px">🎉 Crea attività</div>
       <div class="btn secondary" onclick="navigate('home')" style="margin-top:8px">Annulla</div>
     </div>`;
   setupGeoAutocomplete('cCity','cCityList',item=>{document.getElementById('cCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
   setupGeoAutocomplete('cAddr','cAddrList',item=>{document.getElementById('cLat').textContent=item.lat;document.getElementById('cLng').textContent=item.lon;document.getElementById('coordsOk').style.display='block';});
 }
+
+function selectCreateGender(g){
+  document.getElementById('cGenderPref').value=g;
+  ['mf','m','f'].forEach(x=>{document.getElementById('cgp_'+x)?.classList.toggle('selected',x===g);});
+}
+
 const emojiOpts=['🎷','🖼️','🍹','⚽','🥾','🏔️','🚣','🎸','🎭','🎬','🍕','✈️','💻','🧘','🎉','🎨','🏋️','🎤'];
 function pickEmoji(){let h='<div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px;justify-content:center">';emojiOpts.forEach(em=>{h+='<div style="font-size:34px;cursor:pointer;padding:4px" onclick="chooseEmoji(\''+em+'\')">'+em+'</div>';});h+='</div>';showModal('Scegli emoji',h);}
 function chooseEmoji(em){selectedEmoji=em;document.getElementById('emojiPick').textContent=em;closeModal();}
+
 async function submitCreate(){
   const title=document.getElementById('cTitle').value.trim();
   const desc=document.getElementById('cDesc').value.trim();
@@ -1297,6 +1002,7 @@ async function submitCreate(){
   const link=document.getElementById('cLink').value.trim();
   const lat=parseFloat(document.getElementById('cLat').textContent)||null;
   const lng=parseFloat(document.getElementById('cLng').textContent)||null;
+  const genderPref=document.getElementById('cGenderPref').value||'mf';
   if(!title){toast('⚠️ Inserisci il titolo');return;}
   if(!cat){toast('⚠️ Seleziona la categoria');return;}
   if(!dateRaw){toast('⚠️ Inserisci data e ora');return;}
@@ -1304,25 +1010,29 @@ async function submitCreate(){
   if(!addr){toast('⚠️ Inserisci l\'indirizzo');return;}
   if(maxP<2){toast('⚠️ Min 2 partecipanti');return;}
   toast('⏳ Creazione...');
-  const {data,error}=await supabase.from('events').insert({creator_id:currentUser.id,title,description:desc,category:cat,date_time:new Date(dateRaw).toISOString(),location:city,address:addr,max_participants:maxP,price,emoji:selectedEmoji,latitude:lat,longitude:lng,external_link:link||null,status:'active'}).select().single();
+  const {data,error}=await supabase.from('events').insert({
+    creator_id:currentUser.id,title,description:desc,category:cat,
+    date_time:new Date(dateRaw).toISOString(),location:city,address:addr,
+    max_participants:maxP,price,emoji:selectedEmoji,latitude:lat,longitude:lng,
+    external_link:link||null,status:'active',
+    gender_preference:genderPref,
+    organizer_gender:currentUser.gender||'o'
+  }).select().single();
   if(error){toast('❌ '+error.message);return;}
   await supabase.from('event_participants').insert({event_id:data.id,user_id:currentUser.id});
   await loadEvents();
   notifications.unshift({id:Date.now(),text:'Hai creato "'+title+'"',time:'ora',read:false,icon:'🎉'});
-  toast('✅ Evento creato!');
-  navigate('eventDetail',data.id);
+  toast('✅ Evento creato!');navigate('eventDetail',data.id);
 }
 
 /* ── CHAT LIST ── */
 async function drawChatList(){
-  if(!isLoggedIn){navigate('login');return;}
-  showLoading();
+  if(!isLoggedIn){navigate('login');return;}showLoading();
   const {data:myParts}=await supabase.from('event_participants').select('event_id').eq('user_id',currentUser.id);
-  const ids=(myParts||[]).map(p=>p.event_id);
-  let myEvents=[];
+  const ids=(myParts||[]).map(p=>p.event_id);let myEvents=[];
   if(ids.length){const {data}=await supabase.from('events').select('*').in('id',ids);myEvents=data||[];}
   let html='<div class="section-title" style="margin-bottom:14px">Le tue chat</div><div class="events-grid">';
-  if(!myEvents.length)html+='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun gruppo ancora.<br><div class="btn" onclick="navigate(\'search\')" style="margin-top:10px;max-width:200px;margin-left:auto;margin-right:auto">Esplora eventi</div></div>';
+  if(!myEvents.length)html+='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun gruppo ancora.</div>';
   myEvents.forEach(e=>{html+='<div class="card" onclick="navigate(\'eventGroup\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:13px;color:#888">Tocca per aprire la chat</div></div><div style="font-size:20px;color:#ddd">›</div></div></div>';});
   html+='</div>';
   document.getElementById('content').innerHTML=html;
@@ -1366,11 +1076,12 @@ async function sendMessage(eventId){
   inp.value='';await drawEventGroup(eventId);
 }
 async function renderParticipants(e){
-  const {data:parts}=await supabase.from('event_participants').select('*,profiles(id,name,city,verified,emoji)').eq('event_id',e.id);
+  const {data:parts}=await supabase.from('event_participants').select('*,profiles(id,name,city,verified,emoji,photo_url)').eq('event_id',e.id);
   let html='<div style="font-size:13px;color:#888;margin-bottom:12px">'+(parts?.length||0)+'/'+e.max_participants+' partecipanti</div>';
   (parts||[]).forEach(p=>{
     const u=p.profiles;if(!u)return;
-    html+='<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:600">'+u.name+(u.verified?' <span class="verified-badge">✅</span>':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div>'+(u.id!==currentUser?.id?'<div style="display:flex;gap:8px"><span style="cursor:pointer;font-size:18px" onclick="navigate(\'report\','+e.id+')" title="Segnala">🚩</span><span style="cursor:pointer;font-size:18px" onclick="blockUser(\''+u.id+'\')" title="Blocca">🚫</span></div>':'<span style="font-size:12px;background:#f0eeff;color:#6c5ce7;border-radius:10px;padding:3px 8px">Tu</span>')+'</div>';
+    const avatarHtml=u.photo_url?`<img src="${u.photo_url}" style="width:42px;height:42px;border-radius:50%;object-fit:cover;" />`:(u.emoji||'👤');
+    html+='<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0"><div class="avatar">${avatarHtml}</div><div style="flex:1"><div style="font-weight:600">'+u.name+(u.verified?' <span class="verified-badge">✅</span>':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div>'+(u.id!==currentUser?.id?'<div style="display:flex;gap:8px"><span style="cursor:pointer;font-size:18px" onclick="navigate(\'report\','+e.id+')" title="Segnala">🚩</span><span style="cursor:pointer;font-size:18px" onclick="blockUser(\''+u.id+'\')" title="Blocca">🚫</span></div>':'<span style="font-size:12px;background:#f0eeff;color:#6c5ce7;border-radius:10px;padding:3px 8px">Tu</span>')+'</div>';
   });
   return html;
 }
@@ -1396,49 +1107,180 @@ async function drawProfile(){
   currentUser.interests=userInterests;
   const {count:evCount}=await supabase.from('event_participants').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id);
   const comp=currentUser.completeness||40;
-  let html='<div class="profile-grid">';
-  html+='<div>';
-  html+='<div style="text-align:center;padding:20px;background:#fff;border-radius:18px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px">';
-  html+='<div class="avatar xl" style="margin:auto;margin-bottom:12px">'+(currentUser.emoji||'👤')+'</div>';
-  html+='<div style="font-size:21px;font-weight:800">'+(currentUser.name||'Utente')+'</div>';
-  if(isPremium)html+='<div style="margin-top:4px"><span class="badge" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">⭐ Premium</span></div>';
-  if(currentUser.verified)html+='<div style="margin-top:4px"><span class="verified-badge">✅ Verificato</span></div>';
-  html+='<div style="font-size:14px;color:#888;margin-top:6px">📍 '+(currentUser.city||'')+'</div>';
-  html+='<div style="font-size:14px;color:#555;margin-top:8px;line-height:1.5">'+(currentUser.bio||'Nessuna bio ancora')+'</div>';
-  html+='</div>';
-  html+='<div class="profile-stats" style="background:#fff;border-radius:14px;box-shadow:0 1px 8px rgba(0,0,0,.07);">';
-  html+='<div class="profile-stat"><div class="num">'+(evCount||0)+'</div><div class="lbl">Eventi</div></div>';
-  html+='<div class="profile-stat"><div class="num">'+userInterests.length+'</div><div class="lbl">Interessi</div></div>';
-  html+='<div class="profile-stat"><div class="num">'+(currentUser.verified?'✅':'❌')+'</div><div class="lbl">Verif.</div></div>';
-  html+='</div>';
-  html+='<div class="btn secondary" onclick="navigate(\'matchPeople\')" style="margin-top:8px">🤝 Match persone</div>';
-  html+='<div class="btn secondary" onclick="navigate(\'aiAssistant\')" style="margin-top:8px">🤖 AI Assistant</div>';
-  html+='<div class="btn secondary" onclick="navigate(\'settings\')" style="margin-top:8px">⚙️ Impostazioni</div>';
-  html+='<div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>';
-  html+='</div>';
-  html+='<div>';
-  html+='<div class="card"><div style="font-weight:700;margin-bottom:4px">Completamento profilo <span style="color:#6c5ce7">'+comp+'%</span></div><div class="progress-bar"><div class="progress-fill" style="width:'+comp+'%"></div></div></div>';
-  html+='<div style="margin:8px 0">'+userInterests.map(i=>'<span class="card-tag tag-'+i.toLowerCase()+'">'+i+'</span>').join('')+'</div>';
-  html+='<div class="card"><div style="font-weight:700;margin-bottom:12px">✏️ Modifica profilo</div>';
-  html+='<label>Bio</label><textarea id="editBio" rows="2" placeholder="Raccontati...">'+(currentUser.bio||'')+'</textarea>';
-  html+='<label>Città</label><div class="autocomplete-wrap"><input id="editCity" value="'+(currentUser.city||'')+'" autocomplete="off"><div class="autocomplete-list" id="editCityList" style="display:none"></div></div>';
-  html+='<label>Interessi</label><div class="chips" id="profileChips">'+allInterests.map(i=>'<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleProfileInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>').join('')+'</div>';
-  html+='<div class="btn" onclick="saveProfile()" style="margin-top:14px">💾 Salva modifiche</div></div>';
-  html+='</div></div>';
+  const maxDist=currentUser.max_distance||50;
+  const secondaryCities=(currentUser.secondary_cities||[]);
+
+  let html='';
+  // Cover + avatar header
+  html+=`<div style="max-width:700px;margin:0 auto;">
+    <div style="position:relative;">
+      <div class="profile-cover" onclick="triggerCoverUpload()">
+        ${currentUser.cover_url?`<img src="${currentUser.cover_url}" />`:''}
+        <div class="profile-cover-edit">📷 Cambia copertina</div>
+      </div>
+      <input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="uploadCover(this)">
+      <div class="profile-avatar-wrap">
+        <div class="avatar xl" id="profileAvatar">
+          ${currentUser.photo_url?`<img src="${currentUser.photo_url}" />`:(currentUser.emoji||'👤')}
+        </div>
+        <div class="profile-avatar-edit" onclick="triggerPhotoUpload()">📷</div>
+        <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
+      </div>
+    </div>
+    <div style="padding:8px 16px 0 16px;margin-top:4px">
+      <div style="font-size:21px;font-weight:800">${currentUser.name||'Utente'}</div>
+      ${isPremium?'<span class="badge" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">⭐ Premium</span>':''}
+      ${currentUser.verified?'<span class="verified-badge" style="margin-left:4px">✅ Verificato</span>':''}
+      <div style="font-size:14px;color:#888;margin-top:4px">📍 ${currentUser.city||''}</div>
+      <div style="font-size:14px;color:#555;margin-top:6px;line-height:1.5">${currentUser.bio||'Nessuna bio ancora'}</div>
+    </div>`;
+
+  // Stats
+  html+=`<div class="profile-stats" style="background:#fff;border-radius:14px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin:14px 16px;">
+    <div class="profile-stat"><div class="num">${evCount||0}</div><div class="lbl">Eventi</div></div>
+    <div class="profile-stat"><div class="num">${userInterests.length}</div><div class="lbl">Interessi</div></div>
+    <div class="profile-stat"><div class="num">${currentUser.verified?'✅':'❌'}</div><div class="lbl">Verif.</div></div>
+  </div>`;
+
+  // Completamento
+  html+=`<div style="padding:0 16px">
+    <div class="card"><div style="font-weight:700;margin-bottom:4px">Completamento profilo <span style="color:#6c5ce7">${comp}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${comp}%"></div></div></div>`;
+
+  // Interessi
+  html+=`<div style="margin:8px 0">${userInterests.map(i=>`<span class="card-tag tag-${i.toLowerCase()}">${i}</span>`).join('')}</div>`;
+
+  // Edit form
+  html+=`<div class="card">
+    <div style="font-weight:700;margin-bottom:12px">✏️ Modifica profilo</div>
+    <label>Bio</label>
+    <textarea id="editBio" rows="2" placeholder="Raccontati...">${currentUser.bio||''}</textarea>
+    
+    <label>Città principale</label>
+    <div class="autocomplete-wrap">
+      <input id="editCity" value="${currentUser.city||''}" autocomplete="off">
+      <div class="autocomplete-list" id="editCityList" style="display:none"></div>
+    </div>
+
+    <label>Distanza massima dagli eventi (dalla tua città)</label>
+    <div style="display:flex;justify-content:space-between;margin-top:8px"><span style="font-size:13px;color:#888">Distanza</span><span id="editDistVal" style="color:#6c5ce7;font-weight:700">${maxDist>=200?'Qualsiasi':maxDist+' km'}</span></div>
+    <input type="range" id="editDistSlider" min="5" max="200" step="5" value="${maxDist}" oninput="updateEditDist(this.value)" style="width:100%;accent-color:#6c5ce7;margin-top:4px">
+
+    <label>Città secondarie (max 2)</label>
+    <div id="secondaryCitiesList">
+      ${secondaryCities.map((c,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+        <input value="${c}" id="secCity_${i}" style="flex:1;margin-top:0" placeholder="Città secondaria">
+        <div class="btn sm danger" style="flex-shrink:0" onclick="removeSecCity(${i})">✕</div>
+      </div>`).join('')}
+    </div>
+    ${secondaryCities.length<2?`<div class="btn outline sm" style="margin-top:10px" onclick="addSecCity()">+ Aggiungi città secondaria</div>`:''}
+
+    <label>Interessi</label>
+    <div class="chips" id="profileChips">
+      ${allInterests.map(i=>`<div class="chip ${userInterests.includes(i.label)?'selected':''}" onclick="toggleProfileInterest('${i.label}',this)">${i.icon} ${i.label}</div>`).join('')}
+    </div>
+
+    <div class="btn" onclick="saveProfile()" style="margin-top:14px">💾 Salva modifiche</div>
+  </div>
+
+  <div class="btn secondary" onclick="navigate('matchPeople')" style="margin-top:8px">🤝 Match persone</div>
+  <div class="btn secondary" onclick="navigate('aiAssistant')" style="margin-top:8px">🤖 AI Assistant</div>
+  <div class="btn secondary" onclick="navigate('settings')" style="margin-top:8px">⚙️ Impostazioni</div>
+  <div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>
+  </div></div>`;
+
   document.getElementById('content').innerHTML=html;
   setupGeoAutocomplete('editCity','editCityList',item=>{document.getElementById('editCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
 }
-function toggleProfileInterest(label,el){el.classList.toggle('selected');if(el.classList.contains('selected')){if(!userInterests.includes(label))userInterests.push(label);}else{userInterests=userInterests.filter(i=>i!==label);}}
+
+function updateEditDist(val){
+  const el=document.getElementById('editDistVal');
+  if(el)el.textContent=val>=200?'Qualsiasi':val+' km';
+}
+
+function addSecCity(){
+  const list=document.getElementById('secondaryCitiesList');
+  if(!list)return;
+  const count=list.querySelectorAll('input').length;
+  if(count>=2){toast('⚠️ Massimo 2 città secondarie');return;}
+  const idx=count;
+  const div=document.createElement('div');
+  div.style.cssText='display:flex;align-items:center;gap:8px;margin-top:8px';
+  div.innerHTML=`<input value="" id="secCity_${idx}" style="flex:1;margin-top:0" placeholder="Città secondaria">
+    <div class="btn sm danger" style="flex-shrink:0" onclick="this.parentElement.remove();checkAddSecBtn()">✕</div>`;
+  list.appendChild(div);
+  if(list.querySelectorAll('input').length>=2){
+    const addBtn=document.querySelector('[onclick="addSecCity()"]');
+    if(addBtn)addBtn.style.display='none';
+  }
+}
+function removeSecCity(i){
+  const inp=document.getElementById('secCity_'+i);
+  if(inp)inp.closest('div').remove();
+  const addBtn=document.querySelector('[onclick="addSecCity()"]');
+  if(addBtn)addBtn.style.display='';
+}
+
+function triggerPhotoUpload(){document.getElementById('photoFileInput').click();}
+function triggerCoverUpload(){document.getElementById('coverFileInput').click();}
+
+async function uploadPhoto(input){
+  const file=input.files[0];if(!file)return;
+  toast('⏳ Caricamento foto...');
+  const ext=file.name.split('.').pop();
+  const path=`avatars/${currentUser.id}.${ext}`;
+  const {error:upErr}=await supabase.storage.from('avatars').upload(path,file,{upsert:true});
+  if(upErr){toast('❌ '+upErr.message);return;}
+  const {data:urlData}=supabase.storage.from('avatars').getPublicUrl(path);
+  const url=urlData.publicUrl+'?t='+Date.now();
+  await supabase.from('profiles').update({photo_url:url}).eq('id',currentUser.id);
+  currentUser.photo_url=url;
+  toast('✅ Foto profilo aggiornata!');
+  renderHeaderRight();
+  drawProfile();
+}
+
+async function uploadCover(input){
+  const file=input.files[0];if(!file)return;
+  toast('⏳ Caricamento copertina...');
+  const ext=file.name.split('.').pop();
+  const path=`covers/${currentUser.id}.${ext}`;
+  const {error:upErr}=await supabase.storage.from('avatars').upload(path,file,{upsert:true});
+  if(upErr){toast('❌ '+upErr.message);return;}
+  const {data:urlData}=supabase.storage.from('avatars').getPublicUrl(path);
+  const url=urlData.publicUrl+'?t='+Date.now();
+  await supabase.from('profiles').update({cover_url:url}).eq('id',currentUser.id);
+  currentUser.cover_url=url;
+  toast('✅ Foto di copertina aggiornata!');
+  drawProfile();
+}
+
+function toggleProfileInterest(label,el){
+  el.classList.toggle('selected');
+  if(el.classList.contains('selected')){if(!userInterests.includes(label))userInterests.push(label);}
+  else{userInterests=userInterests.filter(i=>i!==label);}
+}
+
 async function saveProfile(){
-  const bio=document.getElementById('editBio').value;
-  const city=document.getElementById('editCity').value;
-  const {error}=await supabase.from('profiles').update({bio,city,completeness:Math.min(100,(currentUser.completeness||40)+15)}).eq('id',currentUser.id);
+  const bio=document.getElementById('editBio')?.value||'';
+  const city=document.getElementById('editCity')?.value||'';
+  const maxDist=parseInt(document.getElementById('editDistSlider')?.value)||50;
+  // Raccoglie città secondarie
+  const secInputs=document.querySelectorAll('#secondaryCitiesList input');
+  const secondaryCities=Array.from(secInputs).map(i=>i.value.trim()).filter(Boolean).slice(0,2);
+  const {error}=await supabase.from('profiles').update({
+    bio,city,
+    completeness:Math.min(100,(currentUser.completeness||40)+15),
+    max_distance:maxDist,
+    secondary_cities:secondaryCities
+  }).eq('id',currentUser.id);
   if(error){toast('❌ '+error.message);return;}
   await supabase.from('user_interests').delete().eq('user_id',currentUser.id);
   const {data:iRows}=await supabase.from('interests').select('id,name').in('name',userInterests);
   if(iRows?.length)await supabase.from('user_interests').insert(iRows.map(i=>({user_id:currentUser.id,interest_id:i.id})));
   currentUser.bio=bio;currentUser.city=city;currentUser.interests=userInterests;
-  toast('✅ Profilo aggiornato!');drawProfile();
+  currentUser.max_distance=maxDist;currentUser.secondary_cities=secondaryCities;
+  toast('✅ Profilo aggiornato!');
+  drawProfile();
 }
 
 /* ── AI ASSISTANT ── */
@@ -1450,7 +1292,7 @@ function drawAI(){
   html+='<div style="font-weight:700;font-size:14px;margin-bottom:10px">💡 Suggeriti per te</div>';
   const sug=events.filter(e=>userInterests.some(t=>e.category===t)).slice(0,3);
   sug.forEach(e=>{html+='<div class="ai-suggestion" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div><div style="font-weight:700;font-size:14px">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div></div><div style="margin-left:auto;font-size:18px;color:#ddd">›</div></div></div>';});
-  if(!sug.length)html+='<div style="text-align:center;color:#aaa;padding:16px">Nessun evento trovato. <span style="color:#6c5ce7;cursor:pointer" onclick="navigate(\'search\')">Esplora →</span></div>';
+  if(!sug.length)html+='<div style="text-align:center;color:#aaa;padding:16px">Nessun evento trovato.</div>';
   html+='<div class="ai-suggestion" onclick="navigate(\'matchPeople\')" style="margin-top:4px"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">🤝</span><div><div style="font-weight:700;font-size:14px">Persone compatibili</div><div style="font-size:12px;color:#888">Trova persone con i tuoi interessi</div></div><div style="margin-left:auto">›</div></div></div>';
   html+='<div class="chat-messages" id="aiChatMsgs" style="margin-top:16px;min-height:40px;max-height:300px"></div>';
   html+='<div class="chat-input-row"><input id="aiInput" placeholder="Scrivi cosa vorresti fare..." onkeypress="if(event.key===\'Enter\')sendAI()"><button class="send-btn" onclick="sendAI()">➤</button></div>';
@@ -1458,8 +1300,7 @@ function drawAI(){
   document.getElementById('content').innerHTML=html;
 }
 function sendAI(){
-  const inp=document.getElementById('aiInput');
-  if(!inp||!inp.value.trim())return;
+  const inp=document.getElementById('aiInput');if(!inp||!inp.value.trim())return;
   const text=inp.value.trim();inp.value='';
   const chat=document.getElementById('aiChatMsgs');
   const uW=document.createElement('div');uW.className='msg-wrap me';uW.innerHTML='<div class="msg-bubble sent">'+text+'</div>';chat.appendChild(uW);
@@ -1478,7 +1319,7 @@ async function drawMatchPeople(){
   showLoading();
   const {data:profiles}=await supabase.from('profiles').select('*').neq('id',currentUser?.id||'');
   const results=[];
-  for(const u of (profiles||[]).slice(0,10)){
+  for(const u of(profiles||[]).slice(0,10)){
     if(blockedUsers.includes(u.id))continue;
     const {data:ui}=await supabase.from('user_interests').select('interests(name)').eq('user_id',u.id);
     const uI=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
@@ -1490,7 +1331,19 @@ async function drawMatchPeople(){
   results.sort((a,b)=>b.pct-a.pct);
   let html='<div style="font-size:14px;color:#888;margin-bottom:16px">Basato sui tuoi interessi in comune</div>';
   if(!results.length)html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun utente trovato ancora</div>';
-  results.forEach(u=>{html+='<div class="match-row"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:700">'+u.name+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div><div style="font-size:12px;color:#6c5ce7;margin:2px 0">'+u.commonInterests.length+' interessi in comune: '+(u.commonInterests.join(', ')||'nessuno')+'</div><div class="compat-bar"><div class="compat-fill" style="width:'+u.pct+'%"></div></div></div><div class="match-pct">'+u.pct+'%</div></div>';});
+  results.forEach(u=>{
+    const avatarContent=u.photo_url?`<img src="${u.photo_url}" />`:(u.emoji||'👤');
+    html+=`<div class="match-row">
+      <div class="avatar">${avatarContent}</div>
+      <div style="flex:1">
+        <div style="font-weight:700">${u.name}${u.verified?' ✅':''}</div>
+        <div style="font-size:12px;color:#888">📍 ${u.city||''}</div>
+        <div style="font-size:12px;color:#6c5ce7;margin:2px 0">${u.commonInterests.length} interessi in comune: ${u.commonInterests.join(', ')||'nessuno'}</div>
+        <div class="compat-bar"><div class="compat-fill" style="width:${u.pct}%"></div></div>
+      </div>
+      <div class="match-pct">${u.pct}%</div>
+    </div>`;
+  });
   document.getElementById('content').innerHTML=html;
 }
 
@@ -1529,8 +1382,7 @@ async function submitFeedback(eventId){
   if(!selectedStars){toast('⭐ Seleziona almeno una stella');return;}
   const {error}=await supabase.from('feedback').insert({event_id:eventId,from_user_id:currentUser.id,rating:selectedStars,comment:document.getElementById('feedbackComment').value,would_meet_again:repeatValue});
   if(error){toast('❌ '+error.message);return;}
-  toast('✅ Feedback inviato! Grazie 🙏');
-  setTimeout(()=>navigate('home'),1500);
+  toast('✅ Feedback inviato! Grazie 🙏');setTimeout(()=>navigate('home'),1500);
 }
 
 /* ── NOTIFICATIONS ── */
@@ -1560,6 +1412,78 @@ async function submitReport(){
   reportSelected='';toast('✅ Segnalazione inviata!');goBack();
 }
 
+/* ── SETTINGS ── */
+function drawSettings(){
+  const prefs=loadNavPrefs();
+  document.getElementById('content').innerHTML=`<div style="max-width:700px;margin:0 auto;" id="settingsRoot"></div>`;
+  renderSettingsContent(prefs);
+}
+
+function renderSettingsContent(prefs){
+  const root=document.getElementById('settingsRoot');if(!root)return;
+  let premHtml=`<div class="premium-card">
+    <div class="premium-badge">${isPremium?'⭐ PREMIUM ATTIVO':'🔓 PIANO BASE'}</div>
+    <div style="font-size:22px;font-weight:800;margin-bottom:6px">${isPremium?'Sei Premium!':'Passa a Premium'}</div>
+    <ul class="premium-features">
+      <li>✅ Nessuna pubblicità</li>
+      <li>✅ Accesso prioritario agli eventi</li>
+      <li>✅ AI Assistant avanzato</li>
+      <li>✅ Badge Premium sul profilo</li>
+    </ul>
+    ${isPremium
+      ?`<button class="btn-premium active-plan">✅ Piano attivo</button>`
+      :`<div style="font-size:20px;font-weight:900;text-align:center;margin:8px 0">€4,99 <span style="font-size:14px;font-weight:500;opacity:.8">/mese</span></div>
+        <button class="btn-premium" onclick="activatePremium()">🚀 Attiva Premium</button>`
+    }
+  </div>`;
+
+  const bottomSlots=prefs.bottom;const headerSlots=prefs.header;
+  let bottomConfig=`<div class="settings-section"><h3>📱 Barra in basso</h3><div class="slots-row" id="bottomSlots">`;
+  for(let i=0;i<5;i++){const id=bottomSlots[i];const btn=id?ALL_BUTTONS.find(b=>b.id===id):null;bottomConfig+=btn?`<div class="slot-box filled">${btn.icon}<span class="slot-remove" onclick="removeFromBottom('${btn.id}')">✕</span></div>`:`<div class="slot-box">＋</div>`;}
+  bottomConfig+=`</div><div style="font-size:12px;font-weight:700;color:#aaa;margin:10px 0 6px">DISPONIBILI</div><div class="btn-pool" id="bottomPool">`;
+  ALL_BUTTONS.forEach(btn=>{const inUse=bottomSlots.includes(btn.id)||headerSlots.includes(btn.id);bottomConfig+=`<div class="btn-pool-item${inUse?' in-use':''}" onclick="addToBottom('${btn.id}')">${btn.icon} ${btn.label}</div>`;});
+  bottomConfig+=`</div></div>`;
+
+  let headerConfig=`<div class="settings-section"><h3>🔝 Barra in alto a destra</h3><div class="slots-row" id="headerSlots">`;
+  for(let i=0;i<3;i++){const id=headerSlots[i];const btn=id?ALL_BUTTONS.find(b=>b.id===id):null;headerConfig+=btn?`<div class="slot-box filled">${btn.icon}<span class="slot-remove" onclick="removeFromHeader('${btn.id}')">✕</span></div>`:`<div class="slot-box">＋</div>`;}
+  headerConfig+=`</div><div style="font-size:12px;font-weight:700;color:#aaa;margin:10px 0 6px">DISPONIBILI</div><div class="btn-pool" id="headerPool">`;
+  ALL_BUTTONS.forEach(btn=>{const inUse=bottomSlots.includes(btn.id)||headerSlots.includes(btn.id);headerConfig+=`<div class="btn-pool-item${inUse?' in-use':''}" onclick="addToHeader('${btn.id}')">${btn.icon} ${btn.label}</div>`;});
+  headerConfig+=`</div></div>`;
+
+  const notifSection=`<div class="settings-section"><h3>🔔 Notifiche</h3>
+    <div class="toggle-row"><div><div class="toggle-label">Nuovi eventi consigliati</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+    <div class="toggle-row"><div><div class="toggle-label">Messaggi chat</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+  </div>`;
+
+  const privacySection=`<div class="settings-section"><h3>🔒 Privacy</h3>
+    <div class="toggle-row"><div><div class="toggle-label">Profilo pubblico</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+    <div class="toggle-row"><div><div class="toggle-label">Mostra distanza</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+  </div>`;
+
+  const accountSection=`<div class="settings-section"><h3>👤 Account</h3>
+    <div class="btn outline" onclick="navigate('profile')" style="margin-top:0">✏️ Modifica profilo</div>
+    <div class="btn secondary" style="margin-top:8px" onclick="toast('🔑 Funzione in arrivo!')">🔑 Cambia password</div>
+    <div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>
+  </div>`;
+
+  root.innerHTML=premHtml+bottomConfig+headerConfig+notifSection+privacySection+accountSection;
+}
+
+function addToBottom(id){const prefs=loadNavPrefs();if(prefs.bottom.includes(id)||prefs.header.includes(id)){toast('⚠️ Già presente');return;}if(prefs.bottom.length>=5){toast('⚠️ Massimo 5 pulsanti');return;}prefs.bottom.push(id);saveNavPrefs(prefs);renderNavbar();renderSettingsContent(prefs);}
+function removeFromBottom(id){const prefs=loadNavPrefs();prefs.bottom=prefs.bottom.filter(b=>b!==id);saveNavPrefs(prefs);renderNavbar();renderSettingsContent(prefs);}
+function addToHeader(id){const prefs=loadNavPrefs();if(prefs.bottom.includes(id)||prefs.header.includes(id)){toast('⚠️ Già presente');return;}if(prefs.header.length>=3){toast('⚠️ Massimo 3 pulsanti');return;}prefs.header.push(id);saveNavPrefs(prefs);renderHeaderRight();renderSettingsContent(prefs);}
+function removeFromHeader(id){const prefs=loadNavPrefs();prefs.header=prefs.header.filter(h=>h!==id);saveNavPrefs(prefs);renderHeaderRight();renderSettingsContent(prefs);}
+
+function activatePremium(){
+  showModal('⭐ Attiva Premium',`<div style="text-align:center;padding:10px 0">
+    <div style="font-size:48px;margin-bottom:10px">⭐</div>
+    <div style="font-size:18px;font-weight:800;color:#6c5ce7;margin-bottom:6px">EventConnect Premium</div>
+    <div style="font-size:24px;font-weight:900;margin-bottom:16px">€4,99<span style="font-size:14px;font-weight:400;color:#888">/mese</span></div>
+    <div class="btn" onclick="confirmPremium()" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">🚀 Attiva ora</div>
+  </div>`);
+}
+function confirmPremium(){isPremium=true;closeModal();toast('⭐ Premium attivato!');drawSettings();}
+
 /* ── ADMIN ── */
 async function drawAdmin(){
   showLoading();
@@ -1584,12 +1508,13 @@ async function adminTab(tab,el){
     c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessuna segnalazione</div>';
   } else if(tab==='users'){
     const {data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(20);
-    let h='<div class="events-grid">';(data||[]).forEach(u=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:700">'+(u.name||'Utente')+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div><div class="btn sm danger" onclick="toast(\'Presto disponibile\')">🚫</div></div></div>';});
-    h+='</div>';c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun utente</div>';
+    let h='<div class="events-grid">';(data||[]).forEach(u=>{
+      const av=u.photo_url?`<img src="${u.photo_url}" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">`:(u.emoji||'👤');
+      h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar">'+av+'</div><div style="flex:1"><div style="font-weight:700">'+(u.name||'Utente')+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div><div class="btn sm danger" onclick="toast(\'Presto disponibile\')">🚫</div></div></div>';
+    });h+='</div>';c.innerHTML=h;
   } else if(tab==='events'){
     const {data}=await supabase.from('events').select('*').order('created_at',{ascending:false}).limit(20);
-    let h='<div class="events-grid">';(data||[]).forEach(e=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+' • <span class="badge '+(e.status==='active'?'green':'red')+'">'+e.status+'</span></div></div><div class="btn sm danger" onclick="adminRemoveEvent('+e.id+')">🗑️</div></div></div>';});
-    h+='</div>';c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun evento</div>';
+    let h='<div class="events-grid">';(data||[]).forEach(e=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+' • <span class="badge '+(e.status==='active'?'green':'red')+'">'+e.status+'</span></div></div><div class="btn sm danger" onclick="adminRemoveEvent('+e.id+')">🗑️</div></div></div>';});h+='</div>';c.innerHTML=h;
   }
 }
 async function adminResolve(id,status){await supabase.from('reports').update({status}).eq('id',id);toast(status==='resolved'?'✅ Risolto':'🗑️ Ignorato');drawAdmin();}
@@ -1597,3 +1522,4 @@ async function adminRemoveEvent(id){await supabase.from('events').update({status
 </script>
 </body>
 </html>
+
