@@ -2,23 +2,55 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EventConnect – Condividi Esperienze</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+/* ── RESET ── */
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;overflow-y:auto;}.app {
-  max-width: 1200px;      /* ← larghezza desktop */
-  margin: 0 auto;
-  background: #f5f5f7;
-  min-height: 100vh;      /* ← si espande col contenuto */
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow-y: auto;       /* ← scroll abilitato */
-  box-shadow: 0 0 40px rgba(0,0,0,.15);
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;overflow-y:auto;min-height:100vh;}
+
+/* ══════════════════════════════════════
+   SPLASH
+══════════════════════════════════════ */
+.splash{
+  position:fixed;inset:0;
+  background:linear-gradient(160deg,#6c5ce7 0%,#a29bfe 100%);
+  z-index:999;color:#fff;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;
+  padding:60px 24px 44px;
+  text-align:center;
 }
-.header{padding:14px 16px;background:#fff;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;position:relative;z-index:50;min-height:54px;}
+.splash-logo{font-size:72px;line-height:1;}
+.splash-title{font-size:36px;font-weight:800;letter-spacing:-.5px;margin-top:14px;}
+.splash-sub{font-size:16px;opacity:.88;line-height:1.5;margin-top:10px;}
+.splash-pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.splash-pill{background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;}
+.splash-btns{width:100%;max-width:400px;display:flex;flex-direction:column;gap:12px;}
+.splash-btn-primary{width:100%;padding:16px;border-radius:16px;border:none;background:#fff;color:#6c5ce7;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,.18);}
+.splash-btn-secondary{width:100%;padding:16px;border-radius:16px;border:2px solid rgba(255,255,255,.75);background:transparent;color:#fff;font-size:17px;font-weight:700;cursor:pointer;}
+.splash-btn-ghost{width:100%;padding:12px;border-radius:16px;border:none;background:rgba(255,255,255,.18);color:#fff;font-size:14px;cursor:pointer;}
+.splash-footer{margin-top:8px;font-size:12px;opacity:.55;}
+
+/* ══════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════ */
+.app{
+  display:none;
+  min-height:100vh;
+  flex-direction:column;
+}
+
+/* ── HEADER ── */
+.header{
+  padding:14px 20px;
+  background:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid #eee;
+  position:sticky;top:0;z-index:100;
+  min-height:56px;
+}
 .header-left{display:flex;align-items:center;gap:10px;}
 .back-btn{font-size:26px;cursor:pointer;color:#6c5ce7;display:none;line-height:1;}
 .header-title{font-weight:700;font-size:17px;}
@@ -26,18 +58,77 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .header-right{display:flex;align-items:center;gap:12px;}
 .header-icon{font-size:22px;cursor:pointer;position:relative;}
 .badge-dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#ff4757;border:2px solid #fff;}
-.content {
-  flex: 1;
-  overflow-y: visible;    /* ← lascia scorrere la pagina intera */
-  padding: 24px 32px;     /* ← più padding per desktop */
-  padding-bottom: 85px;
+
+/* ── LAYOUT PRINCIPALE ── */
+.app-body{
+  display:flex;
+  flex:1;
+  min-height:calc(100vh - 56px);
 }
-.content::-webkit-scrollbar{display:none;}
-.navbar{display:flex;justify-content:space-around;align-items:center;padding:8px 0 14px;border-top:1px solid #eee;background:#fff;position:absolute;bottom:0;left:0;right:0;z-index:50;}
+
+/* ── SIDEBAR (solo desktop) ── */
+.sidebar{
+  display:none;
+  width:220px;
+  flex-shrink:0;
+  background:#fff;
+  border-right:1px solid #eee;
+  padding:24px 0;
+  position:sticky;
+  top:56px;
+  height:calc(100vh - 56px);
+  overflow-y:auto;
+}
+.sidebar-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 24px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:600;
+  color:#666;
+  border-radius:0;
+  transition:all .2s;
+  border-left:3px solid transparent;
+}
+.sidebar-item:hover{background:#f8f7ff;color:#6c5ce7;}
+.sidebar-item.active{background:#f0eeff;color:#6c5ce7;border-left:3px solid #6c5ce7;}
+.sidebar-icon{font-size:20px;width:24px;text-align:center;}
+.sidebar-plus{
+  background:linear-gradient(135deg,#6c5ce7,#8e7dff);
+  color:#fff;border-radius:12px;
+  margin:8px 16px;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;font-weight:700;font-size:14px;
+  transition:opacity .2s;
+}
+.sidebar-plus:hover{opacity:.9;}
+
+/* ── CONTENT ── */
+.content{
+  flex:1;
+  padding:20px;
+  overflow-y:auto;
+  max-width:100%;
+}
+
+/* ── NAVBAR MOBILE (solo mobile) ── */
+.navbar{
+  display:flex;
+  justify-content:space-around;align-items:center;
+  padding:8px 0 14px;
+  border-top:1px solid #eee;
+  background:#fff;
+  position:sticky;bottom:0;
+  z-index:100;
+}
 .nav-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;font-size:10px;color:#aaa;gap:2px;transition:color .2s;min-width:52px;}
 .nav-item.active{color:#6c5ce7;}
 .nav-icon{font-size:22px;line-height:1;}
 .nav-plus{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-top:-14px;box-shadow:0 4px 14px rgba(108,92,231,.5);}
+
+/* ══════════════════════════════════════
+   COMPONENTI UI
+══════════════════════════════════════ */
 .btn{background:linear-gradient(90deg,#6c5ce7,#8e7dff);color:#fff;padding:13px;text-align:center;border-radius:14px;margin-top:10px;cursor:pointer;font-weight:700;font-size:15px;border:none;width:100%;display:block;transition:opacity .2s;}
 .btn:active{opacity:.8;}
 .btn.secondary{background:#f0f0f5;color:#6c5ce7;}
@@ -45,10 +136,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn.danger{background:linear-gradient(90deg,#ff4757,#ff6b81);}
 .btn.green{background:linear-gradient(90deg,#00b894,#55efc4);}
 .btn.sm{padding:8px 14px;font-size:13px;border-radius:10px;width:auto;display:inline-block;margin-top:0;}
+
 .card{background:#fff;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
 .card-title{font-weight:700;font-size:16px;margin-bottom:4px;}
 .card-meta{font-size:13px;color:#666;display:flex;align-items:center;gap:6px;margin-bottom:3px;}
 .card-tag{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;margin-bottom:6px;margin-right:4px;}
+
+/* TAG COLORI */
 .tag-musica{background:#f0eeff;color:#6c5ce7;}
 .tag-arte{background:#fce4ec;color:#c2185b;}
 .tag-sport{background:#e8f8f5;color:#00897b;}
@@ -62,40 +156,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-libri{background:#fff8e1;color:#f57f17;}
 .tag-benessere{background:#f1f8e9;color:#558b2f;}
 .tag-cibo{background:#fff3e0;color:#e65100;}
+
+/* FORM */
 input,textarea,select{width:100%;padding:12px 14px;margin-top:8px;border-radius:12px;border:1.5px solid #e0e0e0;font-size:14px;outline:none;transition:border-color .2s;background:#fafafa;font-family:inherit;color:#222;}
 input:focus,textarea:focus,select:focus{border-color:#6c5ce7;background:#fff;}
 label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
+
+/* AUTOCOMPLETE */
 .autocomplete-wrap{position:relative;}
 .autocomplete-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #6c5ce7;border-radius:12px;z-index:200;max-height:180px;overflow-y:auto;box-shadow:0 8px 24px rgba(108,92,231,.15);}
 .autocomplete-item{padding:10px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid #f0f0f0;}
 .autocomplete-item:last-child{border-bottom:none;}
 .autocomplete-item:hover{background:#f0eeff;color:#6c5ce7;}
+
+/* AVATAR */
 .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;}
 .avatar.lg{width:80px;height:80px;font-size:30px;}
 .avatar.sm{width:32px;height:32px;font-size:13px;}
 .avatar.xl{width:100px;height:100px;font-size:36px;}
+
+/* BADGE */
 .badge{background:#6c5ce7;color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;}
 .badge.green{background:#00b894;}
 .badge.red{background:#ff4757;}
 .badge.orange{background:#e67e22;}
+
+/* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
 .chip{padding:9px 16px;border-radius:20px;border:2px solid #e0e0e0;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:6px;transition:all .2s;background:#fff;}
 .chip.selected{border-color:#6c5ce7;background:#f0eeff;color:#6c5ce7;font-weight:700;}
+
+/* SECTION */
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:8px;}
 .section-title{font-weight:700;font-size:17px;}
 .section-link{color:#6c5ce7;font-size:13px;cursor:pointer;}
+
+/* SEARCH */
 .search-bar{display:flex;align-items:center;gap:10px;background:#f5f5f7;border-radius:14px;padding:10px 14px;margin-bottom:12px;border:1.5px solid #e8e8e8;}
 .search-bar input{border:none;background:transparent;padding:0;margin:0;font-size:14px;flex:1;}
 .search-bar input:focus{border:none;background:transparent;}
+
+/* FILTERS */
 .filters{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
 .filters::-webkit-scrollbar{display:none;}
 .filter-chip{padding:7px 14px;border-radius:20px;border:1.5px solid #e0e0e0;cursor:pointer;font-size:13px;white-space:nowrap;background:#fff;transition:all .2s;flex-shrink:0;}
 .filter-chip.active{background:#6c5ce7;color:#fff;border-color:#6c5ce7;}
+
+/* SCROLL ROW */
 .scroll-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;}
 .scroll-row::-webkit-scrollbar{display:none;}
 .scroll-card{min-width:190px;background:#fff;border-radius:16px;padding:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);flex-shrink:0;cursor:pointer;transition:transform .15s;}
 .scroll-card:active{transform:scale(.97);}
-.chat-messages{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:340px;overflow-y:auto;}
+
+/* CHAT */
+.chat-messages{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:400px;overflow-y:auto;}
 .msg-wrap{display:flex;flex-direction:column;}
 .msg-wrap.me{align-items:flex-end;}
 .msg-wrap.them{align-items:flex-start;}
@@ -107,29 +221,45 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .chat-input-row{display:flex;gap:8px;align-items:center;margin-top:4px;}
 .chat-input-row input{margin:0;flex:1;}
 .send-btn{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* TABS */
 .tabs{display:flex;border-bottom:2px solid #eee;margin-bottom:14px;}
 .tab{flex:1;text-align:center;padding:10px;cursor:pointer;font-size:14px;font-weight:700;color:#aaa;}
 .tab.active{color:#6c5ce7;border-bottom:2px solid #6c5ce7;margin-bottom:-2px;}
+
+/* PROFILE */
 .profile-stats{display:flex;border-top:1px solid #eee;border-bottom:1px solid #eee;margin:14px 0;}
 .profile-stat{flex:1;text-align:center;padding:14px 0;}
 .profile-stat .num{font-size:20px;font-weight:800;color:#222;}
 .profile-stat .lbl{font-size:12px;color:#888;}
+
+/* MATCH */
 .match-row{display:flex;align-items:center;gap:12px;padding:13px;background:#fafafa;border-radius:14px;margin-bottom:10px;}
 .compat-bar{height:6px;border-radius:3px;background:#eee;margin-top:4px;flex:1;}
 .compat-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#6c5ce7,#00b894);}
 .match-pct{font-weight:800;color:#6c5ce7;font-size:16px;margin-left:auto;}
+
+/* STARS */
 .stars{display:flex;gap:8px;font-size:36px;justify-content:center;margin:16px 0;}
 .star{cursor:pointer;color:#ddd;transition:color .2s;}
 .star.active{color:#f39c12;}
+
+/* NOTIFICHE */
 .notif-item{display:flex;gap:12px;align-items:flex-start;padding:13px;background:#fff;border-radius:14px;margin-bottom:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);}
 .notif-dot{width:10px;height:10px;border-radius:50%;background:#6c5ce7;margin-top:5px;flex-shrink:0;}
 .notif-dot.read{background:#ddd;}
+
+/* REPORT */
 .report-option{padding:13px;border-radius:12px;border:1.5px solid #eee;margin-bottom:8px;cursor:pointer;font-size:14px;transition:all .2s;}
 .report-option.selected{border-color:#ff4757;background:#fff5f5;color:#ff4757;}
+
+/* STATS ADMIN */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
 .stat-card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,.07);}
 .stat-num{font-size:22px;font-weight:800;color:#6c5ce7;}
 .stat-label{font-size:11px;color:#888;margin-top:2px;}
+
+/* AI */
 .ai-bubble{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;border-radius:20px 20px 20px 4px;padding:14px 16px;font-size:14px;line-height:1.55;margin-bottom:12px;}
 .ai-suggestion{background:#f8f7ff;border-radius:14px;padding:13px;margin-bottom:10px;border:1.5px solid #e8e4ff;cursor:pointer;transition:background .2s;}
 .ai-suggestion:hover{background:#f0eeff;}
@@ -137,91 +267,158 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
 .ai-dot:nth-child(2){animation-delay:.15s;}
 .ai-dot:nth-child(3){animation-delay:.3s;}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+
+/* DETAIL */
 .detail-hero{width:100%;height:180px;border-radius:16px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:60px;margin-bottom:14px;}
 .detail-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;}
 .detail-row .icon{font-size:18px;width:24px;flex-shrink:0;margin-top:1px;}
 .participants-row{display:flex;margin:10px 0;}
 .participant-av{width:32px;height:32px;border-radius:50%;border:2px solid #fff;margin-left:-8px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;}
 .participant-av:first-child{margin-left:0;}
+
+/* PROGRESS */
 .progress-bar{height:6px;background:#eee;border-radius:3px;margin-top:6px;}
 .progress-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#6c5ce7,#00b894);transition:width .4s;}
+
+/* VERIFIED */
 .verified-badge{display:inline-flex;align-items:center;gap:4px;background:#e8f8f5;color:#00897b;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;}
+
+/* TOAST */
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(50,50,50,.92);color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;z-index:9999;white-space:nowrap;pointer-events:none;animation:fadeInOut 2.8s forwards;}
 @keyframes fadeInOut{0%{opacity:0;transform:translateX(-50%) translateY(10px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}80%{opacity:1;}100%{opacity:0;}}
+
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
-.modal{background:#fff;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;}
+.modal{background:#fff;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;}
 .modal-handle{width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 16px;}
+
+/* LOADING */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;gap:12px;color:#888;}
 .spinner{width:36px;height:36px;border:3px solid #f0eeff;border-top:3px solid #6c5ce7;border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .hidden{display:none!important;}
 
-/* SPLASH */
-.splash{
-  position:fixed;inset:0;
-  background:linear-gradient(160deg,#6c5ce7 0%,#a29bfe 100%);
-  z-index:999;color:#fff;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:space-between;
-  padding:60px 24px 44px;
-  text-align:center;
+/* ══════════════════════════════════════
+   GRID EVENTI (desktop)
+══════════════════════════════════════ */
+.events-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET (≥ 768px)
+══════════════════════════════════════ */
+@media(min-width:768px){
+  .content{padding:28px 32px;}
+
+  .events-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .scroll-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    overflow-x:visible;
+  }
+  .scroll-card{min-width:unset;}
+
+  .modal{
+    border-radius:24px;
+    margin:auto;
+    max-width:600px;
+  }
+  .modal-overlay{align-items:center;}
+
+  .stat-grid{grid-template-columns:repeat(3,1fr);}
+
+  .detail-hero{height:240px;font-size:80px;}
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — DESKTOP (≥ 1024px)
+══════════════════════════════════════ */
+@media(min-width:1024px){
+
+  /* Mostra sidebar, nascondi navbar mobile */
+  .sidebar{display:block;}
+  .navbar{display:none!important;}
+
+  /* Header più largo */
+  .header{padding:14px 32px;}
+
+  .content{
+    padding:32px 40px;
+    max-width:900px;
+  }
+
+  .events-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  /* Scroll row diventa griglia */
+  .scroll-row{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  /* Form più comodi */
+  .form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .form-row label{margin-top:0;}
+
+  /* Chat più alta */
+  .chat-messages{max-height:500px;}
+
+  /* Cards profilo affiancate */
+  .profile-grid{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:20px;
+    align-items:start;
+  }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — LARGE DESKTOP (≥ 1400px)
+══════════════════════════════════════ */
+@media(min-width:1400px){
+  .events-grid{grid-template-columns:repeat(3,1fr);}
+  .scroll-row{grid-template-columns:repeat(5,1fr);}
+  .content{max-width:1100px;}
 }
 </style>
 </head>
 <body>
 
-<!-- SPLASH – contenuto statico, sempre visibile, no JS needed -->
+<!-- ══ SPLASH ══ -->
 <div class="splash" id="splash">
-
-  <!-- TOP: logo + titolo + subtitle -->
-  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
-    <div style="font-size:72px;line-height:1;">🎉</div>
-    <div style="font-size:36px;font-weight:800;letter-spacing:-.5px;">EventConnect</div>
-    <div style="font-size:16px;opacity:.88;line-height:1.5;">
-      Condividi Esperienze,<br>Crea Connessioni
-    </div>
+  <div>
+    <div class="splash-logo">🎉</div>
+    <div class="splash-title">EventConnect</div>
+    <div class="splash-sub">Condividi Esperienze,<br>Crea Connessioni</div>
   </div>
-
-  <!-- CENTRO: feature pills -->
-  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
-    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">🛡️ Sicuro e verificato</div>
-    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">🤝 Matching intelligente</div>
-    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">📍 Vicino a te</div>
-    <div style="background:rgba(255,255,255,.22);border-radius:20px;padding:8px 16px;font-size:13px;">🤖 AI Assistant</div>
+  <div class="splash-pills">
+    <div class="splash-pill">🛡️ Sicuro e verificato</div>
+    <div class="splash-pill">🤝 Matching intelligente</div>
+    <div class="splash-pill">📍 Vicino a te</div>
+    <div class="splash-pill">🤖 AI Assistant</div>
   </div>
-
-<!-- BASSO: 3 pulsanti -->
-<div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;">
-
-  <button id="btnRegister"
-    style="width:100%;padding:16px;border-radius:16px;border:none;
-           background:#fff;color:#6c5ce7;font-size:17px;font-weight:800;
-           cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,.18);">
-    🚀 Registrati – è gratis
-  </button>
-
-  <button id="btnLogin"
-    style="width:100%;padding:16px;border-radius:16px;
-           border:2px solid rgba(255,255,255,.75);
-           background:transparent;color:#fff;
-           font-size:17px;font-weight:700;cursor:pointer;">
-    Accedi
-  </button>
-
-  <button id="btnAdmin"
-    style="width:100%;padding:12px;border-radius:16px;border:none;
-           background:rgba(255,255,255,.18);color:#fff;
-           font-size:14px;cursor:pointer;">
-    🔐 Demo Admin
-  </button>
-
-  <div style="margin-top:8px;font-size:12px;opacity:.55;">
-    Vivi di più. Insieme. 🌟<br>Scopri. Condividi. Connettiti.
+  <div class="splash-btns">
+    <button id="btnRegister" class="splash-btn-primary">🚀 Registrati – è gratis</button>
+    <button id="btnLogin" class="splash-btn-secondary">Accedi</button>
+    <button id="btnAdmin" class="splash-btn-ghost">🔐 Demo Admin</button>
+    <div class="splash-footer">Vivi di più. Insieme. 🌟<br>Scopri. Condividi. Connettiti.</div>
   </div>
 </div>
-</div>
-<!-- APP SHELL -->
-<div class="app" id="appShell" style="display:none;">
+
+<!-- ══ APP SHELL ══ -->
+<div class="app" id="appShell">
+
+  <!-- HEADER -->
   <div class="header" id="appHeader">
     <div class="header-left">
       <span class="back-btn" id="backBtn" onclick="goBack()">‹</span>
@@ -230,7 +427,47 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
     </div>
     <div class="header-right" id="headerRight"></div>
   </div>
-  <div class="content" id="content"></div>
+
+  <!-- BODY (sidebar + content) -->
+  <div class="app-body">
+
+    <!-- SIDEBAR DESKTOP -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-item" onclick="navigate('home')" id="snav-home">
+        <span class="sidebar-icon">🏠</span> Home
+      </div>
+      <div class="sidebar-item" onclick="navigate('search')" id="snav-search">
+        <span class="sidebar-icon">🔍</span> Cerca
+      </div>
+      <div class="sidebar-item" onclick="navigate('chatList')" id="snav-chatList">
+        <span class="sidebar-icon">💬</span> Chat
+      </div>
+      <div class="sidebar-item" onclick="navigate('matchPeople')" id="snav-matchPeople">
+        <span class="sidebar-icon">🤝</span> Match
+      </div>
+      <div class="sidebar-item" onclick="navigate('aiAssistant')" id="snav-aiAssistant">
+        <span class="sidebar-icon">🤖</span> AI Assistant
+      </div>
+      <div class="sidebar-item" onclick="navigate('notifications')" id="snav-notifications">
+        <span class="sidebar-icon">🔔</span> Notifiche
+      </div>
+      <div class="sidebar-item" onclick="navigate('savedEvents')" id="snav-savedEvents">
+        <span class="sidebar-icon">🔖</span> Preferiti
+      </div>
+      <div class="sidebar-item" onclick="navigate('profile')" id="snav-profile">
+        <span class="sidebar-icon">👤</span> Profilo
+      </div>
+      <div class="sidebar-plus" onclick="navigate('create')">
+        <span style="font-size:20px">＋</span> Crea attività
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="content" id="content"></div>
+
+  </div><!-- fine app-body -->
+
+  <!-- NAVBAR MOBILE -->
   <div class="navbar" id="navbar" style="display:none;">
     <div class="nav-item" onclick="navigate('home')" id="nav-home">
       <span class="nav-icon">🏠</span><span>Home</span>
@@ -248,18 +485,16 @@ label{font-size:13px;color:#555;font-weight:600;margin-top:14px;display:block;}
       <span class="nav-icon">👤</span><span>Profilo</span>
     </div>
   </div>
-</div>
+
+</div><!-- fine appShell -->
 
 <script>
 /* ── SUPABASE ── */
 const SUPABASE_URL = 'https://sqevigimxneucauwljov.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxZXZpZ2lteG5ldWNhdXdsam92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDAyNjQsImV4cCI6MjA5NzM3NjI2NH0.0Eo-hIYVFYQJjyGh3viUTeymInTyqw6Ef7BF54uJOXU';
-
 if (!window._supabaseClient) {
   window._supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
-
-// ✅ Usa var invece di const — var non dà errore se dichiarata più volte
 var supabase = window._supabaseClient;
 
 /* ── STATE ── */
@@ -270,21 +505,12 @@ let userLocation=null,activeFilters={category:'',maxDistance:200};
 let savedEvents=[],blockedUsers=[],activeTab='chat';
 let events=[],selectedEmoji='🎉',thumbValue=null,repeatValue=null;
 let notifications=[{id:1,text:'Benvenuto su EventConnect! 🎉',time:'ora',read:false,icon:'🎉'}];
-
 const allInterests=[
   {icon:'🎵',label:'Musica'},{icon:'🎨',label:'Arte'},{icon:'⚽',label:'Sport'},
   {icon:'🥾',label:'Trekking'},{icon:'🎬',label:'Cinema'},{icon:'🍕',label:'Cibo'},
   {icon:'✈️',label:'Viaggi'},{icon:'💻',label:'Tecnologia'},{icon:'🎭',label:'Teatro'},
   {icon:'📚',label:'Libri'},{icon:'🧘',label:'Benessere'},{icon:'🎉',label:'Altro'}
 ];
-
-/* ── SPLASH ENTRY POINT ── */
-function splashGo(dest){
-  document.getElementById('splash').style.display='none';
-  document.getElementById('appShell').style.display='flex';
-  if(dest==='admin'){adminLogin();}
-  else{navigate(dest);}
-}
 
 /* ── INIT ── */
 window.onload=async function(){
@@ -300,7 +526,6 @@ window.onload=async function(){
         userInterests=(ui||[]).map(x=>x.interests?.name).filter(Boolean);
         currentUser.interests=userInterests;
         await loadEvents();
-        // Già loggato: salta splash e vai a home
         document.getElementById('splash').style.display='none';
         document.getElementById('appShell').style.display='flex';
         navigate('home');
@@ -308,6 +533,25 @@ window.onload=async function(){
     }
   }catch(e){console.log('No session',e);}
 };
+
+/* ── SPLASH BUTTONS ── */
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('btnRegister').addEventListener('click', function() {
+    document.getElementById('splash').style.display='none';
+    document.getElementById('appShell').style.display='flex';
+    navigate('register');
+  });
+  document.getElementById('btnLogin').addEventListener('click', function() {
+    document.getElementById('splash').style.display='none';
+    document.getElementById('appShell').style.display='flex';
+    navigate('login');
+  });
+  document.getElementById('btnAdmin').addEventListener('click', function() {
+    document.getElementById('splash').style.display='none';
+    document.getElementById('appShell').style.display='flex';
+    adminLogin();
+  });
+});
 
 /* ── GEO ── */
 function haversine(a,b,c,d){const R=6371,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180,x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return(R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))).toFixed(1);}
@@ -343,10 +587,10 @@ function setupGeoAutocomplete(iId,lId,cb){
 
 /* ── AI ── */
 const aiR=[
-  {kw:['jazz','musica','concerto'],reply:'🎷 Ho trovato eventi musicali! Dai un\'occhiata ai concerti.',suggest:'Musica'},
-  {kw:['trekking','montagna','escursione'],reply:'🥾 Ci sono uscite trekking questo weekend!',suggest:'Trekking'},
-  {kw:['arte','mostra','museo'],reply:'🖼️ Ho trovato mostre ed eventi artistici!',suggest:'Arte'},
-  {kw:['aperitivo','cibo','mangiare'],reply:'🍹 Ci sono aperitivi ed eventi food!',suggest:'Food'},
+  {kw:['jazz','musica','concerto'],reply:'🎷 Ho trovato eventi musicali!',suggest:'Musica'},
+  {kw:['trekking','montagna','escursione'],reply:'🥾 Ci sono uscite trekking!',suggest:'Trekking'},
+  {kw:['arte','mostra','museo'],reply:'🖼️ Ho trovato mostre artistiche!',suggest:'Arte'},
+  {kw:['aperitivo','cibo','mangiare'],reply:'🍹 Ci sono eventi food!',suggest:'Food'},
   {kw:['sport','calcio','kayak'],reply:'⚽ Ho trovato eventi sportivi!',suggest:'Sport'},
   {kw:['persone','conoscere','match'],reply:'🤝 Vuoi vedere le persone compatibili con te?'},
   {kw:['vicino','zona','distanza'],reply:'📍 Attiva la posizione per eventi vicini a te!'},
@@ -371,24 +615,46 @@ function navigate(page,param){
   currentPage=page;
   if(param!==undefined)currentEventId=param;
   updateShell(page);
-  const map={home:drawHome,search:drawSearch,create:drawCreate,chatList:drawChatList,profile:drawProfile,onboarding:drawOnboarding,login:drawLogin,register:drawRegister,eventDetail:()=>drawEventDetail(currentEventId),eventGroup:()=>drawEventGroup(currentEventId),aiAssistant:drawAI,matchPeople:drawMatchPeople,feedback:()=>drawFeedback(currentEventId),notifications:drawNotifications,admin:drawAdmin,report:()=>drawReport(),savedEvents:drawSavedEvents};
+  const map={
+    home:drawHome,search:drawSearch,create:drawCreate,chatList:drawChatList,
+    profile:drawProfile,onboarding:drawOnboarding,login:drawLogin,register:drawRegister,
+    eventDetail:()=>drawEventDetail(currentEventId),eventGroup:()=>drawEventGroup(currentEventId),
+    aiAssistant:drawAI,matchPeople:drawMatchPeople,feedback:()=>drawFeedback(currentEventId),
+    notifications:drawNotifications,admin:drawAdmin,report:()=>drawReport(),savedEvents:drawSavedEvents
+  };
   if(map[page])map[page]();
   document.getElementById('content').scrollTop=0;
+  window.scrollTo(0,0);
 }
+
 function goBack(){if(navHistory.length)navigate(navHistory.pop());}
 
 function updateShell(page){
   const noNavPages=['login','register','onboarding'];
-  document.getElementById('navbar').style.display=noNavPages.includes(page)?'none':'flex';
+  const showNav=!noNavPages.includes(page);
+
+  /* Navbar mobile */
+  document.getElementById('navbar').style.display=showNav?'flex':'none';
+  /* Sidebar desktop */
+  document.getElementById('sidebar').style.display=showNav?'':'none';
+
+  /* Active nav mobile */
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const nm={home:'nav-home',search:'nav-search',create:'nav-create',chatList:'nav-chatList',profile:'nav-profile'};
   if(nm[page])document.getElementById(nm[page])?.classList.add('active');
+
+  /* Active sidebar desktop */
+  document.querySelectorAll('.sidebar-item').forEach(n=>n.classList.remove('active'));
+  const smap={home:'snav-home',search:'snav-search',chatList:'snav-chatList',matchPeople:'snav-matchPeople',aiAssistant:'snav-aiAssistant',notifications:'snav-notifications',savedEvents:'snav-savedEvents',profile:'snav-profile'};
+  if(smap[page])document.getElementById(smap[page])?.classList.add('active');
+
   const logo=document.getElementById('headerLogo');
   const title=document.getElementById('headerTitle');
   const back=document.getElementById('backBtn');
   const hr=document.getElementById('headerRight');
   const noBack=['home','search','create','chatList','profile','login','register','onboarding'];
   back.style.display=noBack.includes(page)?'none':'block';
+
   if(page==='home'){
     logo.classList.remove('hidden');title.classList.add('hidden');
     hr.innerHTML='<span class="header-icon" onclick="navigate(\'savedEvents\')">🔖</span><span class="header-icon" onclick="navigate(\'notifications\')" style="position:relative">🔔<span class="badge-dot" style="'+(notifications.some(n=>!n.read)?'':'display:none')+'"></span></span>';
@@ -411,21 +677,23 @@ async function loadEvents(){
 /* ── LOGIN ── */
 function drawLogin(){
   document.getElementById('content').innerHTML=`
-    <div style="text-align:center;padding:30px 0 20px">
-      <div style="font-size:64px">🎉</div>
-      <h2 style="font-size:24px;font-weight:800;margin:10px 0 6px">EventConnect</h2>
-      <p style="color:#888;font-size:14px">Condividi Esperienze, Crea Connessioni</p>
-    </div>
-    <label>Email</label>
-    <input id="loginEmail" type="email" placeholder="tua@email.com">
-    <label>Password</label>
-    <input id="loginPwd" type="password" placeholder="••••••••">
-    <div class="btn" onclick="doLogin()" style="margin-top:20px">Accedi</div>
-    <div class="btn secondary" onclick="navigate('register')" style="margin-top:8px">Non hai un account? Registrati</div>
-    <div style="text-align:center;margin:16px 0;color:#aaa;font-size:13px">oppure</div>
-    <div class="btn outline" onclick="googleLogin()">🔑 Continua con Google</div>
-    <div style="text-align:center;margin-top:16px">
-      <small style="color:#6c5ce7;cursor:pointer" onclick="adminLogin()">🔐 Accesso Admin (demo)</small>
+    <div style="max-width:480px;margin:0 auto;">
+      <div style="text-align:center;padding:30px 0 20px">
+        <div style="font-size:64px">🎉</div>
+        <h2 style="font-size:24px;font-weight:800;margin:10px 0 6px">EventConnect</h2>
+        <p style="color:#888;font-size:14px">Condividi Esperienze, Crea Connessioni</p>
+      </div>
+      <label>Email</label>
+      <input id="loginEmail" type="email" placeholder="tua@email.com">
+      <label>Password</label>
+      <input id="loginPwd" type="password" placeholder="••••••••">
+      <div class="btn" onclick="doLogin()" style="margin-top:20px">Accedi</div>
+      <div class="btn secondary" onclick="navigate('register')" style="margin-top:8px">Non hai un account? Registrati</div>
+      <div style="text-align:center;margin:16px 0;color:#aaa;font-size:13px">oppure</div>
+      <div class="btn outline" onclick="googleLogin()">🔑 Continua con Google</div>
+      <div style="text-align:center;margin-top:16px">
+        <small style="color:#6c5ce7;cursor:pointer" onclick="adminLogin()">🔐 Accesso Admin (demo)</small>
+      </div>
     </div>`;
 }
 
@@ -469,26 +737,34 @@ async function doLogout(){
 /* ── REGISTER ── */
 function drawRegister(){
   document.getElementById('content').innerHTML=`
-    <label>Nome *</label>
-    <input id="regName" placeholder="Il tuo nome">
-    <label>Email *</label>
-    <input id="regEmail" type="email" placeholder="tua@email.com">
-    <label>Password *</label>
-    <input id="regPwd" type="password" placeholder="Almeno 6 caratteri">
-    <label>Data di nascita *</label>
-    <input id="regBirth" type="date">
-    <label>Città *</label>
-    <div class="autocomplete-wrap">
-      <input id="regCity" placeholder="Es. Milano" autocomplete="off">
-      <div class="autocomplete-list" id="regCityList" style="display:none"></div>
-    </div>
-    <label>Bio (opzionale)</label>
-    <textarea id="regBio" placeholder="Raccontati..." rows="2"></textarea>
-    <label>Instagram (opzionale)</label>
-    <input id="regIG" placeholder="@username">
-    <div class="btn" onclick="doRegister()" style="margin-top:20px">Registrati</div>
-    <div class="btn outline" onclick="googleLogin()" style="margin-top:8px">🔑 Google</div>
-    <div class="btn secondary" onclick="navigate('login')" style="margin-top:8px">Hai già un account? Accedi</div>`;
+    <div style="max-width:600px;margin:0 auto;">
+      <label>Nome *</label>
+      <input id="regName" placeholder="Il tuo nome">
+      <label>Email *</label>
+      <input id="regEmail" type="email" placeholder="tua@email.com">
+      <label>Password *</label>
+      <input id="regPwd" type="password" placeholder="Almeno 6 caratteri">
+      <div class="form-row">
+        <div>
+          <label>Data di nascita *</label>
+          <input id="regBirth" type="date">
+        </div>
+        <div>
+          <label>Città *</label>
+          <div class="autocomplete-wrap">
+            <input id="regCity" placeholder="Es. Milano" autocomplete="off">
+            <div class="autocomplete-list" id="regCityList" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+      <label>Bio (opzionale)</label>
+      <textarea id="regBio" placeholder="Raccontati..." rows="2"></textarea>
+      <label>Instagram (opzionale)</label>
+      <input id="regIG" placeholder="@username">
+      <div class="btn" onclick="doRegister()" style="margin-top:20px">Registrati</div>
+      <div class="btn outline" onclick="googleLogin()" style="margin-top:8px">🔑 Google</div>
+      <div class="btn secondary" onclick="navigate('login')" style="margin-top:8px">Hai già un account? Accedi</div>
+    </div>`;
   setupGeoAutocomplete('regCity','regCityList',item=>{
     document.getElementById('regCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];
   });
@@ -514,11 +790,11 @@ async function doRegister(){
 
 /* ── ONBOARDING ── */
 function drawOnboarding(){
-  let html='<div style="text-align:center;padding:20px 0 16px"><h2 style="font-size:22px;font-weight:800">Quali sono i tuoi interessi?</h2><p style="color:#888;font-size:14px;margin-top:6px">Seleziona almeno 3</p></div><div class="chips" id="interestChips">';
+  let html='<div style="max-width:600px;margin:0 auto;"><div style="text-align:center;padding:20px 0 16px"><h2 style="font-size:22px;font-weight:800">Quali sono i tuoi interessi?</h2><p style="color:#888;font-size:14px;margin-top:6px">Seleziona almeno 3</p></div><div class="chips" id="interestChips">';
   allInterests.forEach(i=>{
     html+='<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>';
   });
-  html+='</div><div style="margin-top:24px"><div class="btn" onclick="finishOnboarding()">Continua</div><div class="btn secondary" style="margin-top:8px" onclick="navigate(\'home\')">Salta per ora</div></div>';
+  html+='</div><div style="margin-top:24px"><div class="btn" onclick="finishOnboarding()">Continua</div><div class="btn secondary" style="margin-top:8px" onclick="navigate(\'home\')">Salta per ora</div></div></div>';
   document.getElementById('content').innerHTML=html;
 }
 
@@ -547,48 +823,58 @@ async function drawHome(){
   await loadEvents();
   const user=currentUser||{name:'Utente',completeness:40,interests:[]};
   const fn=user.name?.split(' ')[0]||'Utente';
-  const suggested=events.filter(e=>(user.interests||[]).some(t=>e.category===t)).slice(0,5);
-  const rest=events.filter(e=>!suggested.includes(e)).slice(0,4);
-  let html='<div style="margin-bottom:16px"><div style="font-size:22px;font-weight:800">Ciao '+fn+'! 👋</div><div style="font-size:14px;color:#888;margin-top:2px">Ecco cosa abbiamo per te</div></div>';
+  const suggested=events.filter(e=>(user.interests||[]).some(t=>e.category===t)).slice(0,8);
+  const rest=events.filter(e=>!suggested.includes(e)).slice(0,6);
+
+  let html='<div style="margin-bottom:20px"><div style="font-size:24px;font-weight:800">Ciao '+fn+'! 👋</div><div style="font-size:14px;color:#888;margin-top:4px">Ecco cosa abbiamo per te</div></div>';
 
   if((user.completeness||40)<80){
-    html+='<div class="card" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer" onclick="navigate(\'profile\')"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">🤳</div><div style="flex:1"><div style="font-weight:700">Completa il tuo profilo</div><div style="font-size:13px;opacity:.85">Completato al '+(user.completeness||40)+'%</div><div class="progress-bar" style="margin-top:6px;background:rgba(255,255,255,.3)"><div class="progress-fill" style="width:'+(user.completeness||40)+'%;background:#fff"></div></div></div></div></div>';
+    html+='<div class="card" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer;margin-bottom:20px" onclick="navigate(\'profile\')"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">🤳</div><div style="flex:1"><div style="font-weight:700">Completa il tuo profilo</div><div style="font-size:13px;opacity:.85">Completato al '+(user.completeness||40)+'%</div><div class="progress-bar" style="margin-top:6px;background:rgba(255,255,255,.3)"><div class="progress-fill" style="width:'+(user.completeness||40)+'%;background:#fff"></div></div></div></div></div>';
   }
 
   html+='<div class="section-header"><span class="section-title">Consigliati per te</span><span class="section-link" onclick="navigate(\'search\')">Vedi tutti</span></div>';
+  const toShow=suggested.length?suggested:events.slice(0,8);
 
-  const toShow=suggested.length?suggested:events.slice(0,5);
   if(!toShow.length){
-    html+='<div style="text-align:center;color:#aaa;padding:20px">Nessun evento.<br><div class="btn" onclick="navigate(\'create\')" style="margin-top:10px">+ Crea il primo evento</div></div>';
+    html+='<div style="text-align:center;color:#aaa;padding:30px">Nessun evento.<br><div class="btn" onclick="navigate(\'create\')" style="margin-top:10px;max-width:200px;margin-left:auto;margin-right:auto">+ Crea il primo evento</div></div>';
   } else {
+    /* Su desktop usa griglia, su mobile usa scroll row */
     html+='<div class="scroll-row">';
     toShow.forEach(e=>{
       const dl=distLabel(e);
-      html+='<div class="scroll-card" onclick="navigate(\'eventDetail\','+e.id+')"><div style="font-size:42px;text-align:center;padding:8px 0">'+(e.emoji||'🎉')+'</div><div style="font-weight:700;font-size:14px;margin-bottom:4px">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div>'+(dl?'<div style="font-size:11px;color:#6c5ce7;margin-top:3px">📍'+dl+'</div>':'')+(e.price===0?'<div style="font-size:11px;color:#00b894;margin-top:3px">✅ Gratuito</div>':'<div style="font-size:11px;color:#e67e22;margin-top:3px">💰 €'+e.price+'</div>')+'</div>';
+      html+='<div class="scroll-card" onclick="navigate(\'eventDetail\','+e.id+')"><div style="font-size:42px;text-align:center;padding:8px 0">'+(e.emoji||'🎉')+'</div><div style="font-weight:700;font-size:14px;margin-bottom:4px">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div>'+(dl?'<div style="font-size:11px;color:#6c5ce7;margin-top:3px">📍 '+dl+'</div>':'')+(e.price===0?'<div style="font-size:11px;color:#00b894;margin-top:3px">✅ Gratuito</div>':'<div style="font-size:11px;color:#e67e22;margin-top:3px">💰 €'+e.price+'</div>')+'</div>';
     });
     html+='</div>';
   }
 
-  html+='<div class="section-header" style="margin-top:18px"><span class="section-title">Tutti gli eventi</span></div>';
-  const toShow2=rest.length?rest:events.slice(0,4);
+  html+='<div class="section-header" style="margin-top:24px"><span class="section-title">Tutti gli eventi</span></div>';
+  html+='<div class="events-grid">';
+  const toShow2=rest.length?rest:events.slice(0,6);
   toShow2.forEach(e=>{
     const dl=distLabel(e);
-    html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:38px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px">📍'+dl+'</span>':'')+'</div><div class="card-meta">'+(e.price===0?'✅ Gratuito':'💰 €'+e.price)+'</div></div><div style="font-size:22px;color:#ddd">›</div></div></div>';
+    html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:38px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px">📍 '+dl+'</span>':'')+'</div><div class="card-meta">'+(e.price===0?'✅ Gratuito':'💰 €'+e.price)+'</div></div><div style="font-size:22px;color:#ddd">›</div></div></div>';
   });
+  html+='</div>';
 
-  html+='<div class="card" onclick="navigate(\'aiAssistant\')" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer;margin-top:4px"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:32px">🤖</div><div><div style="font-weight:700">AI Assistant</div><div style="font-size:13px;opacity:.85">Suggerimenti personalizzati</div></div><div style="margin-left:auto;font-size:22px">›</div></div></div>';
-  html+='<div class="btn" onclick="navigate(\'create\')" style="margin-top:8px">+ Crea una nuova attività</div>';
+  html+='<div class="card" onclick="navigate(\'aiAssistant\')" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;cursor:pointer;margin-top:8px"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:32px">🤖</div><div><div style="font-weight:700">AI Assistant</div><div style="font-size:13px;opacity:.85">Suggerimenti personalizzati</div></div><div style="margin-left:auto;font-size:22px">›</div></div></div>';
+  html+='<div class="btn" onclick="navigate(\'create\')" style="margin-top:12px">+ Crea una nuova attività</div>';
+
   document.getElementById('content').innerHTML=html;
 }
 
 /* ── SEARCH ── */
 function drawSearch(){
   let html='<div class="search-bar"><span>🔍</span><input id="searchInput" placeholder="Cerca eventi..." oninput="filterEvents()"></div>';
-  html+=userLocation?'<div style="background:#f0eeff;border-radius:12px;padding:9px 14px;font-size:13px;color:#6c5ce7;margin-bottom:12px;display:flex;align-items:center;gap:8px"><span>📍</span><span>Posizione rilevata</span><span style="margin-left:auto;cursor:pointer;color:#aaa" onclick="userLocation=null;drawSearch()">✕</span></div>':'<div style="background:#fff3e0;border-radius:12px;padding:9px 14px;font-size:13px;color:#e65100;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:8px" onclick="enableGeo()"><span>📍</span><span>Attiva posizione per distanze</span></div>';
+  html+=userLocation
+    ?'<div style="background:#f0eeff;border-radius:12px;padding:9px 14px;font-size:13px;color:#6c5ce7;margin-bottom:12px;display:flex;align-items:center;gap:8px"><span>📍</span><span>Posizione rilevata</span><span style="margin-left:auto;cursor:pointer;color:#aaa" onclick="userLocation=null;drawSearch()">✕</span></div>'
+    :'<div style="background:#fff3e0;border-radius:12px;padding:9px 14px;font-size:13px;color:#e65100;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:8px" onclick="enableGeo()"><span>📍</span><span>Attiva posizione per distanze</span></div>';
   html+='<div class="filters" id="catFilters">'+['Tutti','Musica','Arte','Sport','Trekking','Food','Cinema','Teatro','Viaggi'].map(c=>'<div class="filter-chip '+((!activeFilters.category&&c==='Tutti')||activeFilters.category===c?'active':'')+'" onclick="setCatFilter(\''+(c==='Tutti'?'':c)+'\',this)">'+c+'</div>').join('')+'</div>';
-  html+='<div style="display:flex;gap:8px;margin-bottom:10px"><div class="autocomplete-wrap" style="flex:1"><input id="citySearchInput" placeholder="📍 Città..." oninput="filterEvents()" autocomplete="off"><div class="autocomplete-list" id="citySearchList" style="display:none"></div></div><input id="dateSearchInput" type="date" onchange="filterEvents()" style="flex:1;margin-top:0"></div>';
-  if(userLocation){html+='<div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700">📍 Distanza max</span><span id="distVal" style="font-size:13px;color:#6c5ce7;font-weight:700">'+(activeFilters.maxDistance>=200?'Tutte':activeFilters.maxDistance+' km')+'</span></div><input type="range" id="distSlider" min="0" max="200" step="5" value="'+activeFilters.maxDistance+'" oninput="onDistSlider(this.value)" style="width:100%;accent-color:#6c5ce7;margin:0"></div>';}
-  html+='<div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><span style="font-size:13px;color:#888;white-space:nowrap">Ordina:</span><select id="sortSel" onchange="filterEvents()" style="margin-top:0;flex:1"><option value="default">Rilevanza</option>'+(userLocation?'<option value="distance">📍 Distanza</option>':'')+'<option value="price">💰 Prezzo</option></select></div><div id="searchResults"></div>';
+  html+='<div class="form-row" style="margin-bottom:10px"><div class="autocomplete-wrap"><input id="citySearchInput" placeholder="📍 Città..." oninput="filterEvents()" autocomplete="off" style="margin-top:0"><div class="autocomplete-list" id="citySearchList" style="display:none"></div></div><input id="dateSearchInput" type="date" onchange="filterEvents()" style="margin-top:0"></div>';
+  if(userLocation){
+    html+='<div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 8px rgba(0,0,0,.06)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700">📍 Distanza max</span><span id="distVal" style="font-size:13px;color:#6c5ce7;font-weight:700">'+(activeFilters.maxDistance>=200?'Tutte':activeFilters.maxDistance+' km')+'</span></div><input type="range" id="distSlider" min="0" max="200" step="5" value="'+activeFilters.maxDistance+'" oninput="onDistSlider(this.value)" style="width:100%;accent-color:#6c5ce7;margin:0"></div>';
+  }
+  html+='<div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><span style="font-size:13px;color:#888;white-space:nowrap">Ordina:</span><select id="sortSel" onchange="filterEvents()" style="margin-top:0;flex:1"><option value="default">Rilevanza</option>'+(userLocation?'<option value="distance">📍 Distanza</option>':'')+'<option value="price">💰 Prezzo</option></select></div>';
+  html+='<div id="searchResults" class="events-grid"></div>';
   document.getElementById('content').innerHTML=html;
   setupGeoAutocomplete('citySearchInput','citySearchList',item=>{document.getElementById('citySearchInput').value=item.address?.city||item.display_name.split(',')[0];filterEvents();});
   filterEvents();
@@ -613,10 +899,10 @@ function filterEvents(){
   if(sort==='distance'&&userLocation)filtered.sort((a,b)=>parseFloat(haversine(userLocation.lat,userLocation.lng,a.latitude,a.longitude))-parseFloat(haversine(userLocation.lat,userLocation.lng,b.latitude,b.longitude)));
   else if(sort==='price')filtered.sort((a,b)=>a.price-b.price);
   let html='';
-  if(!filtered.length)html='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento trovato</div>';
+  if(!filtered.length)html='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun evento trovato</div>';
   filtered.forEach(e=>{
     const dl=distLabel(e);
-    html+='<div class="card" style="cursor:pointer" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:40px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px;font-weight:700">📍'+dl+'</span>':'')+'</div>'+(e.price===0?'<div class="card-meta" style="color:#00b894">✅ Gratuito</div>':'<div class="card-meta" style="color:#e67e22">💰 €'+e.price+'</div>')+'</div></div></div>';
+    html+='<div class="card" style="cursor:pointer" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:40px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+(dl?' <span style="background:#f0eeff;color:#6c5ce7;border-radius:8px;padding:1px 6px;font-size:11px;font-weight:700">📍 '+dl+'</span>':'')+'</div>'+(e.price===0?'<div class="card-meta" style="color:#00b894">✅ Gratuito</div>':'<div class="card-meta" style="color:#e67e22">💰 €'+e.price+'</div>')+'</div></div></div>';
   });
   document.getElementById('searchResults').innerHTML=html;
 }
@@ -624,9 +910,10 @@ function filterEvents(){
 /* ── SAVED EVENTS ── */
 function drawSavedEvents(){
   const saved=events.filter(e=>savedEvents.includes(e.id));
-  let html='<div class="section-title" style="margin-bottom:14px">I tuoi preferiti 🔖</div>';
-  if(!saved.length)html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun evento salvato.<br>Premi 🔖!</div>';
+  let html='<div class="section-title" style="margin-bottom:14px">I tuoi preferiti 🔖</div><div class="events-grid">';
+  if(!saved.length)html+='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun evento salvato.<br>Premi 🔖!</div>';
   saved.forEach(e=>{html+='<div class="card" onclick="navigate(\'eventDetail\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div><div class="card-title">'+e.title+'</div><div class="card-meta">📍 '+(e.location||'')+'</div></div></div></div>';});
+  html+='</div>';
   document.getElementById('content').innerHTML=html;
 }
 function toggleSave(id){if(savedEvents.includes(id)){savedEvents=savedEvents.filter(i=>i!==id);toast('Rimosso dai preferiti');}else{savedEvents.push(id);toast('🔖 Salvato!');}}
@@ -644,7 +931,8 @@ async function drawEventDetail(eventId){
   }
   const dl=distLabel(e);
   const isSaved=savedEvents.includes(e.id);
-  let html='<div class="detail-hero">'+(e.emoji||'🎉')+'</div>';
+  let html='<div style="max-width:700px;margin:0 auto;">';
+  html+='<div class="detail-hero">'+(e.emoji||'🎉')+'</div>';
   html+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px"><div><span class="card-tag tag-'+(e.category||'altro').toLowerCase()+'">'+(e.category||'Altro')+'</span><div class="card-title" style="font-size:20px">'+e.title+'</div></div><span style="font-size:24px;cursor:pointer" onclick="shareEvent('+e.id+')">⬆️</span></div>';
   html+='<div class="detail-row"><span class="icon">📍</span><div>'+(e.location||'')+(e.address?'<br><span style="color:#888;font-size:13px">'+e.address+'</span>':'')+(dl?'<br><span style="color:#6c5ce7;font-size:12px;font-weight:700">📍 '+dl+' da te</span>':'')+'</div></div>';
   if(e.date_time)html+='<div class="detail-row"><span class="icon">📅</span>'+new Date(e.date_time).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+'</div>';
@@ -662,6 +950,7 @@ async function drawEventDetail(eventId){
     html+='<div class="btn secondary" onclick="toggleSave('+e.id+')" style="margin-top:8px">🔖 '+(isSaved?'Salvato ✓':'Mi interessa')+'</div>';
   }
   html+='<div style="margin-top:16px;text-align:center"><span style="color:#ff4757;font-size:13px;cursor:pointer" onclick="navigate(\'report\','+e.id+')">🚩 Segnala evento</span></div>';
+  html+='</div>';
   document.getElementById('content').innerHTML=html;
 }
 
@@ -673,11 +962,13 @@ async function joinEvent(id){
   notifications.unshift({id:Date.now(),text:'Hai aderito a un evento!',time:'ora',read:false,icon:'✅'});
   drawEventDetail(id);
 }
+
 async function leaveEvent(id){
   const {error}=await supabase.from('event_participants').delete().eq('event_id',id).eq('user_id',currentUser.id);
   if(error){toast('❌ '+error.message);return;}
   toast('👋 Hai abbandonato l\'evento');navigate('home');
 }
+
 function shareEvent(id){
   const e=events.find(ev=>ev.id===id);
   if(navigator.share)navigator.share({title:e?.title||'EventConnect',text:'Vieni a questo evento!',url:window.location.href});
@@ -689,26 +980,46 @@ function drawCreate(){
   if(!isLoggedIn){toast('⚠️ Devi essere loggato');navigate('login');return;}
   selectedEmoji='🎉';
   document.getElementById('content').innerHTML=`
-    <div style="text-align:center;padding:10px 0 16px">
-      <div id="emojiPick" style="width:80px;height:80px;border-radius:18px;background:#f0eeff;margin:auto;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px dashed #6c5ce7" onclick="pickEmoji()">🎉</div>
-      <div style="font-size:13px;color:#888;margin-top:6px">Tocca per scegliere emoji</div>
-    </div>
-    <label>Titolo *</label><input id="cTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
-    <label>Descrizione *</label><textarea id="cDesc" placeholder="Descrivi l'esperienza..." rows="3"></textarea>
-    <label>Categoria *</label>
-    <select id="cCat"><option value="">Seleziona...</option><option>Musica</option><option>Arte</option><option>Sport</option><option>Trekking</option><option>Food</option><option>Cinema</option><option>Teatro</option><option>Viaggi</option><option>Tecnologia</option><option>Benessere</option><option>Altro</option></select>
-    <label>Data e ora *</label><input id="cDate" type="datetime-local">
-    <label>Città *</label>
-    <div class="autocomplete-wrap"><input id="cCity" placeholder="Es. Milano" autocomplete="off"><div class="autocomplete-list" id="cCityList" style="display:none"></div></div>
-    <label>Indirizzo *</label>
-    <div class="autocomplete-wrap"><input id="cAddr" placeholder="Es. Via Borsieri 37, Milano" autocomplete="off"><div class="autocomplete-list" id="cAddrList" style="display:none"></div></div>
-    <div id="coordsOk" style="font-size:12px;color:#00b894;margin-top:4px;display:none">✅ Coordinate rilevate</div>
-    <div id="cLat" style="display:none"></div><div id="cLng" style="display:none"></div>
-    <label>Max partecipanti *</label><input id="cMax" type="number" placeholder="Es. 10" min="2" max="100">
-    <label>Prezzo (€)</label><input id="cPrice" type="number" placeholder="0" min="0" step="0.5" value="0">
-    <label>Link esterno (opzionale)</label><input id="cLink" type="url" placeholder="https://...">
-    <div class="btn" onclick="submitCreate()" style="margin-top:20px">🎉 Crea attività</div>
-    <div class="btn secondary" onclick="navigate('home')" style="margin-top:8px">Annulla</div>`;
+    <div style="max-width:700px;margin:0 auto;">
+      <div style="text-align:center;padding:10px 0 16px">
+        <div id="emojiPick" style="width:80px;height:80px;border-radius:18px;background:#f0eeff;margin:auto;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px dashed #6c5ce7" onclick="pickEmoji()">🎉</div>
+        <div style="font-size:13px;color:#888;margin-top:6px">Tocca per scegliere emoji</div>
+      </div>
+      <label>Titolo *</label><input id="cTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
+      <label>Descrizione *</label><textarea id="cDesc" placeholder="Descrivi l'esperienza..." rows="3"></textarea>
+      <div class="form-row">
+        <div>
+          <label>Categoria *</label>
+          <select id="cCat"><option value="">Seleziona...</option><option>Musica</option><option>Arte</option><option>Sport</option><option>Trekking</option><option>Food</option><option>Cinema</option><option>Teatro</option><option>Viaggi</option><option>Tecnologia</option><option>Benessere</option><option>Altro</option></select>
+        </div>
+        <div>
+          <label>Data e ora *</label><input id="cDate" type="datetime-local">
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>Città *</label>
+          <div class="autocomplete-wrap"><input id="cCity" placeholder="Es. Milano" autocomplete="off"><div class="autocomplete-list" id="cCityList" style="display:none"></div></div>
+        </div>
+        <div>
+          <label>Max partecipanti *</label><input id="cMax" type="number" placeholder="Es. 10" min="2" max="100">
+        </div>
+      </div>
+      <label>Indirizzo *</label>
+      <div class="autocomplete-wrap"><input id="cAddr" placeholder="Es. Via Borsieri 37, Milano" autocomplete="off"><div class="autocomplete-list" id="cAddrList" style="display:none"></div></div>
+      <div id="coordsOk" style="font-size:12px;color:#00b894;margin-top:4px;display:none">✅ Coordinate rilevate</div>
+      <div id="cLat" style="display:none"></div><div id="cLng" style="display:none"></div>
+      <div class="form-row">
+        <div>
+          <label>Prezzo (€)</label><input id="cPrice" type="number" placeholder="0" min="0" step="0.5" value="0">
+        </div>
+        <div>
+          <label>Link esterno (opzionale)</label><input id="cLink" type="url" placeholder="https://...">
+        </div>
+      </div>
+      <div class="btn" onclick="submitCreate()" style="margin-top:20px">🎉 Crea attività</div>
+      <div class="btn secondary" onclick="navigate('home')" style="margin-top:8px">Annulla</div>
+    </div>`;
   setupGeoAutocomplete('cCity','cCityList',item=>{document.getElementById('cCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
   setupGeoAutocomplete('cAddr','cAddrList',item=>{document.getElementById('cLat').textContent=item.lat;document.getElementById('cLng').textContent=item.lon;document.getElementById('coordsOk').style.display='block';});
 }
@@ -753,9 +1064,10 @@ async function drawChatList(){
   const ids=(myParts||[]).map(p=>p.event_id);
   let myEvents=[];
   if(ids.length){const {data}=await supabase.from('events').select('*').in('id',ids);myEvents=data||[];}
-  let html='<div class="section-title" style="margin-bottom:14px">Le tue chat</div>';
-  if(!myEvents.length)html+='<div style="text-align:center;color:#aaa;padding:40px">Nessun gruppo ancora.<br><div class="btn" onclick="navigate(\'search\')" style="margin-top:10px">Esplora eventi</div></div>';
+  let html='<div class="section-title" style="margin-bottom:14px">Le tue chat</div><div class="events-grid">';
+  if(!myEvents.length)html+='<div style="text-align:center;color:#aaa;padding:40px;grid-column:1/-1">Nessun gruppo ancora.<br><div class="btn" onclick="navigate(\'search\')" style="margin-top:10px;max-width:200px;margin-left:auto;margin-right:auto">Esplora eventi</div></div>';
   myEvents.forEach(e=>{html+='<div class="card" onclick="navigate(\'eventGroup\','+e.id+')" style="cursor:pointer"><div style="display:flex;gap:12px;align-items:center"><div style="font-size:36px">'+(e.emoji||'🎉')+'</div><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:13px;color:#888">Tocca per aprire la chat</div></div><div style="font-size:20px;color:#ddd">›</div></div></div>';});
+  html+='</div>';
   document.getElementById('content').innerHTML=html;
 }
 
@@ -764,13 +1076,14 @@ async function drawEventGroup(eventId){
   const {data:e}=await supabase.from('events').select('*').eq('id',eventId).single();
   if(!e)return;
   document.getElementById('headerTitle').textContent=e.title;
-  let html='<div style="background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px"><div style="font-size:28px">'+(e.emoji||'🎉')+'</div><div><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div></div></div>';
+  let html='<div style="max-width:700px;margin:0 auto;">';
+  html+='<div style="background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px"><div style="font-size:28px">'+(e.emoji||'🎉')+'</div><div><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div></div></div>';
   html+='<div class="tabs"><div class="tab '+(activeTab==='chat'?'active':'')+'" onclick="switchTab(\'chat\','+e.id+')">💬 Chat</div><div class="tab '+(activeTab==='participants'?'active':'')+'" onclick="switchTab(\'participants\','+e.id+')">👥 Partecipanti</div><div class="tab '+(activeTab==='details'?'active':'')+'" onclick="switchTab(\'details\','+e.id+')">ℹ️ Dettagli</div></div>';
   html+='<div id="groupTabContent">';
   if(activeTab==='chat')html+=await renderChat(e);
   else if(activeTab==='participants')html+=await renderParticipants(e);
   else html+=renderEventDetails(e);
-  html+='</div>';
+  html+='</div></div>';
   document.getElementById('content').innerHTML=html;
   if(activeTab==='chat'){setTimeout(()=>{const c=document.getElementById('chatMsgs');if(c)c.scrollTop=c.scrollHeight;},50);}
 }
@@ -834,12 +1147,39 @@ async function drawProfile(){
   currentUser.interests=userInterests;
   const {count:evCount}=await supabase.from('event_participants').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id);
   const comp=currentUser.completeness||40;
-  let html='<div style="text-align:center;padding:20px 0 10px"><div class="avatar xl" style="margin:auto;margin-bottom:12px">'+(currentUser.emoji||'👤')+'</div><div style="font-size:21px;font-weight:800">'+(currentUser.name||'Utente')+'</div>'+(currentUser.verified?'<div style="margin-top:4px"><span class="verified-badge">✅ Profilo Verificato</span></div>':'')+'<div style="font-size:14px;color:#888;margin-top:6px">📍 '+(currentUser.city||'')+'</div><div style="font-size:14px;color:#555;margin-top:8px;padding:0 16px;line-height:1.5">'+(currentUser.bio||'Nessuna bio ancora')+'</div></div>';
-  html+='<div style="margin:12px 0;text-align:center">'+userInterests.map(i=>'<span class="card-tag tag-'+i.toLowerCase()+'">'+i+'</span>').join('')+'</div>';
-  html+='<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:700">Completamento profilo</span><span style="font-size:13px;color:#6c5ce7;font-weight:700">'+comp+'%</span></div><div class="progress-bar"><div class="progress-fill" style="width:'+comp+'%"></div></div></div>';
-  html+='<div class="profile-stats"><div class="profile-stat"><div class="num">'+(evCount||0)+'</div><div class="lbl">Eventi</div></div><div class="profile-stat"><div class="num">'+userInterests.length+'</div><div class="lbl">Interessi</div></div><div class="profile-stat"><div class="num">'+(currentUser.verified?'✅':'❌')+'</div><div class="lbl">Verificato</div></div></div>';
-  html+='<div class="card"><div style="font-weight:700;margin-bottom:12px">✏️ Modifica profilo</div><label>Bio</label><textarea id="editBio" rows="2" placeholder="Raccontati...">'+(currentUser.bio||'')+'</textarea><label>Città</label><div class="autocomplete-wrap"><input id="editCity" value="'+(currentUser.city||'')+'" autocomplete="off"><div class="autocomplete-list" id="editCityList" style="display:none"></div></div><label>Interessi</label><div class="chips" id="profileChips">'+allInterests.map(i=>'<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleProfileInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>').join('')+'</div><div class="btn" onclick="saveProfile()" style="margin-top:14px">💾 Salva modifiche</div></div>';
-  html+='<div class="btn secondary" onclick="navigate(\'matchPeople\')">🤝 Persone compatibili</div><div class="btn secondary" onclick="navigate(\'aiAssistant\')" style="margin-top:8px">🤖 AI Assistant</div><div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>';
+
+  let html='<div class="profile-grid">';
+  /* Colonna sinistra: avatar + stats */
+  html+='<div>';
+  html+='<div style="text-align:center;padding:20px;background:#fff;border-radius:18px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px">';
+  html+='<div class="avatar xl" style="margin:auto;margin-bottom:12px">'+(currentUser.emoji||'👤')+'</div>';
+  html+='<div style="font-size:21px;font-weight:800">'+(currentUser.name||'Utente')+'</div>';
+  if(currentUser.verified)html+='<div style="margin-top:4px"><span class="verified-badge">✅ Verificato</span></div>';
+  html+='<div style="font-size:14px;color:#888;margin-top:6px">📍 '+(currentUser.city||'')+'</div>';
+  html+='<div style="font-size:14px;color:#555;margin-top:8px;line-height:1.5">'+(currentUser.bio||'Nessuna bio ancora')+'</div>';
+  html+='</div>';
+  html+='<div class="profile-stats" style="background:#fff;border-radius:14px;box-shadow:0 1px 8px rgba(0,0,0,.07);">';
+  html+='<div class="profile-stat"><div class="num">'+(evCount||0)+'</div><div class="lbl">Eventi</div></div>';
+  html+='<div class="profile-stat"><div class="num">'+userInterests.length+'</div><div class="lbl">Interessi</div></div>';
+  html+='<div class="profile-stat"><div class="num">'+(currentUser.verified?'✅':'❌')+'</div><div class="lbl">Verif.</div></div>';
+  html+='</div>';
+  html+='<div class="btn secondary" onclick="navigate(\'matchPeople\')" style="margin-top:8px">🤝 Match persone</div>';
+  html+='<div class="btn secondary" onclick="navigate(\'aiAssistant\')" style="margin-top:8px">🤖 AI Assistant</div>';
+  html+='<div class="btn danger" onclick="doLogout()" style="margin-top:8px">🚪 Esci</div>';
+  html+='</div>';
+
+  /* Colonna destra: edit + interessi */
+  html+='<div>';
+  html+='<div class="card"><div style="font-weight:700;margin-bottom:4px">Completamento profilo <span style="color:#6c5ce7">'+comp+'%</span></div><div class="progress-bar"><div class="progress-fill" style="width:'+comp+'%"></div></div></div>';
+  html+='<div style="margin:8px 0">'+userInterests.map(i=>'<span class="card-tag tag-'+i.toLowerCase()+'">'+i+'</span>').join('')+'</div>';
+  html+='<div class="card"><div style="font-weight:700;margin-bottom:12px">✏️ Modifica profilo</div>';
+  html+='<label>Bio</label><textarea id="editBio" rows="2" placeholder="Raccontati...">'+(currentUser.bio||'')+'</textarea>';
+  html+='<label>Città</label><div class="autocomplete-wrap"><input id="editCity" value="'+(currentUser.city||'')+'" autocomplete="off"><div class="autocomplete-list" id="editCityList" style="display:none"></div></div>';
+  html+='<label>Interessi</label><div class="chips" id="profileChips">'+allInterests.map(i=>'<div class="chip '+(userInterests.includes(i.label)?'selected':'')+'" onclick="toggleProfileInterest(\''+i.label+'\',this)">'+i.icon+' '+i.label+'</div>').join('')+'</div>';
+  html+='<div class="btn" onclick="saveProfile()" style="margin-top:14px">💾 Salva modifiche</div></div>';
+  html+='</div>';
+  html+='</div>'; /* fine profile-grid */
+
   document.getElementById('content').innerHTML=html;
   setupGeoAutocomplete('editCity','editCityList',item=>{document.getElementById('editCity').value=item.address?.city||item.address?.town||item.display_name.split(',')[0];});
 }
@@ -861,15 +1201,17 @@ async function saveProfile(){
 /* ── AI ASSISTANT ── */
 function drawAI(){
   const user=currentUser||{name:'Utente'};
-  let html='<div style="text-align:center;margin-bottom:16px"><div style="font-size:50px">🤖</div><div style="font-weight:700;font-size:18px">AI Assistant</div><div style="font-size:13px;color:#888">Il tuo assistente personale</div></div>';
+  let html='<div style="max-width:700px;margin:0 auto;">';
+  html+='<div style="text-align:center;margin-bottom:16px"><div style="font-size:50px">🤖</div><div style="font-weight:700;font-size:18px">AI Assistant</div><div style="font-size:13px;color:#888">Il tuo assistente personale</div></div>';
   html+='<div class="ai-bubble">Ciao '+(user.name?.split(' ')[0]||'')+'! 👋<br>Dimmi cosa vorresti fare e ti aiuto.<br><br><b>Prova:</b> "Cercami eventi di trekking" • "Voglio conoscere nuove persone"</div>';
   html+='<div style="font-weight:700;font-size:14px;margin-bottom:10px">💡 Suggeriti per te</div>';
   const sug=events.filter(e=>userInterests.some(t=>e.category===t)).slice(0,3);
   sug.forEach(e=>{html+='<div class="ai-suggestion" onclick="navigate(\'eventDetail\','+e.id+')"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div><div style="font-weight:700;font-size:14px">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+'</div></div><div style="margin-left:auto;font-size:18px;color:#ddd">›</div></div></div>';});
   if(!sug.length)html+='<div style="text-align:center;color:#aaa;padding:16px">Nessun evento trovato. <span style="color:#6c5ce7;cursor:pointer" onclick="navigate(\'search\')">Esplora →</span></div>';
   html+='<div class="ai-suggestion" onclick="navigate(\'matchPeople\')" style="margin-top:4px"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">🤝</span><div><div style="font-weight:700;font-size:14px">Persone compatibili</div><div style="font-size:12px;color:#888">Trova persone con i tuoi interessi</div></div><div style="margin-left:auto">›</div></div></div>';
-  html+='<div class="chat-messages" id="aiChatMsgs" style="margin-top:16px;min-height:40px;max-height:240px"></div>';
+  html+='<div class="chat-messages" id="aiChatMsgs" style="margin-top:16px;min-height:40px;max-height:300px"></div>';
   html+='<div class="chat-input-row"><input id="aiInput" placeholder="Scrivi cosa vorresti fare..." onkeypress="if(event.key===\'Enter\')sendAI()"><button class="send-btn" onclick="sendAI()">➤</button></div>';
+  html+='</div>';
   document.getElementById('content').innerHTML=html;
 }
 
@@ -915,26 +1257,28 @@ function drawFeedback(eventId){
   selectedStars=0;thumbValue=null;repeatValue=null;
   const e=events.find(ev=>ev.id===eventId)||{title:'Evento'};
   document.getElementById('content').innerHTML=`
-    <div style="text-align:center;padding:20px 0">
-      <div style="font-size:60px">🎉</div>
-      <div style="font-size:20px;font-weight:800;margin-top:10px">Grazie per aver partecipato!</div>
-      <div style="font-size:14px;color:#888;margin-top:6px">Com'è andata a <b>${e.title}</b>?</div>
-    </div>
-    <div style="font-size:15px;font-weight:700;text-align:center">Valuta la tua esperienza</div>
-    <div class="stars">${[1,2,3,4,5].map(s=>'<span class="star" onclick="setStar('+s+')" id="star'+s+'">★</span>').join('')}</div>
-    <div style="font-size:14px;font-weight:700;margin-top:16px">Ti sei trovato bene con le persone?</div>
-    <div style="display:flex;gap:16px;justify-content:center;margin:14px 0">
-      <span style="font-size:40px;cursor:pointer" id="thumbUp" onclick="selectThumb(true)">👍</span>
-      <span style="font-size:40px;cursor:pointer" id="thumbDown" onclick="selectThumb(false)">👎</span>
-    </div>
-    <div style="font-size:14px;font-weight:700">Rifarebbe l'esperienza insieme?</div>
-    <div style="display:flex;gap:10px;margin:10px 0">
-      <div class="btn sm secondary" id="repeatYes" onclick="setRepeat(true)">👍 Sì</div>
-      <div class="btn sm secondary" id="repeatNo" onclick="setRepeat(false)">👎 No</div>
-    </div>
-    <label>Commento (opzionale)</label>
-    <textarea id="feedbackComment" placeholder="Descrivi la tua esperienza..." rows="3"></textarea>
-    <div class="btn" onclick="submitFeedback(${eventId})" style="margin-top:16px">📤 Invia feedback</div>`;
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:60px">🎉</div>
+        <div style="font-size:20px;font-weight:800;margin-top:10px">Grazie per aver partecipato!</div>
+        <div style="font-size:14px;color:#888;margin-top:6px">Com'è andata a <b>${e.title}</b>?</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;text-align:center">Valuta la tua esperienza</div>
+      <div class="stars">${[1,2,3,4,5].map(s=>'<span class="star" onclick="setStar('+s+')" id="star'+s+'">★</span>').join('')}</div>
+      <div style="font-size:14px;font-weight:700;margin-top:16px">Ti sei trovato bene con le persone?</div>
+      <div style="display:flex;gap:16px;justify-content:center;margin:14px 0">
+        <span style="font-size:40px;cursor:pointer" id="thumbUp" onclick="selectThumb(true)">👍</span>
+        <span style="font-size:40px;cursor:pointer" id="thumbDown" onclick="selectThumb(false)">👎</span>
+      </div>
+      <div style="font-size:14px;font-weight:700">Rifarebbe l'esperienza insieme?</div>
+      <div style="display:flex;gap:10px;margin:10px 0">
+        <div class="btn sm secondary" id="repeatYes" onclick="setRepeat(true)">👍 Sì</div>
+        <div class="btn sm secondary" id="repeatNo" onclick="setRepeat(false)">👎 No</div>
+      </div>
+      <label>Commento (opzionale)</label>
+      <textarea id="feedbackComment" placeholder="Descrivi la tua esperienza..." rows="3"></textarea>
+      <div class="btn" onclick="submitFeedback(${eventId})" style="margin-top:16px">📤 Invia feedback</div>
+    </div>`;
 }
 
 function setStar(n){selectedStars=n;document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<n));}
@@ -963,12 +1307,13 @@ function markAllRead(){notifications.forEach(n=>n.read=true);drawNotifications()
 /* ── REPORT ── */
 function drawReport(){
   const reasons=['Profilo falso','Comportamento inappropriato','Molestie','Spam','Mancata presenza','Contenuto inappropriato'];
-  let html='<div style="text-align:center;margin-bottom:20px"><div style="font-size:48px">🚩</div><div style="font-weight:800;font-size:18px;margin-top:8px">Segnala</div><div style="font-size:13px;color:#888;margin-top:4px">Aiutaci a mantenere la community sicura</div></div><div style="font-weight:700;margin-bottom:10px">Motivo</div>';
+  let html='<div style="max-width:600px;margin:0 auto;"><div style="text-align:center;margin-bottom:20px"><div style="font-size:48px">🚩</div><div style="font-weight:800;font-size:18px;margin-top:8px">Segnala</div><div style="font-size:13px;color:#888;margin-top:4px">Aiutaci a mantenere la community sicura</div></div><div style="font-weight:700;margin-bottom:10px">Motivo</div>';
   reasons.forEach(r=>{html+='<div class="report-option '+(reportSelected===r?'selected':'')+'" onclick="selectReason(\''+r+'\',this)">'+r+'</div>';});
-  html+='<label>Descrizione (opzionale)</label><textarea id="reportDesc" placeholder="Descrivi..." rows="3"></textarea><div class="btn danger" onclick="submitReport()" style="margin-top:16px">🚩 Invia segnalazione</div><div class="btn secondary" onclick="goBack()" style="margin-top:8px">Annulla</div>';
+  html+='<label>Descrizione (opzionale)</label><textarea id="reportDesc" placeholder="Descrivi..." rows="3"></textarea><div class="btn danger" onclick="submitReport()" style="margin-top:16px">🚩 Invia segnalazione</div><div class="btn secondary" onclick="goBack()" style="margin-top:8px">Annulla</div></div>';
   document.getElementById('content').innerHTML=html;
 }
 function selectReason(r,el){reportSelected=r;document.querySelectorAll('.report-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');}
+
 async function submitReport(){
   if(!reportSelected){toast('⚠️ Seleziona un motivo');return;}
   const {error}=await supabase.from('reports').insert({reporter_id:currentUser?.id||null,reason:reportSelected,description:document.getElementById('reportDesc').value,event_id:currentEventId||null});
@@ -1001,35 +1346,19 @@ async function adminTab(tab,el){
     c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessuna segnalazione</div>';
   } else if(tab==='users'){
     const {data}=await supabase.from('profiles').select('*').order('created_at',{ascending:false}).limit(20);
-    let h='';(data||[]).forEach(u=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:700">'+(u.name||'Utente')+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div><div class="btn sm danger" onclick="toast(\'Presto disponibile\')">🚫</div></div></div>';});
+    let h='<div class="events-grid">';(data||[]).forEach(u=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1"><div style="font-weight:700">'+(u.name||'Utente')+(u.verified?' ✅':'')+'</div><div style="font-size:12px;color:#888">📍 '+(u.city||'')+'</div></div><div class="btn sm danger" onclick="toast(\'Presto disponibile\')">🚫</div></div></div>';});
+    h+='</div>';
     c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun utente</div>';
   } else if(tab==='events'){
     const {data}=await supabase.from('events').select('*').order('created_at',{ascending:false}).limit(20);
-    let h='';(data||[]).forEach(e=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+' • <span class="badge '+(e.status==='active'?'green':'red')+'">'+e.status+'</span></div></div><div class="btn sm danger" onclick="adminRemoveEvent('+e.id+')">🗑️</div></div></div>';});
+    let h='<div class="events-grid">';(data||[]).forEach(e=>{h+='<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">'+(e.emoji||'🎉')+'</span><div style="flex:1"><div style="font-weight:700">'+e.title+'</div><div style="font-size:12px;color:#888">'+(e.location||'')+' • <span class="badge '+(e.status==='active'?'green':'red')+'">'+e.status+'</span></div></div><div class="btn sm danger" onclick="adminRemoveEvent('+e.id+')">🗑️</div></div></div>';});
+    h+='</div>';
     c.innerHTML=h||'<div style="text-align:center;color:#aaa;padding:30px">Nessun evento</div>';
   }
 }
 
 async function adminResolve(id,status){await supabase.from('reports').update({status}).eq('id',id);toast(status==='resolved'?'✅ Risolto':'🗑️ Ignorato');drawAdmin();}
 async function adminRemoveEvent(id){await supabase.from('events').update({status:'removed'}).eq('id',id);toast('🗑️ Evento rimosso');await loadEvents();drawAdmin();}
-/* ── COLLEGAMENTO PULSANTI SPLASH ── */
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('btnRegister').addEventListener('click', function() {
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('appShell').style.display = 'flex';
-    navigate('register');
-  });
-  document.getElementById('btnLogin').addEventListener('click', function() {
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('appShell').style.display = 'flex';
-    navigate('login');
-  });
-  document.getElementById('btnAdmin').addEventListener('click', function() {
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('appShell').style.display = 'flex';
-    adminLogin();
-  });
-});
 </script>
 </body>
 </html>
