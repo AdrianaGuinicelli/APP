@@ -96,7 +96,7 @@ function drawCreate() {
 
 <div id="coverPreviewBox" onclick="document.getElementById('cCover').click()" style="
   margin-top:8px;
-  height:180px;
+  height:220px;
   border:2px dashed #6c5ce7;
   border-radius:18px;
   background:#f8f7ff;
@@ -109,6 +109,12 @@ function drawCreate() {
   font-weight:700;
 ">
   📎 Carica immagine evento
+</div>
+
+<div id="coverControls" style="display:none;gap:8px;margin-top:8px">
+  <div class="btn sm outline" onclick="setCoverFit('cover')">Riempi</div>
+  <div class="btn sm outline" onclick="setCoverFit('contain')">Adatta</div>
+  <div class="btn sm outline" onclick="setCoverFit('portrait')">Foto verticale</div>
 </div>
 
 <div id="coverFileName" style="font-size:12px;color:#888;margin-top:6px"></div>
