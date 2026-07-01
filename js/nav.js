@@ -74,10 +74,10 @@ html += `<div class="profile-dropdown-wrap" id="profileDropWrap">
 
   <div class="profile-dropdown" id="profileDropdown">
     <div class="pd-item" onclick="closeDropdown();navigate('myevents')">
-      <span class="pd-icon">📅</span>
-      <span>I miei eventi</span>
-      ${getMyEventsCount() > 0 ? `<span class="pd-badge">${getMyEventsCount()}</span>` : ''}
-    </div>
+  <span class="pd-icon">📅</span>
+  <span class="pd-label">I miei eventi</span>
+  ${getMyEventsCount() > 0 ? `<span class="pd-badge">${getMyEventsCount()}</span>` : ''}
+</div>
 
     <div class="pd-item" onclick="closeDropdown();navigate('savedEvents')">
       <span class="pd-icon">❤️</span>
