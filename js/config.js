@@ -15,12 +15,12 @@ const ALL_BUTTONS = [
   { id: 'chatList',     icon: '💬', label: 'Chat',      page: 'chatList',     badge: 'chat' },
   { id: 'aiAssistant',  icon: '🤖', label: 'AI',        page: 'aiAssistant' },
   { id: 'notifications',icon: '🔔', label: 'Notifiche', page: 'notifications', badge: 'notif' },
-  { id: 'savedEvents',  icon: '🔖', label: 'Preferiti', page: 'savedEvents' },
+  { id: 'savedEvents',  icon: '❤️', label: 'Preferiti', page: 'savedEvents' },
   { id: 'matchPeople',  icon: '🤝', label: 'Match',     page: 'matchPeople' },
 ];
 
 const DEFAULT_BOTTOM = ['home', 'search', 'create', 'chatList', 'aiAssistant'];
-const DEFAULT_HEADER = ['notifications', 'savedEvents'];
+const DEFAULT_HEADER = ['notifications'];
 
 const PAGE_TITLES = {
   home: '',
