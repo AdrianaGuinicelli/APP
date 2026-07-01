@@ -93,6 +93,10 @@ function drawCreate() {
       <div style="text-align:center;padding:10px 0 16px">
         <div id="emojiPick" style="width:80px;height:80px;border-radius:18px;background:#f0eeff;margin:auto;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px dashed #6c5ce7" onclick="pickEmoji()">🎉</div>
         <div style="font-size:13px;color:#888;margin-top:6px">Tocca per scegliere emoji</div>
+        <div style="margin-top:14px">
+  <label>Immagine evento (opzionale)</label>
+  <input id="cCover" type="file" accept="image/*">
+</div>
       </div>
       <label>Titolo *</label>
       <input id="cTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
@@ -196,8 +200,29 @@ async function submitCreate() {
   if (!city)     { toast('⚠️ Inserisci la città'); return; }
   if (!addr)     { toast('⚠️ Inserisci l\'indirizzo'); return; }
   if (maxP < 2)  { toast('⚠️ Min 2 partecipanti'); return; }
-
+const coverFile = document.getElementById('cCover')?.files?.[0] || null;
   toast('⏳ Creazione...');
+  let coverUrl = null;
+
+if (coverFile) {
+  const ext = coverFile.name.split('.').pop();
+  const path = `${currentUser.id}/${Date.now()}.${ext}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('event-covers')
+    .upload(path, coverFile, { upsert: true });
+
+  if (uploadError) {
+    toast('❌ Errore immagine: ' + uploadError.message);
+    return;
+  }
+
+  const { data: urlData } = supabase.storage
+    .from('event-covers')
+    .getPublicUrl(path);
+
+  coverUrl = urlData.publicUrl;
+}
   const { data, error } = await supabase.from('events').insert({
     creator_id: currentUser.id, title, description: desc, category: cat,
     date_time: new Date(dateRaw).toISOString(), location: city, address: addr,
