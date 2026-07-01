@@ -201,6 +201,7 @@ const profileData = {
   id: data.user.id,
   first_name: firstName,
   last_name: lastName,
+  name: `${firstName} ${lastName}`.trim(),
   city,
   birth_date: birth,
   bio: document.getElementById('regBio').value,
