@@ -181,6 +181,13 @@ function drawCreate() {
     document.getElementById('coordsOk').style.display = 'block';
   });
 }
+document.addEventListener('change', function(e) {
+  if (e.target && e.target.id === 'cCover') {
+    const fileName = e.target.files?.[0]?.name || '';
+    const el = document.getElementById('coverFileName');
+    if (el) el.textContent = fileName ? '📎 ' + fileName : '';
+  }
+});
 function selectCreateGender(g) {
   document.getElementById('cGenderPref').value = g;
   ['mf','m','f'].forEach(x => document.getElementById('cgp_' + x)?.classList.toggle('selected', x === g));
