@@ -72,7 +72,10 @@ const avatarContent = currentUser?.photo_url
   html += `<div class="profile-dropdown-wrap" id="profileDropWrap">
     <button class="profile-avatar-btn" onclick="toggleProfileDropdown()" id="profileAvatarBtn">${avatarContent}</button>
     <div class="profile-dropdown" id="profileDropdown">
-      <div class="pd-item" onclick="closeDropdown();navigate('myevents')"><span class="pd-icon">📅</span> I miei eventi<span class="pd-badge">4</span></div>
+      <div class="pd-item" onclick="closeDropdown();navigate('myevents')">
+  <span class="pd-icon">📅</span> I miei eventi
+  ${getMyEventsCount() > 0 ? `<span class="pd-badge">${getMyEventsCount()}</span>` : ''}
+</div>
       <div class="pd-item" onclick="closeDropdown();navigate('matchPeople')"><span class="pd-icon">🤝</span> Match persone</div>
       <div class="pd-item" onclick="closeDropdown();navigate('profile')"><span class="pd-icon">👤</span> Profilo</div>
       <div class="pd-item" onclick="closeDropdown();navigate('settings')"><span class="pd-icon">⚙️</span> Impostazioni</div>
