@@ -2,7 +2,7 @@ async function drawHome() {
   showLoading();
   await loadEvents();
   const user = currentUser || { name: 'Utente', completeness: 40, interests: [] };
-  const fn = user.name || 'Utente';
+  const fn = firstName(user);
   const suggested = events.filter(e => (user.interests || []).some(t => e.category === t)).slice(0, 8);
   const rest      = events.filter(e => !suggested.includes(e)).slice(0, 6);
 
