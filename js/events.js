@@ -194,28 +194,26 @@ function drawCreate() {
     document.getElementById('coordsOk').style.display = 'block';
   });
 }
-document.addEventListener('change', function(e) {
-  if (e.target && e.target.id === 'cCover') {
-    const file = e.target.files?.[0];
-    const fileNameEl = document.getElementById('coverFileName');
-    const previewBox = document.getElementById('coverPreviewBox');
+function previewEventCover(input) {
+  const file = input.files?.[0];
+  const fileNameEl = document.getElementById('coverFileName');
+  const previewBox = document.getElementById('coverPreviewBox');
 
-    if (!file || !previewBox) return;
+  if (!file || !previewBox) return;
 
-    if (fileNameEl) fileNameEl.textContent = '📎 ' + file.name;
+  if (fileNameEl) fileNameEl.textContent = '📎 ' + file.name;
 
-    const imageUrl = URL.createObjectURL(file);
+  const imageUrl = URL.createObjectURL(file);
 
-    previewBox.innerHTML = `
-      <img src="${imageUrl}" style="
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        display:block;
-      ">
-    `;
-  }
-});
+  previewBox.innerHTML = `
+    <img src="${imageUrl}" style="
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    ">
+  `;
+}
 function selectCreateGender(g) {
   document.getElementById('cGenderPref').value = g;
   ['mf','m','f'].forEach(x => document.getElementById('cgp_' + x)?.classList.toggle('selected', x === g));
