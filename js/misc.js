@@ -75,8 +75,26 @@ function drawNotifications() {
   });
   document.getElementById('content').innerHTML = html;
 }
-function markRead(id) { const n = notifications.find(x => x.id === id); if (n) n.read = true; drawNotifications(); }
-function markAllRead() { notifications.forEach(n => n.read = true); drawNotifications(); }
+function saveNotifications() {
+  localStorage.setItem('ec_notifications', JSON.stringify(notifications));
+}
+
+function markRead(id) {
+  const n = notifications.find(x => x.id === id);
+  if (n) n.read = true;
+  saveNotifications();
+  renderHeaderRight();
+  renderNavbar();
+  drawNotifications();
+}
+
+function markAllRead() {
+  notifications.forEach(n => n.read = true);
+  saveNotifications();
+  renderHeaderRight();
+  renderNavbar();
+  drawNotifications();
+}
 
 // ── REPORT ────────────────────────────────────────────────────────────────────
 function drawReport() {
