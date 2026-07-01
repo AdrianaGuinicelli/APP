@@ -91,7 +91,14 @@ function drawCreate() {
   document.getElementById('content').innerHTML = `
     <div style="max-width:700px;margin:0 auto;">
       <label>Immagine evento (opzionale)</label>
-      <input id="cCover" type="file" accept="image/*">
+
+<input id="cCover" type="file" accept="image/*" style="display:none">
+
+<div class="btn outline" onclick="document.getElementById('cCover').click()" style="margin-top:8px">
+  📎 Carica immagine
+</div>
+
+<div id="coverFileName" style="font-size:12px;color:#888;margin-top:6px"></div>
 
       <label>Titolo *</label>
       <input id="cTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
