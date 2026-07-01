@@ -215,19 +215,12 @@ city,
   emoji: '🙂',
   gender: selectedGender
 };
-  pendingEmailVerify = true;
+pendingEmailVerify = false;
+isLoggedIn = true;
 
-  showModal('📧 Verifica Email', `
-    <div style="text-align:center;padding:10px 0">
-      <div style="font-size:60px;margin-bottom:12px">📧</div>
-      <div style="font-size:18px;font-weight:800;margin-bottom:8px">Controlla la tua email!</div>
-      <div style="font-size:14px;color:#555;line-height:1.6;margin-bottom:16px">
-        Abbiamo inviato un link di conferma a <b>${email}</b>.<br>
-        Clicca il link per attivare il tuo account e poi accedi.
-      </div>
-      <div class="btn" onclick="closeModal();navigate('login')">Vai al Login</div>
-    </div>
-  `);
+toast('✅ Registrazione completata!');
+await loadEvents();
+navigate('home');
 }
 
 // ── ONBOARDING ────────────────────────────────────────────
