@@ -25,7 +25,7 @@ var selectedEmoji     = '🎉';
 var thumbValue        = null;
 var repeatValue       = null;
 
-var notifications     = [
+var notifications = JSON.parse(localStorage.getItem('ec_notifications') || 'null') || [
   { id: 1, text: 'Benvenuto su EventConnect! 🎉', time: 'ora', read: false, icon: '🎉' }
 ];
 
