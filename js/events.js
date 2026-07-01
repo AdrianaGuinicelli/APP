@@ -227,7 +227,9 @@ if (coverFile) {
     creator_id: currentUser.id, title, description: desc, category: cat,
     date_time: new Date(dateRaw).toISOString(), location: city, address: addr,
     max_participants: maxP, price, emoji: selectedEmoji, latitude: lat, longitude: lng,
-    external_link: link || null, status: 'active',
+external_link: link || null,
+cover_url: coverUrl,
+status: 'active',
     gender_preference: genderPref,
     organizer_gender: currentUser.gender || 'o'
   }).select().single();
