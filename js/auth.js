@@ -157,7 +157,8 @@ function checkPwdMatch() {
 }
 
 async function doRegister() {
-  const name  = document.getElementById('regName').value.trim();
+  const firstName = document.getElementById('regFirstName').value.trim();
+const lastName  = document.getElementById('regLastName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const pwd   = document.getElementById('regPwd').value;
   const pwd2  = document.getElementById('regPwd2').value;
