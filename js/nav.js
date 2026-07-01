@@ -67,7 +67,7 @@ function renderHeaderRight() {
 
 const avatarContent = currentUser?.photo_url
   ? `<img src="${currentUser.photo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
-  : getInitials(currentUser?.name);
+  : initials(currentUser);
 
   html += `<div class="profile-dropdown-wrap" id="profileDropWrap">
     <button class="profile-avatar-btn" onclick="toggleProfileDropdown()" id="profileAvatarBtn">${avatarContent}</button>
