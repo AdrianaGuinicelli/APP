@@ -189,7 +189,16 @@ const lastName  = document.getElementById('regLastName').value.trim();
     secondary_cities: []
   });
 
-  currentUser = { id: data.user.id, name, city, interests: [], completeness: 40, emoji: '🙂', gender: selectedGender };
+  currentUser = {
+  id: data.user.id,
+  first_name: firstName,
+  last_name: lastName,
+  city,
+  interests: [],
+  completeness: 40,
+  emoji: '🙂',
+  gender: selectedGender
+};
   pendingEmailVerify = true;
 
   showModal('📧 Verifica Email', `
