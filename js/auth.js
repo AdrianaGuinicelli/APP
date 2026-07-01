@@ -82,7 +82,16 @@ async function doLogout() {
 function drawRegister() {
   document.getElementById('content').innerHTML = `
     <div style="max-width:600px;margin:0 auto;">
-      <label>Nome *</label><input id="regName" placeholder="Il tuo nome">
+     <div class="form-row">
+  <div>
+    <label>Nome *</label>
+    <input id="regFirstName" placeholder="Il tuo nome">
+  </div>
+  <div>
+    <label>Cognome *</label>
+    <input id="regLastName" placeholder="Il tuo cognome">
+  </div>
+</div>
       <label>Email *</label>
       <input id="regEmail" type="email" placeholder="tua@email.com" oninput="checkRegEmail()">
       <div id="emailCheck" style="font-size:12px;margin-top:4px;color:#aaa"></div>
