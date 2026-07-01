@@ -90,12 +90,25 @@ function drawCreate() {
 
   document.getElementById('content').innerHTML = `
     <div style="max-width:700px;margin:0 auto;">
-      <label>Immagine evento (opzionale)</label>
+<label>Immagine evento (opzionale)</label>
 
 <input id="cCover" type="file" accept="image/*" style="display:none">
 
-<div class="btn outline" onclick="document.getElementById('cCover').click()" style="margin-top:8px">
-  📎 Carica immagine
+<div id="coverPreviewBox" onclick="document.getElementById('cCover').click()" style="
+  margin-top:8px;
+  height:180px;
+  border:2px dashed #6c5ce7;
+  border-radius:18px;
+  background:#f8f7ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  overflow:hidden;
+  color:#6c5ce7;
+  font-weight:700;
+">
+  📎 Carica immagine evento
 </div>
 
 <div id="coverFileName" style="font-size:12px;color:#888;margin-top:6px"></div>
