@@ -204,22 +204,54 @@ function previewEventCover(input) {
   const file = input.files?.[0];
   const fileNameEl = document.getElementById('coverFileName');
   const previewBox = document.getElementById('coverPreviewBox');
+  const controls = document.getElementById('coverControls');
 
   if (!file || !previewBox) return;
 
   if (fileNameEl) fileNameEl.textContent = '📎 ' + file.name;
+  if (controls) controls.style.display = 'flex';
 
   const imageUrl = URL.createObjectURL(file);
 
   previewBox.innerHTML = `
-    <img src="${imageUrl}" style="
+    <img id="coverPreviewImg" src="${imageUrl}" style="
       width:100%;
       height:100%;
-     object-fit:contain;
-background:#fff;
+      object-fit:cover;
+      object-position:center;
       display:block;
+      background:#fff;
     ">
   `;
+}
+function setCoverFit(mode) {
+  const img = document.getElementById('coverPreviewImg');
+  const box = document.getElementById('coverPreviewBox');
+  if (!img || !box) return;
+
+  if (mode === 'cover') {
+    box.style.height = '220px';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    img.style.objectPosition = 'center';
+  }
+
+  if (mode === 'contain') {
+    box.style.height = '220px';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
+    img.style.objectPosition = 'center';
+  }
+
+  if (mode === 'portrait') {
+    box.style.height = '420px';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
+    img.style.objectPosition = 'center';
+  }
 }
 function selectCreateGender(g) {
   document.getElementById('cGenderPref').value = g;
