@@ -73,6 +73,9 @@ const avatarContent = currentUser?.photo_url
     <button class="profile-avatar-btn" onclick="toggleProfileDropdown()" id="profileAvatarBtn">${avatarContent}</button>
     <div class="profile-dropdown" id="profileDropdown">
       <div class="pd-item" onclick="closeDropdown();navigate('myevents')">
+      <div class="pd-item" onclick="closeDropdown();navigate('savedEvents')">
+  <span class="pd-icon">❤️</span> Preferiti
+</div>
   <span class="pd-icon">📅</span> I miei eventi
   ${getMyEventsCount() > 0 ? `<span class="pd-badge">${getMyEventsCount()}</span>` : ''}
 </div>
