@@ -72,10 +72,25 @@ function adminLogin() {
 
 async function doLogout() {
   await supabase.auth.signOut();
-  isLoggedIn = false; isAdmin = false; currentUser = null;
-  userInterests = []; events = []; savedEvents = [];
-  document.getElementById('appShell').style.display = 'none';
-  document.getElementById('splash').style.display = 'flex';
+
+  isLoggedIn = false;
+  isAdmin = false;
+  currentUser = null;
+  userInterests = [];
+  events = [];
+  savedEvents = [];
+  currentPage = '';
+
+  const headerRight = document.getElementById('headerRight');
+  if (headerRight) headerRight.innerHTML = '';
+
+  const navbar = document.getElementById('navbar');
+  if (navbar) navbar.style.display = 'none';
+
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('appShell').style.display = 'flex';
+
+  navigate('login');
 }
 
 // ── REGISTER ─────────────────────────────────────────────
