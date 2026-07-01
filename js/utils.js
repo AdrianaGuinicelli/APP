@@ -1,4 +1,31 @@
 // Funzioni helper riutilizzabili ovunque
+// ── USER HELPERS ──────────────────────────────────────────
+
+function fullName(user) {
+  if (!user) return 'Utente';
+
+  return [user.first_name, user.last_name]
+    .filter(Boolean)
+    .join(' ')
+    .trim() || 'Utente';
+}
+
+function firstName(user) {
+  if (!user) return 'Utente';
+
+  return user.first_name || fullName(user).split(' ')[0];
+}
+
+function initials(user) {
+  if (!user) return '?';
+
+  const f = user.first_name?.charAt(0) || '';
+  const l = user.last_name?.charAt(0) || '';
+
+  if (f || l) return (f + l).toUpperCase();
+
+  return '?';
+}
 
 // ── PASSWORD ──────────────────────────────────────────────
 function validatePassword(pwd) {
