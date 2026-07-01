@@ -167,3 +167,10 @@ async function loadEvents() {
     .order('created_at', { ascending: false });
   if (!error && data) events = data;
 }
+function getMyEventsCount() {
+  if (!currentUser?.id || !events?.length) return 0;
+
+  return events.filter(e =>
+    e.creator_id === currentUser.id
+  ).length;
+}
