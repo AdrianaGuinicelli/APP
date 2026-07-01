@@ -87,21 +87,18 @@ function toggleSave(id) {
 // ── CREATE ────────────────────────────────────────────────────────────────────
 function drawCreate() {
   if (!isLoggedIn) { toast('⚠️ Devi essere loggato'); navigate('login'); return; }
-  selectedEmoji = '🎉';
+
   document.getElementById('content').innerHTML = `
     <div style="max-width:700px;margin:0 auto;">
-      <div style="text-align:center;padding:10px 0 16px">
-        <div id="emojiPick" style="width:80px;height:80px;border-radius:18px;background:#f0eeff;margin:auto;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px dashed #6c5ce7" onclick="pickEmoji()">🎉</div>
-        <div style="font-size:13px;color:#888;margin-top:6px">Tocca per scegliere emoji</div>
-        <div style="margin-top:14px">
-  <label>Immagine evento (opzionale)</label>
-  <input id="cCover" type="file" accept="image/*">
-</div>
-      </div>
+      <label>Immagine evento (opzionale)</label>
+      <input id="cCover" type="file" accept="image/*">
+
       <label>Titolo *</label>
       <input id="cTitle" placeholder="Es. Trekking al Monte Resegone" maxlength="80">
+
       <label>Descrizione *</label>
       <textarea id="cDesc" placeholder="Descrivi l'esperienza..." rows="3"></textarea>
+
       <div class="form-row">
         <div>
           <label>Categoria *</label>
@@ -118,6 +115,7 @@ function drawCreate() {
           <input id="cDate" type="datetime-local">
         </div>
       </div>
+
       <div class="form-row">
         <div>
           <label>Città *</label>
@@ -131,14 +129,17 @@ function drawCreate() {
           <input id="cMax" type="number" placeholder="Es. 10" min="2" max="100">
         </div>
       </div>
+
       <label>Indirizzo *</label>
       <div class="autocomplete-wrap">
         <input id="cAddr" placeholder="Es. Via Borsieri 37, Milano" autocomplete="off">
         <div class="autocomplete-list" id="cAddrList" style="display:none"></div>
       </div>
+
       <div id="coordsOk" style="font-size:12px;color:#00b894;margin-top:4px;display:none">✅ Coordinate rilevate</div>
       <div id="cLat" style="display:none"></div>
       <div id="cLng" style="display:none"></div>
+
       <div class="form-row">
         <div>
           <label>Prezzo (€)</label>
@@ -149,19 +150,24 @@ function drawCreate() {
           <input id="cLink" type="url" placeholder="https://...">
         </div>
       </div>
+
       <label>A questo evento voglio *</label>
       <div class="gender-chips" style="margin-top:8px">
         <div class="gender-chip selected" id="cgp_mf" onclick="selectCreateGender('mf')">👫 Tutti (indifferente)</div>
         <div class="gender-chip" id="cgp_m" onclick="selectCreateGender('m')">👨 Solo uomini</div>
         <div class="gender-chip" id="cgp_f" onclick="selectCreateGender('f')">👩 Solo donne</div>
       </div>
+
       <input type="hidden" id="cGenderPref" value="mf">
+
       <div class="btn" onclick="submitCreate()" style="margin-top:20px">🎉 Crea attività</div>
       <div class="btn secondary" onclick="navigate('home')" style="margin-top:8px">Annulla</div>
     </div>`;
+
   setupGeoAutocomplete('cCity', 'cCityList', item => {
     document.getElementById('cCity').value = item.address?.city || item.address?.town || item.display_name.split(',')[0];
   });
+
   setupGeoAutocomplete('cAddr', 'cAddrList', item => {
     document.getElementById('cLat').textContent = item.lat;
     document.getElementById('cLng').textContent = item.lon;
