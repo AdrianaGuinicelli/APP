@@ -232,7 +232,7 @@ if (coverFile) {
   const { data, error } = await supabase.from('events').insert({
     creator_id: currentUser.id, title, description: desc, category: cat,
     date_time: new Date(dateRaw).toISOString(), location: city, address: addr,
-    max_participants: maxP, price, emoji: selectedEmoji, latitude: lat, longitude: lng,
+    max_participants: maxP, price, emoji: '🎉', latitude: lat, longitude: lng,
 external_link: link || null,
 cover_url: coverUrl,
 status: 'active',
