@@ -196,9 +196,24 @@ function drawCreate() {
 }
 document.addEventListener('change', function(e) {
   if (e.target && e.target.id === 'cCover') {
-    const fileName = e.target.files?.[0]?.name || '';
-    const el = document.getElementById('coverFileName');
-    if (el) el.textContent = fileName ? '📎 ' + fileName : '';
+    const file = e.target.files?.[0];
+    const fileNameEl = document.getElementById('coverFileName');
+    const previewBox = document.getElementById('coverPreviewBox');
+
+    if (!file || !previewBox) return;
+
+    if (fileNameEl) fileNameEl.textContent = '📎 ' + file.name;
+
+    const imageUrl = URL.createObjectURL(file);
+
+    previewBox.innerHTML = `
+      <img src="${imageUrl}" style="
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+      ">
+    `;
   }
 });
 function selectCreateGender(g) {
