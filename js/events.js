@@ -92,7 +92,7 @@ function drawCreate() {
     <div style="max-width:700px;margin:0 auto;">
 <label>Immagine evento (opzionale)</label>
 
-<input id="cCover" type="file" accept="image/*" style="display:none">
+<input id="cCover" type="file" accept="image/*" style="display:none" onchange="previewEventCover(this)">
 
 <div id="coverPreviewBox" onclick="document.getElementById('cCover').click()" style="
   margin-top:8px;
