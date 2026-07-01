@@ -165,8 +165,18 @@ const lastName  = document.getElementById('regLastName').value.trim();
   const city  = document.getElementById('regCity').value.trim();
   const birth = document.getElementById('regBirth').value;
 
- if (!firstName || !lastName || !email || !pwd || !city || !birth) {
-  toast('⚠️ Compila tutti i campi obbligatori');
+if (!firstName || !lastName || !email || !pwd || !city || !birth) {
+  toast(
+    'Manca: ' +
+    [
+      !firstName ? 'nome' : '',
+      !lastName ? 'cognome' : '',
+      !email ? 'email' : '',
+      !pwd ? 'password' : '',
+      !city ? 'città' : '',
+      !birth ? 'data nascita' : ''
+    ].filter(Boolean).join(', ')
+  );
   return;
 }
   if (!isValidEmail(email))    { toast('⚠️ Inserisci un\'email valida'); return; }
