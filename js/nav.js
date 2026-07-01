@@ -80,15 +80,14 @@ html += `<div class="profile-dropdown-wrap" id="profileDropWrap">
 </div>
 
     <div class="pd-item" onclick="closeDropdown();navigate('savedEvents')">
-      <span class="pd-icon">❤️</span>
-      <span>Preferiti</span>
-    </div>
+  <span class="pd-icon">❤️</span>
+  <span class="pd-label">Preferiti</span>
+</div>
 
-    <div class="pd-item" onclick="closeDropdown();navigate('matchPeople')">
-      <span class="pd-icon">🤝</span>
-      <span>Match persone</span>
-    </div>
-
+<div class="pd-item" onclick="closeDropdown();navigate('matchPeople')">
+  <span class="pd-icon">🤝</span>
+  <span class="pd-label">Match persone</span>
+</div>
     <div class="pd-item" onclick="closeDropdown();navigate('profile')">
       <span class="pd-icon">👤</span>
       <span>Profilo</span>
