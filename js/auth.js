@@ -220,8 +220,8 @@ const { data: insertedProfile, error: profileError } = await supabase
   .single();
 
 if (profileError) {
-  console.error(profileError);
-  toast('❌ Errore profilo: ' + profileError.message);
+  console.log(profileError);
+  alert(JSON.stringify(profileError, null, 2));
   return;
 }
 
