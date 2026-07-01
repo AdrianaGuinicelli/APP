@@ -184,42 +184,58 @@ if (!firstName || !lastName || !email || !pwd || !city || !birth) {
   if (pwd !== pwd2)            { toast('⚠️ Le password non corrispondono'); return; }
   if (!selectedGender)         { toast('⚠️ Seleziona il tuo genere'); return; }
 
-  toast('⏳ Registrazione...');
-  const { data, error } = await supabase.auth.signUp({
-    email, password: pwd,
-    options: { emailRedirectTo: window.location.href }
-  });
-  if (error) { toast('❌ ' + error.message); return; }
+toast('⏳ Registrazione...');
 
-  await supabase.from('profiles').insert({
-    id: data.user.id,
-first_name: firstName,
-last_name: lastName,
-city,
-    birth_date: birth,
-    bio: document.getElementById('regBio').value,
-    instagram: document.getElementById('regIG').value,
-    emoji: '🙂', completeness: 40,
-    gender: selectedGender,
-    max_distance: 50,
-    secondary_cities: []
-  });
+const { data, error } = await supabase.auth.signUp({
+  email,
+  password: pwd,
+  options: { emailRedirectTo: window.location.href }
+});
 
-  currentUser = {
+if (error) {
+  toast('❌ ' + error.message);
+  return;
+}
+
+const profileData = {
   id: data.user.id,
   first_name: firstName,
   last_name: lastName,
   city,
-  interests: [],
-  completeness: 40,
+  birth_date: birth,
+  bio: document.getElementById('regBio').value,
+  instagram: document.getElementById('regIG').value,
   emoji: '🙂',
-  gender: selectedGender
+  completeness: 40,
+  gender: selectedGender,
+  max_distance: 50,
+  secondary_cities: []
 };
+
+const { data: insertedProfile, error: profileError } = await supabase
+  .from('profiles')
+  .insert(profileData)
+  .select()
+  .single();
+
+if (profileError) {
+  console.error(profileError);
+  toast('❌ Errore profilo: ' + profileError.message);
+  return;
+}
+
+currentUser = {
+  ...insertedProfile,
+  id: data.user.id,
+  interests: []
+};
+
+userInterests = [];
 pendingEmailVerify = false;
 isLoggedIn = true;
 
-toast('✅ Registrazione completata!');
 await loadEvents();
+toast('✅ Registrazione completata!');
 navigate('home');
 }
 
