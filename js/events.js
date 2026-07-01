@@ -209,7 +209,8 @@ function previewEventCover(input) {
     <img src="${imageUrl}" style="
       width:100%;
       height:100%;
-      object-fit:cover;
+     object-fit:contain;
+background:#fff;
       display:block;
     ">
   `;
