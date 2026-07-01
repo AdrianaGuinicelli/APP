@@ -54,9 +54,20 @@ function renderHeaderRight() {
     </button>`;
   });
 
-  const avatarContent = currentUser?.photo_url
-    ? `<img src="${currentUser.photo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
-    : (currentUser?.name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+ const getInitials = (name) => {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
+const avatarContent = currentUser?.photo_url
+  ? `<img src="${currentUser.photo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
+  : getInitials(currentUser?.name);
 
   html += `<div class="profile-dropdown-wrap" id="profileDropWrap">
     <button class="profile-avatar-btn" onclick="toggleProfileDropdown()" id="profileAvatarBtn">${avatarContent}</button>
