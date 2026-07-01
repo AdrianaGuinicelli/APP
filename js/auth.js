@@ -165,7 +165,10 @@ const lastName  = document.getElementById('regLastName').value.trim();
   const city  = document.getElementById('regCity').value.trim();
   const birth = document.getElementById('regBirth').value;
 
-  if (!name || !email || !pwd || !city || !birth) { toast('⚠️ Compila tutti i campi obbligatori'); return; }
+ if (!firstName || !lastName || !email || !pwd || !city || !birth) {
+  toast('⚠️ Compila tutti i campi obbligatori');
+  return;
+}
   if (!isValidEmail(email))    { toast('⚠️ Inserisci un\'email valida'); return; }
   if (!isPasswordValid(pwd))   { toast('⚠️ La password non soddisfa i requisiti'); return; }
   if (pwd !== pwd2)            { toast('⚠️ Le password non corrispondono'); return; }
@@ -179,7 +182,10 @@ const lastName  = document.getElementById('regLastName').value.trim();
   if (error) { toast('❌ ' + error.message); return; }
 
   await supabase.from('profiles').insert({
-    id: data.user.id, name, city,
+    id: data.user.id,
+first_name: firstName,
+last_name: lastName,
+city,
     birth_date: birth,
     bio: document.getElementById('regBio').value,
     instagram: document.getElementById('regIG').value,
