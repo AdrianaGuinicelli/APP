@@ -57,6 +57,10 @@ async function submitFeedback(eventId) {
 
 // ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
 function drawNotifications() {
+  notifications.forEach(n => n.read = true);
+saveNotifications();
+renderHeaderRight();
+renderNavbar();
   const unread = notifications.filter(n => !n.read).length;
   let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
     <div style="font-size:14px;color:#888">${unread} non lette</div>
